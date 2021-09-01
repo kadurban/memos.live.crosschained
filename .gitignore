@@ -4,6 +4,7 @@ src_old
 # dependencies
 /node_modules
 /_extra
+/hardhat
 /.pnp
 .pnp.js
 
