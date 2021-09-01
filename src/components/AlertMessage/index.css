@@ -1,0 +1,14 @@
+.AlertMessage {
+    padding: var(--std-padding);
+    border-radius: var(--std-border-radius);
+    border: 1px solid var(--std-border-color);
+    background-color: rgb(243,236,203);
+}
+
+.AlertMessage-text {
+
+}
+
+.AlertMessage-controls {
+    margin-top: var(--std-margin);
+}
