@@ -1,54 +1,59 @@
-import React, { useEffect, useState } from 'react';
-import { getContentByUrl } from '../../lib/utils';
+import React, { useEffect, useState, useContext } from 'react';
+import SettingsContext from "../../SettingsContext";
+import Card from "../Card";
+
+async function getUserNfts() {
+  const options = { chain: window.config.NETWORK_NAME };
+  const retrievedNfts = await window.Moralis.Web3API.account.getNFTs(options);
+  console.log('My NFTs:');
+  console.log(retrievedNfts);
+  if (window.config.NETWORK_NAME === 'mumbai') {
+    return retrievedNfts.result;
+  }
+  if (window.config.NETWORK_NAME === 'rinkeby') {
+    return retrievedNfts;
+  }
+}
 
 function MyNFTs(props) {
-  const [ nftListLoaded, setLoaNftListLoadedStatus ] = useState(false);
+  const { settingsState, setSettingsState } = useContext(SettingsContext);
+  const [ nftListLoaded, setNftListLoadedStatus ] = useState(false);
   const [ nftList, setNftList ] = useState([]);
 
   useEffect(async () => {
-    const options = { chain: 'rinkeby' };
-    const retrievedNfts = await window.Moralis.Web3API.account.getNFTs(options);
+    let retrievedNfts = [];
 
-    console.log('My NFTs:');
-
-    for (let nft of retrievedNfts) {
-      nft = {
-        aaa: 'aaa'
-        // ...nft,
-        // metadata: await getContentByUrl(nft.token_uri)
-      }
+    if (settingsState.user) {
+      retrievedNfts = await getUserNfts();
     }
-    console.log(retrievedNfts);
 
-    // retrievedNfts = retrievedNfts.map(nft => ({
-    //   ...nft,
-    //   metadata: getContentByUrl(nft.token_uri)
-    // }));
-
-    // setTimeout(() => console.log(retrievedNfts), 1000);
-
-    setLoaNftListLoadedStatus(true);
     setNftList(retrievedNfts);
+    setNftListLoadedStatus(true);
   }, []);
 
   return (
     <section>
-      <h1>My NFT List</h1>
-      {!nftListLoaded && 'Retrieving your NFTs'}
-      {nftListLoaded && nftList.length === 0 && 'Nothing to show'}
-
-      {nftListLoaded && (
+      {!settingsState.user ? (
+        'You need to connect your wallet to see your NFTs'
+      ) : (
         <>
-          Total NFTs: <strong>{nftList.length}</strong>
-          <br/>
-          {nftList.map(nft => (
-            <div key={nft.token_address}>
-              {nft.metadata && nft.metadata.image ? (
-                  <img src={nft.metadata.image} alt=""/>
-                ) : 'Loading NFT'
-              }
-            </div>
-          ))}
+          <h1>My NFT List</h1>
+          {!nftListLoaded && 'Retrieving your NFTs'}
+          {nftListLoaded && nftList.length === 0 && 'Nothing to show'}
+
+          {nftListLoaded && nftList.length > 0 && (
+            <>
+              Total NFTs: <strong>{nftList.length}</strong>
+              <br/>
+              {nftList.map(nft => (
+                <Card
+                  key={nft.token_uri}
+                  tokenUri={nft.token_uri}
+                  owner={nft.owner_of}
+                />
+              ))}
+            </>
+          )}
         </>
       )}
     </section>

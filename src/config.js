@@ -17,11 +17,27 @@ function getConfig() {
     ]
   }
 
+  const config = {
+    rinkeby: {
+      NETWORK_NAME: 'rinkeby',
+      NETWORK_DISPLAY_NAME: 'Rinkeby - Ethereum TESTNET',
+      MORALIS_APP_ID: 'YGa7VBVv6LC36UmV8FcAW1BpwPHzfs0a0QvYZMwS',
+      MORALIS_SERVER_URL: 'https://grd67eeqwloc.moralisweb3.com:2053/server',
+      MINT_CONTRACT_ADDRESS: '0x021C643724fe02a130cb4bA3e551af13991C760D',
+    },
+    mumbai: {
+      NETWORK_NAME: 'mumbai',
+      NETWORK_DISPLAY_NAME: 'Mumbai - Polygon TESTNET',
+      MORALIS_APP_ID: 'yCh3QlUbZuOyiJbKFyOYMR3DrzQOCBv9GCnBs96I',
+      MORALIS_SERVER_URL: 'https://vw1uxhuol8vp.bigmoralis.com:2053/server',
+      MINT_CONTRACT_ADDRESS: '0x021C643724fe02a130cb4bA3e551af13991C760D',
+    }
+  };
+
+  const currentNetwork = localStorage.getItem('currentNetwork') || (/localhost/.test(window.location.href) ? 'mumbai' : 'polygon');
+
   return {
-    NETWORK: 'Rinkeby - Ethereum TESTNET',
-    MORALIS_APP_ID: 'YGa7VBVv6LC36UmV8FcAW1BpwPHzfs0a0QvYZMwS',
-    MORALIS_SERVER_URL: 'https://grd67eeqwloc.moralisweb3.com:2053/server',
-    MINT_CONTRACT_ADDRESS: '0x021C643724fe02a130cb4bA3e551af13991C760D',
+    ...config[currentNetwork],
     MAX_FILE_SIZE: 22020096,
     EXTENSIONS
   }

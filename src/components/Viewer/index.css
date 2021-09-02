@@ -1,0 +1,276 @@
+.Viewer {
+    position: fixed;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    z-index: 100;
+    background-color: var(--l-bg-color);
+    padding: calc(var(--std-padding) * 4) var(--std-padding);
+
+    animation-name: viewer-appear;
+    animation-duration: .4s;
+    animation-fill-mode: forwards;
+    animation-iteration-count: 1;
+    animation-timing-function: ease-out;
+}
+
+.dark .Viewer {
+    background-color: var(--d-bg-color);
+}
+
+.Viewer.Viewer-hide-animation {
+     animation-name: viewer-dissappear;
+     animation-duration: .4s;
+     animation-fill-mode: forwards;
+     animation-iteration-count: 1;
+     animation-timing-function: ease-out;
+ }
+
+.Viewer-close {
+  float: right;
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  z-index: 110;
+}
+
+.Viewer-info {
+  position: absolute;
+  top: 1.5rem;
+  width: 100%;
+  text-align: center;
+  left: 0;
+  font-size: .8rem;
+  pointer-events: none;
+  z-index: 110;
+}
+
+.Viewer-logo {
+  width: 36px;
+  position: absolute;
+  left: 50%;
+  bottom: 1rem;
+  margin-left: -18px;
+}
+
+.Viewer-description {
+  line-height: 1.4rem;
+  text-align: justify;
+}
+
+.Viewer-description .Viewer-inner {
+  height: 100%;
+  border-radius: 11px;
+  border-top: 1px solid rgb(165,148,71);
+  border-bottom: 1px solid rgb(165,148,71);
+  padding: 1.5rem 1rem;
+  display: flex;
+}
+
+.Viewer-description .Viewer-content-area {
+  max-height: 100%;
+  overflow: auto;
+}
+
+.Viewer-description .Viewer-content-area::-webkit-scrollbar {
+  display: none;
+}
+
+.Viewer-texts .Viewer-inner {
+  height: 100%;
+  border-radius: 11px;
+  display: block;
+}
+
+.Viewer-texts .Viewer-content-area {
+  height: 100%;
+  overflow: hidden;
+}
+
+.Viewer-texts .Viewer-content-area .swiper-container {
+  height: 100%;
+  overflow: hidden;
+}
+
+.Viewer-texts .swiper-slide {
+  height: 100%;
+  overflow: hidden;
+  display: block;
+  border-top: 1px solid rgb(165,148,71);
+  border-bottom: 1px solid rgb(165,148,71);
+  border-radius: 11px;
+  padding: 1.5rem 1rem;
+}
+
+.Viewer-texts .Vewer-texts-inner {
+  height: 100%;
+  overflow: auto;
+  display: flex;
+  justify-content: center;
+}
+
+.Viewer-texts .Vewer-texts-inner::-webkit-scrollbar {
+  display: none;
+}
+
+.Viewer-texts .Vewer-texts-inner-text {
+  line-height: 1.8rem;
+
+  animation-name: text-appears;
+  animation-duration: .4s;
+  animation-fill-mode: forwards;
+  animation-iteration-count: 1;
+  animation-timing-function: ese-out;
+}
+
+
+@keyframes text-appears {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+.Viewer-audios .Viewer-inner {
+  height: 100%;
+  border-radius: 11px;
+  display: block;
+}
+
+.Viewer-audios .swiper-slide {
+  height: 100%;
+  overflow: hidden;
+  display: block;
+  border-top: 1px solid rgb(165,148,71);
+  border-bottom: 1px solid rgb(165,148,71);
+  border-radius: 11px;
+  padding: 1.5rem 1rem;
+}
+
+.Viewer-audios .Viewer-content-area {
+  height: 100%;
+  overflow: hidden;
+}
+
+.Viewer-audios .Viewer-content-area .swiper-container {
+  height: 100%;
+  overflow: hidden;
+}
+
+.Viewer-audios .Vewer-audios-inner {
+  height: 100%;
+  overflow: auto;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+
+.Viewer-audios .Vewer-audios-inner::-webkit-scrollbar {
+  display: none;
+}
+
+.Viewer-audios .Vewer-audios-inner audio {
+  width: 100% !important;
+}
+
+.Viewer-images {
+  padding: 0;
+}
+
+.Viewer-images .Viewer-inner {
+  height: 100%;
+  border-radius: 11px;
+  display: block;
+}
+
+.Viewer-images .swiper-slide {
+  height: 100%;
+  overflow: hidden;
+  /*display: block;*/
+  display: flex;
+  justify-content: space-evenly;
+  align-items: center;
+}
+
+.Viewer-images .Viewer-content-area {
+  height: 100%;
+  overflow: hidden;
+}
+
+.Viewer-images .Viewer-content-area .swiper-container {
+  height: 100%;
+  overflow: hidden;
+}
+
+.Viewer-images .Viewer-images-inner {
+  width: 100%;
+  height: 100%;
+  padding-top: 6rem;
+}
+
+.Viewer-images .Viewer-images-inner img {
+  object-fit: contain;
+  width: 100%;
+  height: 100%;
+}
+
+
+.Viewer-videos {
+  padding: 0;
+}
+
+.Viewer-videos .Viewer-inner {
+  height: 100%;
+  border-radius: 11px;
+  display: block;
+}
+
+.Viewer-videos .swiper-slide {
+  height: 100%;
+  overflow: hidden;
+  display: block;
+  display: flex;
+  justify-content: space-evenly;
+  align-items: center;
+}
+
+.Viewer-videos .Viewer-content-area {
+  height: 100%;
+  overflow: hidden;
+}
+
+.Viewer-videos .Viewer-content-area .swiper-container {
+  height: 100%;
+  overflow: hidden;
+}
+
+.Viewer-videos .Viewer-content-area video {
+  max-width: 100%;
+  max-height: 100%;
+}
+
+@keyframes viewer-appear {
+  0% {
+    transform: scale(0);
+    opacity: 0;
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+@keyframes viewer-dissappear {
+  0% {
+    transform: scale(1);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(0);
+    opacity: 0;
+  }
+}

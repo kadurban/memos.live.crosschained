@@ -43,7 +43,7 @@ export function copyToClipboard(addr, domElForFeedback) {
   setTimeout(() => domElForFeedback.current.classList.remove('run-feedback'), 800);
 }
 
-export async function getContentByUrl({ url }) {
+export async function getContentByUrl(url) {
   return new Promise((resolve, reject) => {
     const xhr = new XMLHttpRequest();
     xhr.onreadystatechange = function () {

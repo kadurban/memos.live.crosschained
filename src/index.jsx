@@ -1,8 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import ReactDOM from 'react-dom';
 import { ToastContainer } from 'react-toastify';
-import Moralis from 'moralis';
-import { getConfig } from './config';
 import SettingsContext from './SettingsContext';
 import App from './components/App';
 

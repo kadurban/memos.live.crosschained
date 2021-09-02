@@ -18,7 +18,7 @@ window.Moralis = Moralis;
 window.config = getConfig();
 window.soundsLoaded = {};
 
-console.info(`%c ${window.config.NETWORK} `, 'background: rgb(172 255 172); color: #000; font-size: 24px;');
+console.info(`%c ${window.config.NETWORK_DISPLAY_NAME} `, 'background: rgb(172 255 172); color: #000; font-size: 24px;');
 
 function App() {
   const { settingsState, setSettingsState } = useContext(SettingsContext);
