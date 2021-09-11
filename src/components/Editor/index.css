@@ -1,6 +1,5 @@
 .Form {
     margin: 0 auto calc(var(--std-margin) * 5);
-    max-inline-size: 360px;
 }
 
 .Form-group {
@@ -80,7 +79,7 @@
     transform: scale(1);
 }
 
-.Form-label .icon::after  {
+.Form-label .icon::after {
     position: absolute;
     display: block;
     content: attr(data-hint);

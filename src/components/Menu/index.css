@@ -1,0 +1,118 @@
+.Menu {
+    position: relative;
+    color: var(--l-text-color);
+    border-radius: 1rem 1rem 0 0;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+.dark .Menu {
+    background-color: var(--d-bg-color);
+    color: var(--d-text-color);
+}
+
+.Menu-primary {
+    display: flex;
+    flex-direction: column;
+    flex: auto;
+}
+
+.Menu-separator {
+    border-bottom: 1px solid rgba(165,148,71,.2);
+    margin-top: var(--std-margin);
+    margin-bottom: var(--std-margin);
+}
+
+.Menu-primary-item {
+    background: transparent;
+    display: flex;
+    flex-direction: row;
+    text-transform: uppercase;
+    line-height: 2rem;
+    margin-bottom: 1rem;
+    width: 100%;
+    text-align: left;
+    text-decoration: none;
+    color: var(--l-text-color);
+    font-size: 1.3rem;
+    padding: .3rem 0;
+    align-items: center;
+    transition: all .2s ease-out;
+    z-index: 2;
+    text-shadow: 1px 1px 0px #fff;
+}
+
+.Menu-primary-highlight {
+    background: #fff;
+    border-radius: var(--std-border-radius);
+    margin-left: -1rem;
+    margin-right: -1rem;
+    padding-left: 1rem;
+    box-shadow: var(--shadow-color) 0px 0.25rem 0.75rem 0px;
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 54px;
+    z-index: 1;
+    transition: top .2s ease-out;
+    background-color: var(--accent-color);
+}
+
+.Menu-primary-item .icon {
+    margin-right: 1rem;
+    padding-top: 2px;
+}
+
+.Menu-primary-item .icon svg {
+    width: 34px;
+    height: 34px;
+    position: relative;
+    top: 2px;
+}
+
+.Menu-primary-item .icon svg path:nth-child(2) {
+    fill: var(--l-gold-text);
+}
+
+.Menu-bottom {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+
+.Menu-bottom a {
+    margin-right: 1rem;
+}
+
+.Menu-bottom .Menu-bottom-create-btn {
+    flex: 1;
+    display: inline-block;
+    text-transform: uppercase;
+    line-height: 1rem;
+}
+
+.Menu-bottom .Menu-bottom-create-btn .icon {
+    top: 2px;
+    vertical-align: sub;
+    position: relative;
+    margin-right: calc(var(--std-margin) / 2);
+}
+
+.Menu-bottom .Menu-bottom-icon-buttonw {
+    flex: 1;
+    text-align: right;
+    margin-right: -8px;
+}
+
+.Menu-bottom button {
+    height: 38px;
+}
+
+.Menu-close-btn {
+    position: absolute;
+    top: .6rem;
+    right: .6rem;
+    z-index: 1;
+}

@@ -126,7 +126,7 @@ function Card(props) {
             <div className="Card-date">
               {isValidDate ? (
                 moment(state.cardData.eventDate, "YYYY-MM-DD HH:mm:ss").format(exactTime ? 'LLL' : 'LL')
-              ) : <hr/>}
+              ) : null}
             </div>
             <div className="Card-date-ago">
               {isValidDate && <DurationTimer eventDate={state.cardData.eventDate} exactTime={exactTime}/>}
@@ -134,7 +134,7 @@ function Card(props) {
           </div>
           <div className={`Card-preview ${!state.imageLoaded ? 'Card-preview-loading' : ''}`}>
             {(!state.imageLoaded || state.imageLoadError) && (
-              <Jdenticon size="48" value={owner}/>
+              <Jdenticon size="268" value={props.tokenId}/>
             )}
             <img
               style={{ opacity: !state.imageLoaded ? 0 : 1 }}
@@ -144,13 +144,13 @@ function Card(props) {
               onError={() => setState({ ...state, imageLoaded: true, imageLoadError: true })}
             />
           </div>
-          <h2 className="Card-title">
+          <div className="Card-title">
             <ClampLines
               text={state.cardData.name}
               lines={3}
               buttons={false}
             />
-          </h2>
+          </div>
         </div>
         <div className="Card-back">
           <div className="Card-back-actions-main">

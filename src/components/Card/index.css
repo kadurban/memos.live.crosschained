@@ -1,17 +1,21 @@
 .Card {
-  color: #000;
+  --card-width: 320px;
+  --card-height: 450px;
+  --card-preview-side: 260px;
+
+  color: var(--l-text-color);
   cursor: pointer;
-  width: calc(100% - var(--std-margin) - var(--std-margin));
-  min-height: 28rem;
+  /*min-height: 28rem;*/
+  margin-right: 5rem;
   perspective: 1000px;
-  margin: calc(var(--std-margin) * 3) var(--std-margin) calc(var(--std-margin) * 3);
   position: relative;
   background-color: transparent;
   -webkit-tap-highlight-color:  rgba(255, 255, 255, 0);
   flex: 1 0 auto;
-  height: auto;
+  height: var(--card-height);
+  width: var(--card-width);
   user-select: none;
-
+  max-width: 340px;
   transition: transform .2s ease-out;
 }
 
@@ -28,14 +32,15 @@
   background-size: 200% !important;
   background: rgb(245,233,183);
   background: radial-gradient(circle, rgba(255,255,255,1) 0%, rgba(255,255,255,1) 28%, rgba(228,205,105,1) 72%);
-  display: block;
+  display: flex;
+  flex-direction: column;
   border-radius: 1rem;
   text-align: center;
   justify-content: center;
   align-items: center;
   position: absolute;
-  height: 100%;
-  width: 100%;
+  height: var(--card-height);
+  width: var(--card-width);
   -webkit-backface-visibility: hidden;
   backface-visibility: hidden;
   transform-style: preserve-3d;
@@ -54,11 +59,20 @@
 }
 
 .Card-front {
-  display: block;
   text-align: center;
-  padding: var(--std-padding);
   overflow: hidden;
   background-position: 50%;
+}
+
+.Card-front > div {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+}
+
+.Card-front > div.Card-preview {
+  flex: var(--card-preview-side);
+  max-height: var(--card-preview-side);
 }
 
 .Card-rotated .Card-front {
@@ -79,17 +93,17 @@
   transform: rotateY(0deg);
 }
 
-.Card-front:before {
-  position: absolute;
-  display: block;
-  content: "";
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  opacity: 0.25;
-  z-index: -1;
-}
+/*.Card-front:before {*/
+/*  position: absolute;*/
+/*  display: block;*/
+/*  content: "";*/
+/*  top: 0;*/
+/*  left: 0;*/
+/*  right: 0;*/
+/*  bottom: 0;*/
+/*  opacity: 0.25;*/
+/*  z-index: -1;*/
+/*}*/
 
 .Card-rotated .Card-front {
   transform: rotateY(180deg);
@@ -99,17 +113,35 @@
   transform: rotateY(-180deg);
 }
 
+.Card .Card-front div.Card-title {
+  font-size: 1.2rem;
+  margin: 0;
+  line-height: 1.6rem;
+  font-weight: 500;
+  /*height: 5rem;*/
+  /*display: flex;*/
+  align-items: center;
+  justify-content: center;
+  text-shadow: 1px 1px 0 #ffffff6e;
+  color: #000000c9;
+  padding: 1rem;
+}
+
+.dark .Card-title {
+  text-shadow: 1px 1px 0 #0000008a;
+  color: #ffffffef;
+}
 
 .Card-preview {
-  margin: auto;
+  /*margin: auto;*/
   overflow: hidden;
   border-radius: 1000px;
   box-shadow: inset 0 0 70px #fff, inset 0 0 10px #fff;
   border: 1px solid #fff;
-  position: relative;
+  /*position: relative;*/
 
-  width: calc(300px - var(--std-padding) - var(--std-padding));
-  height: calc(300px - var(--std-padding) - var(--std-padding));
+  width: var(--card-preview-side);
+  height: var(--card-preview-side);
 }
 
 .dark .Card-preview {
@@ -120,11 +152,13 @@
 .Card-preview > div {
   position: absolute;
   z-index: -2;
-  opacity: .5;
+  width: 100%;
+  height: 100%;
 }
 
-.Card-preview.Card-preview-loading > div {
-  opacity: .5;
+.Card-preview > div svg {
+  max-width: 100%;
+  max-height: 100%;
 }
 
 .Card-preview.Card-preview-loading {
@@ -135,11 +169,11 @@
   animation-name: placeholderAnimate;
   background: #f6f7f8;
   background: linear-gradient(-65deg,
-    rgba(255,255,255,0) 0%,
-    rgba(255,255,255,0) 40%,
-    rgba(239,226,132,.4) 50%,
-    rgba(255,255,255,0) 60%,
-    rgba(255,255,255,0) 100%
+  rgba(255,255,255,0) 0%,
+  rgba(255,255,255,0) 40%,
+  rgba(239,226,132,.4) 50%,
+  rgba(255,255,255,0) 60%,
+  rgba(255,255,255,0) 100%
   );
   background-size: 500%;
   background-position: 100% 0;
@@ -148,11 +182,11 @@
 
 .dark .Card-preview.Card-preview-loading {
   background: linear-gradient(-65deg,
-    rgba(255,255,255,0) 0%,
-    rgba(255,255,255,0) 40%,
-    rgba(167,153,91,.4) 50%,
-    rgba(255,255,255,0) 60%,
-    rgba(255,255,255,0) 100%
+  rgba(255,255,255,0) 0%,
+  rgba(255,255,255,0) 40%,
+  rgba(167,153,91,.4) 50%,
+  rgba(255,255,255,0) 60%,
+  rgba(255,255,255,0) 100%
   );
   background-size: 500%;
   background-position: 100% 0;
@@ -170,27 +204,11 @@
   height: calc(300px - var(--std-padding) - var(--std-padding));
 }
 
-.Card-title {
-  font-size: 1.2rem;
-  margin: var(--std-margin) 0;
-  line-height: 1.6rem;
-  font-weight: 500;
-  height: 5rem;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  text-shadow: 1px 1px 0 #ffffff6e;
-  color: #000000c9;
-}
-
-.dark .Card-title {
-  text-shadow: 1px 1px 0 #0000008a;
-  color: #ffffffef;
-}
-
 .Card-timer {
+  flex-direction: column;
   text-shadow: 1px 1px 0 #ffffff6e;
   color: #000000c9;
+  width: 100%;
 }
 
 .dark .Card-timer {
@@ -199,20 +217,13 @@
 }
 
 .Card-date {
-  width: 100%;
-  font-weight: 500;
+  font-weight: 400;
   white-space: nowrap;
 }
 
-.Card-date hr {
-  border: none;
-  width: 160px;
-  margin: 1.4rem auto 0;
-}
-
 .Card-date-ago {
-  margin: 0 0 var(--std-margin);
-  font-weight: 200;
+  /*margin: 0 0 calc(var(--std-margin) / 2);*/
+  font-weight: 300;
   font-size: 0.8rem;
   white-space: nowrap;
   color: inherit;
@@ -222,6 +233,8 @@
   color: #ffffffbd;
 }
 
+
+/*
 .Card-back-action-button {
   margin: 10px;
   height: 90px;
@@ -282,4 +295,4 @@
     transform: scale(1);
     opacity: 1;
   }
-}
+}*/

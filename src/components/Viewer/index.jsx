@@ -1,6 +1,6 @@
 import React, { useContext, useState, useEffect, useLayoutEffect } from 'react';
 import SwiperCore, { Virtual } from 'swiper';
-import { Swiper, SwiperSlide } from 'swiper/react';
+import { Swiper, SwiperSlide } from 'swiper/react/';
 import ReactMarkdown from 'react-markdown';
 import { Howl } from 'howler';
 import Loader from '../Loader';

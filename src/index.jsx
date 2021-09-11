@@ -18,7 +18,7 @@ function AppContextWrap() {
     <SettingsContext.Provider value={{ settingsState, setSettingsState }}>
       <App/>
       <ToastContainer
-        position="top-right"
+        position="bottom-right"
         autoClose={4000}
         hideProgressBar={true}
         newestOnTop={false}

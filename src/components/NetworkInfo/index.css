@@ -1,0 +1,22 @@
+.NetworkInfo {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  /*margin-right: 1rem;*/
+  position: relative;
+}
+
+.NetworkInfo > svg {
+  position: relative;
+  right: -2.2rem;
+}
+
+.NetworkInfo-selector {
+  margin-right: 1rem;
+}
+
+.NetworkInfo-selector select {
+  padding: 0rem .5rem 0 2.5rem;
+  border: 1px solid #ccc;
+  border-radius: var(--std-border-radius);
+}

@@ -1,0 +1,66 @@
+.App-main-content {
+  display: flex;
+  flex-flow: column;
+  align-items: flex-start;
+  height: 100vh;
+}
+
+.App-primary-content-inner {
+  /*max-width: 1440px;*/
+  width: 100%;
+  min-height: 100%;
+  position: relative;
+  padding-left: 322px;
+  box-sizing: border-box;
+}
+
+.App-primary-content-left {
+  position: absolute;
+  inset: 0px 322px 0px 0px;
+  width: 322px;
+  height: 100%;
+  overflow: auto;
+  /*box-shadow: rgba(0,0,0,.06) 7px 2px 26px 0px;*/
+  /*background: rgb(255, 255, 255);*/
+  padding: var(--std-padding);
+  /*padding: calc(var(--std-padding) / 2) var(--std-padding);*/
+  z-index: 1;
+  display: none;
+  box-shadow: #ffffff 20px 1px 30px 2px;
+}
+
+.App-primary-content-right {
+  position: absolute;
+  inset: 0;
+  padding: var(--std-padding);
+  /*background: rgb(249, 250, 251);*/
+}
+
+.App-primary-content-right h1:first-of-type {
+  padding-top: .5rem;
+}
+
+.App-primary-content-right::after {
+  content: '';
+  position: absolute;
+  width: var(--std-padding);
+  top: 0;
+  right: 0;
+  bottom: 0;
+  pointer-events: none;
+  background: linear-gradient(270deg, rgba(255,255,255,1) 0%, rgba(255,255,255,0) 100%);
+}
+
+@media screen and (min-width: 768px) {
+  .App-primary-content-left {
+    display: initial;
+  }
+
+  .App-primary-content-right {
+    position: absolute;
+    inset: 0px 0px 0px 322px;
+    padding: var(--std-padding);
+    /*background: rgb(249, 250, 251);*/
+    overflow: auto;
+  }
+}

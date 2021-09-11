@@ -1,0 +1,96 @@
+.Top-bar {
+  display: flex;
+  flex-flow: row nowrap;
+  width: 100%;
+  -webkit-box-pack: justify;
+  justify-content: space-between;
+  background: rgb(255, 255, 255);
+  box-shadow: var(--shadow-color) 0.4375rem 0.125rem 1.625rem 0px;
+  background: radial-gradient(circle, rgba(255,255,255,1) 0%, rgba(255,255,255,1) 8%, rgb(250 245 226) 92%);
+  z-index: 2;
+}
+
+.App-primary-content {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  -webkit-box-pack: start;
+  justify-content: flex-start;
+  -webkit-box-align: center;
+  align-items: center;
+  flex: 1 1 0%;
+  overflow: auto;
+  /*box-shadow: #ddca7857 7px 2px 26px 0;*/
+}
+
+.Top-bar-inner {
+  display: flex;
+  width: 100%;
+  /*max-width: 1440px;*/
+  height: 70px;
+  object-fit: contain;
+  -webkit-box-pack: justify;
+  justify-content: space-between;
+  padding: 0px var(--std-padding);
+  margin: auto;
+}
+
+.Top-bar-left {
+  display: flex;
+  -webkit-box-pack: center;
+  justify-content: center;
+  -webkit-box-align: center;
+  align-items: center;
+  min-width: 0px;
+  padding: 0.875rem 0px;
+}
+
+.Top-bar-logo {
+  height: 100%;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+.Top-bar-logo img {
+  max-height: 100%;
+}
+
+.Top-bar-right {
+  display: flex;
+  -webkit-box-pack: center;
+  justify-content: center;
+  -webkit-box-align: center;
+  align-items: center;
+  min-width: 0px;
+  padding: 0.875rem 0px;
+  flex-direction: row;
+}
+
+@media screen and (min-width: 450px) {
+
+}
+
+.Top-bar-menu-btn {
+  display: initial;
+}
+
+@media screen and (min-width: 768px) {
+  .Top-bar-menu-btn {
+    display: none;
+  }
+}
+
+.Top-bar-logo-text {
+  line-height: 1rem;
+  margin-left: .75rem;
+}
+
+.Top-bar-logo-text > div:first-child {
+  color: #686868;
+}
+
+.Top-bar-logo-text > div:last-child {
+  font-size: .6rem;
+  color: #9f9145;
+}

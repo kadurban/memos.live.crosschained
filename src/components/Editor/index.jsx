@@ -1,9 +1,10 @@
 import React, { useState, useContext } from 'react';
 import { useForm } from 'react-hook-form';
 import {v4 as uuid} from 'uuid';
+import moment from 'moment';
 import { toast } from 'react-toastify';
 import SettingsContext from '../../SettingsContext';
-// import ReactTagInput from "@pathofdev/react-tag-input";
+import ReactTagInput from "@pathofdev/react-tag-input";
 import AlertMessage from '../AlertMessage';
 import PreviewStep from '../PreviewStep';
 import Loader from '../Loader';
@@ -83,10 +84,10 @@ function Editor() {
       const extension = file.name.split('.').pop().toLowerCase();
 
       let fileType = null;
-      if (TEXT_EXTENSIONS.includes(extension)) fileType = 'text';
-      if (IMAGE_EXTENSIONS.includes(extension)) fileType = 'image';
-      if (AUDIO_EXTENSIONS.includes(extension)) fileType = 'audio';
-      if (VIDEO_EXTENSIONS.includes(extension)) fileType = 'video';
+      if (TEXT_EXTENSIONS.includes(extension)) fileType = 'Text File';
+      if (IMAGE_EXTENSIONS.includes(extension)) fileType = 'Image File';
+      if (AUDIO_EXTENSIONS.includes(extension)) fileType = 'Audio File';
+      if (VIDEO_EXTENSIONS.includes(extension)) fileType = 'Video File';
 
       return {
         file,
@@ -112,43 +113,67 @@ function Editor() {
     console.log('===> Saving main image');
     const savedImage = new Moralis.File(`${uuid()}.${data.image[0].name.split('.').pop()}`, data.image[0]);
     await savedImage.saveIPFS();
-    const imageSavedURI = savedImage.ipfs();
+    const saveiImageUrl = savedImage.ipfs();
     let metaData = {
-      name: data.name,
+      image: saveiImageUrl,
+      // image_data: '',
+      external_url: 'https://memos.live/',
       description: data.description,
-      image: imageSavedURI,
-      animation_url: imageSavedURI,
-      attributes: []
+      name: data.name,
+      attributes: [],
+      background_color: '',
+      // animation_url: saveiImageUrl,
     };
 
-    // save attached files and create attributes object
-    // for (const fileObject of attachedFiles) {
-    //   if (fileObject.valid) {
-    //     console.log(`===> Saving file (${fileObject.file.size} bytes): ${fileObject.file.name}`);
-    //     const fileToUpload = new Moralis.File(`${fileObject.uuid}.${fileObject.extension}`, fileObject.file);
-    //     await fileToUpload.saveIPFS();
-    //     const uploadedFileHash = fileToUpload.hash();
-    //     metaData.attributes.push({
-    //       key: 'File',
-    //       value: `ipfs://ipfs/${uploadedFileHash}`,
-    //       trait_type: fileObject.trait_type
-    //     });
-    //   } else {
-    //     console.log(`===> Invalid file was skipped: ${fileObject.file.name}`);
-    //   }
-    // }
+    // date to attribute
+    if (moment(data.eventDate, 'YYYY-MM-DD HH:mm:ss').isValid()) {
+      metaData.attributes.push({
+        key: 'Date',
+        value: data.eventDate,
+        trait_type: 'Event Date'
+      });
+    }
 
-    const metaDataUrlEncoded = JSON.stringify(metaData);
-    const tokenMetadataFile = new Moralis.File("metadata.json", { base64: btoa(metaDataUrlEncoded) });
+    // tags to attributes
+    for (const tag of tags) {
+      metaData.attributes.push({
+        key: 'Tag',
+        value: tag,
+        trait_type: 'Tag'
+      });
+    }
+
+    // save attached files and create attributes object
+    for (const fileObject of attachedFiles) {
+      if (fileObject.valid) {
+        console.log(`===> Saving file (${fileObject.file.size} bytes): ${fileObject.file.name}`);
+        const fileToUpload = new Moralis.File(`${fileObject.uuid}.${fileObject.extension}`, fileObject.file);
+        await fileToUpload.saveIPFS();
+        const uploadedFileUrl = fileToUpload.ipfs();
+        metaData.attributes.push({
+          key: 'File',
+          value: uploadedFileUrl,
+          trait_type: fileObject.trait_type
+        });
+      } else {
+        console.log(`===> Invalid file was skipped: ${fileObject.file.name}`);
+      }
+    }
+
+    const metaDataStringified = JSON.stringify(metaData);
+    const tokenMetadataFile = new Moralis.File("metadata.json", { base64: btoa(metaDataStringified) });
     await tokenMetadataFile.saveIPFS();
     const tokenURI = tokenMetadataFile.ipfs();
 
     setUploadStatusInProgress(false);
     document.body.style.overflow = 'auto';
 
+    console.log('Metadata saved:');
+    console.log(metaData);
+
     setTokenURI(tokenURI);
     setMetaData(metaData);
-    toast("1 step to finish. Confirm minting by signing transaction.");
+    toast.info("1 step to finish. Confirm minting by signing transaction.");
     const soundNumber = randomInteger(0, 7);
     playSound(soundsArray[soundNumber]);
   }
@@ -302,17 +327,29 @@ function Editor() {
                     )}
                   </div>
 
-                  {/*<div className="Form-group">*/}
-                  {/*  <label className="Form-label">*/}
-                  {/*    Tags <SVG hintIcon dataHint="Use it to help others to find your digital item. 3-5 tags should be enough." />*/}
-                  {/*  </label>*/}
-                  {/*  <ReactTagInput*/}
-                  {/*    maxTags={7}*/}
-                  {/*    removeOnBackspace={true}*/}
-                  {/*    tags={tags}*/}
-                  {/*    onChange={(newTags) => setTags(newTags)}*/}
-                  {/*  />*/}
-                  {/*</div>*/}
+                  <div className="Form-group">
+                    <label className="Form-label">
+                      Tags <SVG hintIcon dataHint="Use it to help others find your NFT. 3-5 tags should be enough." />
+                    </label>
+                    <ReactTagInput
+                      maxTags={7}
+                      removeOnBackspace={true}
+                      tags={tags}
+                      onChange={(newTags) => setTags(newTags)}
+                    />
+                  </div>
+
+                  <div className="Form-group">
+                    <label className="Form-label">
+                      Associated items: <SVG hintIcon dataHint="Specify token addresses of NFTs that are associated with NFT you are creating now." />
+                    </label>
+                    <ReactTagInput
+                      maxTags={7}
+                      removeOnBackspace={true}
+                      tags={tags}
+                      onChange={(newTags) => setTags(newTags)}
+                    />
+                  </div>
 
                   <div className="Form-group">
                     <label className="Form-label">
