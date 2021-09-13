@@ -49,6 +49,11 @@
   color: var(--l-gold-text);
 }
 
+.Dropdown-content button:hover,
+.Dropdown-content a:hover {
+  text-decoration: underline;
+}
+
 .Dropdown-content .User-address {
   font-weight: 400;
   font-size: .8rem;

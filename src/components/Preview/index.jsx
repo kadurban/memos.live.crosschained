@@ -30,7 +30,7 @@ const mintToken = async (tokenURI) => {
   return tokenId;
 };
 
-function PreviewStep(props) {
+function Preview(props) {
   const { tokenURI, metaData } = props;
   const [tokenId, setTokenId] = useState(null);
   // const [redirect, setRedirect] = useState(null);
@@ -66,4 +66,4 @@ function PreviewStep(props) {
   );
 }
 
-export default PreviewStep;
+export default Preview;

@@ -6,7 +6,7 @@ import { toast } from 'react-toastify';
 import SettingsContext from '../../SettingsContext';
 import ReactTagInput from "@pathofdev/react-tag-input";
 import AlertMessage from '../AlertMessage';
-import PreviewStep from '../PreviewStep';
+import Preview from '../Preview';
 import Loader from '../Loader';
 import SVG from "../../SVG";
 import { playSound, randomInteger } from "../../lib/utils";
@@ -185,7 +185,7 @@ function Editor() {
           <h1>
             NFT Preview
           </h1>
-          <PreviewStep tokenURI={tokenURI} metaData={metaData}/>
+
         </>
       ) : (
         <>
@@ -195,204 +195,209 @@ function Editor() {
 
           {isUploading && <Loader isUploader/>}
 
-          <form
-            className="Form"
-            autoComplete="off"
-            onSubmit={handleSubmit(onFormSubmit)}
-          >
+          <div className="light-background-with-padding">
+            <form
+              className="Form"
+              autoComplete="off"
+              onSubmit={handleSubmit(onFormSubmit)}
+            >
 
-            {!settingsState.user ? (
-              <AlertMessage
-                text="You need to login to be able to create new"
-              />
-            ) : (
-              <>
-                <fieldset>
+              {!settingsState.user ? (
+                <AlertMessage
+                  text="You need to login to be able to create new"
+                />
+              ) : (
+                <>
+                  <fieldset>
 
-                  <legend>General information</legend>
-                  <div className="Form-group">
-                    <label className="Form-label">Name</label>
-                    <input
-                      type="text"
-                      {...register("name", { ...formConfig.name })}
-                      placeholder="e.g.: Bitcoin was launched"
-                      defaultValue={''}
-                    />
-                    {errors.name && <ValidationMessage message={errors.name.message} />}
-                  </div>
-
-                  <div className="Form-group">
-                    <label className="Form-label">
-                      Description
-                    </label>
-                    <TextareaAutosize
-                      cacheMeasurements
-                      {...register("description")}
-                      placeholder="e.g.: Bitcoin is a cryptocurrency invented in 2008 by an unknown person or group of people..."
-                      defaultValue={''}
-                    />
-                    {errors.description && <ValidationMessage message={errors.description.message} />}
-                  </div>
-
-                  <div className="Form-group">
-                    <label className="Form-label" >
-                      Main Preview <SVG hintIcon dataHint={`Image or animation for the front side. Supported: ${[...IMAGE_EXTENSIONS, ...VIDEO_EXTENSIONS].join(', ')}. Max 20mb.`} />
-                    </label>
-                    {image && (
-                      <FilePreview file={image} valid={true}>
-                        <button onClick={() => setImageFile(null)} type="button">
-                          <SVG trash />
-                        </button>
-                      </FilePreview>
-                    )}
-                    <div className="Form-group-file-wrapper">
+                    <legend>General information</legend>
+                    <div className="Form-group">
+                      <label className="Form-label">Name</label>
                       <input
-                        accept={[...IMAGE_EXTENSIONS, ...VIDEO_EXTENSIONS].map(ext => `.${ext}`)}
-                        type="file"
-                        {...register("image", { ...formConfig.image })}
-                        onChange={handleImageChange}
-                        style={{ display: !image ? 'block' : 'none' }}
+                        type="text"
+                        {...register("name", { ...formConfig.name })}
+                        placeholder="e.g.: Bitcoin was launched"
+                        defaultValue={''}
                       />
-                      {!image && <>
-                        <button className="btn-regular" type="button">
-                          <SVG plus />
-                          Add
-                        </button>
-                      </>}
+                      {errors.name && <ValidationMessage message={errors.name.message} />}
                     </div>
-                    {!image && errors.image && <ValidationMessage message={errors.image.message} />}
-                  </div>
 
-                  <div className="Form-group">
-                    <label className="Form-label">
-                      Royalty % <SVG hintIcon dataHint="Your fees for secondary sales. Small values are prefered." />
-                    </label>
-                    <div className="Form-royalty-picker">
-                      <button type="button" className={`btn-regular ${royalty === 3 ? 'active' : ''}`} onClick={() => setRoyalty(3)}>
-                        3%
-                      </button>
-                      <button type="button" className={`btn-regular ${royalty === 5 ? 'active' : ''}`} onClick={() => setRoyalty(5)}>
-                        5%
-                      </button>
-                      <button type="button" className={`btn-regular ${royalty === 7 ? 'active' : ''}`} onClick={() => setRoyalty(7)}>
-                        7%
-                      </button>
-                      <input
-                        type="number"
-                        min={0} max={99}
-                        value={royalty}
-                        {...register("royalty")}
-                        onChange={(e) => {
-                          setRoyalty(parseInt(e.target.value > 99 ? 99 : e.target.value < 0 ? 0 : e.target.value, 10));
-                        }}
+                    <div className="Form-group">
+                      <label className="Form-label">
+                        Description
+                      </label>
+                      <TextareaAutosize
+                        cacheMeasurements
+                        {...register("description")}
+                        placeholder="e.g.: Bitcoin is a cryptocurrency invented in 2008 by an unknown person or group of people..."
+                        defaultValue={''}
                       />
+                      {errors.description && <ValidationMessage message={errors.description.message} />}
                     </div>
-                  </div>
 
-                </fieldset>
-                <fieldset>
-                  <legend>Correlating data</legend>
-
-                  <div className="Form-group">
-                    <label className="Form-label">
-                      Date <SVG hintIcon dataHint="You can specify the date and time which is your new NFT will be associated." />
-                    </label>
-                    <input
-                      type="date"
-                      {...register("eventDate", { ...formConfig.eventDate })}
-                      defaultValue=""
-                    />
-                    {errors.eventDate && <ValidationMessage message={errors.eventDate.message} />}
-                  </div>
-
-                  <div className="Form-group Form-group-set-time">
-                    <div className="Form-group-set-time-switch">
-                      <input
-                        className="switch"
-                        type="checkbox"
-                        id="specifyTime"
-                        {...register("specifyTime")}
-                      />
-                      <label htmlFor="specifyTime">Set time</label>
-                    </div>
-                    {specifyTime && (
-                      <div className="Form-group-set-time-input">
-                        <input
-                          type="time"
-                          {...register("exactTime")}
-                          defaultValue=""
-                        />
-                        {errors.exactTime && <ValidationMessage message={errors.exactTime.message} />}
-                      </div>
-                    )}
-                  </div>
-
-                  <div className="Form-group">
-                    <label className="Form-label">
-                      Tags <SVG hintIcon dataHint="Use it to help others find your NFT. 3-5 tags should be enough." />
-                    </label>
-                    <ReactTagInput
-                      maxTags={7}
-                      removeOnBackspace={true}
-                      tags={tags}
-                      onChange={(newTags) => setTags(newTags)}
-                    />
-                  </div>
-
-                  <div className="Form-group">
-                    <label className="Form-label">
-                      Associated items: <SVG hintIcon dataHint="Specify token addresses of NFTs that are associated with NFT you are creating now." />
-                    </label>
-                    <ReactTagInput
-                      maxTags={7}
-                      removeOnBackspace={true}
-                      tags={tags}
-                      onChange={(newTags) => setTags(newTags)}
-                    />
-                  </div>
-
-                  <div className="Form-group">
-                    <label className="Form-label">
-                      Files: <SVG hintIcon dataHint={`Invalid or unsupported files will not be attached. Supported are: ${[...UPLOADER_SUPPORTED_EXTENSIONS].join(', ')}. Max 20mb.`} />
-                    </label>
-                    <div className="Form-group-files-list-wrapper">
-                      {attachedFiles.map(({ file, uuid, valid }) => (
-                        <FilePreview key={uuid} uuid={uuid} file={file} valid={valid}>
-                          <button
-                            onClick={() => {
-                              const filtered = attachedFiles.filter(f => f.uuid !== uuid);
-                              setAttachedFiles([...filtered]);
-                            }}
-                            type="button"
-                          >
+                    <div className="Form-group">
+                      <label className="Form-label" >
+                        Main Preview <SVG hintIcon dataHint={`Image or animation for the front side. Supported: ${[...IMAGE_EXTENSIONS, ...VIDEO_EXTENSIONS].join(', ')}. Max 20mb.`} />
+                      </label>
+                      {image && (
+                        <FilePreview file={image} valid={true}>
+                          <button onClick={() => setImageFile(null)} type="button">
                             <SVG trash />
                           </button>
                         </FilePreview>
-                      ))}
+                      )}
+                      <div className="Form-group-file-wrapper">
+                        <input
+                          accept={[...IMAGE_EXTENSIONS, ...VIDEO_EXTENSIONS].map(ext => `.${ext}`)}
+                          type="file"
+                          {...register("image", { ...formConfig.image })}
+                          onChange={handleImageChange}
+                          style={{ display: !image ? 'block' : 'none' }}
+                        />
+                        {!image && <>
+                          <button className="btn-regular" type="button">
+                            <SVG plus />
+                            Add
+                          </button>
+                        </>}
+                      </div>
+                      {!image && errors.image && <ValidationMessage message={errors.image.message} />}
                     </div>
-                    <div className="Form-group-file-wrapper">
+
+                    <div className="Form-group">
+                      <label className="Form-label">
+                        Royalty % <SVG hintIcon dataHint="Your fees for secondary sales. Small values are prefered." />
+                      </label>
+                      <div className="Form-royalty-picker">
+                        <button type="button" className={`btn-regular ${royalty === 3 ? 'active' : ''}`} onClick={() => setRoyalty(3)}>
+                          3%
+                        </button>
+                        <button type="button" className={`btn-regular ${royalty === 5 ? 'active' : ''}`} onClick={() => setRoyalty(5)}>
+                          5%
+                        </button>
+                        <button type="button" className={`btn-regular ${royalty === 7 ? 'active' : ''}`} onClick={() => setRoyalty(7)}>
+                          7%
+                        </button>
+                        <input
+                          type="number"
+                          min={0} max={99}
+                          value={royalty}
+                          {...register("royalty")}
+                          onChange={(e) => {
+                            setRoyalty(parseInt(e.target.value > 99 ? 99 : e.target.value < 0 ? 0 : e.target.value, 10));
+                          }}
+                        />
+                      </div>
+                    </div>
+
+                  </fieldset>
+                  <fieldset>
+                    <legend>Correlating data</legend>
+
+                    <div className="Form-group">
+                      <label className="Form-label">
+                        Date <SVG hintIcon dataHint="You can specify the date and time which is your new NFT will be associated." />
+                      </label>
                       <input
-                        type="file"
-                        name="files"
-                        multiple={true}
-                        accept={UPLOADER_SUPPORTED_EXTENSIONS.map(ext => '.' + ext)}
-                        onChange={handleFilesChange}
+                        type="date"
+                        {...register("eventDate", { ...formConfig.eventDate })}
+                        defaultValue=""
                       />
-                      <button className="btn-regular" type="button">
-                        <SVG plus /> Add files
-                      </button>
+                      {errors.eventDate && <ValidationMessage message={errors.eventDate.message} />}
                     </div>
-                  </div>
 
-                </fieldset>
+                    <div className="Form-group Form-group-set-time">
+                      <div className="Form-group-set-time-switch">
+                        <input
+                          className="switch"
+                          type="checkbox"
+                          id="specifyTime"
+                          {...register("specifyTime")}
+                        />
+                        <label htmlFor="specifyTime">Set time</label>
+                      </div>
+                      {specifyTime && (
+                        <div className="Form-group-set-time-input">
+                          <input
+                            type="time"
+                            {...register("exactTime")}
+                            defaultValue=""
+                          />
+                          {errors.exactTime && <ValidationMessage message={errors.exactTime.message} />}
+                        </div>
+                      )}
+                    </div>
 
-                <button className="btn-primary btn-lg" type="submit">
-                  <SVG nextArrow/>
-                  Final step
-                </button>
-              </>
-            )}
-          </form>
+                    <div className="Form-group">
+                      <label className="Form-label">
+                        Tags <SVG hintIcon dataHint="Use it to help others find your NFT. 3-5 tags should be enough." />
+                      </label>
+                      <ReactTagInput
+                        maxTags={7}
+                        removeOnBackspace={true}
+                        tags={tags}
+                        onChange={(newTags) => setTags(newTags)}
+                      />
+                    </div>
+
+                    <div className="Form-group">
+                      <label className="Form-label">
+                        Associated items: <SVG hintIcon dataHint="Specify token addresses of NFTs that are associated with NFT you are creating now." />
+                      </label>
+                      <ReactTagInput
+                        maxTags={7}
+                        removeOnBackspace={true}
+                        tags={tags}
+                        onChange={(newTags) => setTags(newTags)}
+                      />
+                    </div>
+
+                    <div className="Form-group">
+                      <label className="Form-label">
+                        Files: <SVG hintIcon dataHint={`Invalid or unsupported files will not be attached. Supported are: ${[...UPLOADER_SUPPORTED_EXTENSIONS].join(', ')}. Max 20mb.`} />
+                      </label>
+                      <div className="Form-group-files-list-wrapper">
+                        {attachedFiles.map(({ file, uuid, valid }) => (
+                          <FilePreview key={uuid} uuid={uuid} file={file} valid={valid}>
+                            <button
+                              onClick={() => {
+                                const filtered = attachedFiles.filter(f => f.uuid !== uuid);
+                                setAttachedFiles([...filtered]);
+                              }}
+                              type="button"
+                            >
+                              <SVG trash />
+                            </button>
+                          </FilePreview>
+                        ))}
+                      </div>
+                      <div className="Form-group-file-wrapper">
+                        <input
+                          type="file"
+                          name="files"
+                          multiple={true}
+                          accept={UPLOADER_SUPPORTED_EXTENSIONS.map(ext => '.' + ext)}
+                          onChange={handleFilesChange}
+                        />
+                        <button className="btn-regular" type="button">
+                          <SVG plus /> Add files
+                        </button>
+                      </div>
+                    </div>
+
+                  </fieldset>
+                  <fieldset>
+                    <legend>Preview</legend>
+
+                    {/*<Preview tokenURI={tokenURI} metaData={metaData}/>*/}
+                    <button className="btn-primary btn-lg" type="submit">
+                      Next step
+                    </button>
+                  </fieldset>
+                </>
+              )}
+            </form>
+          </div>
         </>
       )}
     </>

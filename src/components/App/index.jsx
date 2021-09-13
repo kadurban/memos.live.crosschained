@@ -4,6 +4,7 @@ import MainPage from '../../pages/MainPage';
 import CreatePage from '../../pages/CreatePage';
 import AboutPage from '../../pages/AboutPage';
 import SearchPage from '../../pages/SearchPage';
+import ProfilePage from '../../pages/ProfilePage';
 import Loader from '../../components/Loader';
 import SettingsContext from '../../SettingsContext';
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
@@ -53,6 +54,7 @@ function App() {
                     <Route path="/new" render={props => <CreatePage {...props} />} />
                     <Route path="/about" render={props => <AboutPage {...props} />} />
                     <Route path="/search" render={props => <SearchPage {...props} />} />
+                    <Route path="/profile" render={props => <ProfilePage {...props} />} />
                     <Route path="/" render={props => <MainPage {...props} />} />
                   </Switch>
                 </div>

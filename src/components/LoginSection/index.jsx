@@ -29,6 +29,7 @@ function LoginSection() {
   function handleClickOutside (event) {
     if (
       dropdownContent &&
+      dropdownContent.current &&
       dropdownContent.current.classList.contains('Dropdown-content-active') &&
       !dropdownContent.current.contains(event.target)
     ) {

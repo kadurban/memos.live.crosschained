@@ -3,9 +3,9 @@ import MyNFTs from '../components/MyNFTs'
 
 function MainPage(props) {
   return (
-    <>
+    <div className="Page-wrapper main">
       <MyNFTs/>
-    </>
+    </div>
   );
 }
 

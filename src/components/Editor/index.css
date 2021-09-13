@@ -1,5 +1,11 @@
 .Form {
     margin: 0 auto calc(var(--std-margin) * 5);
+    display: flex;
+    flex-direction: row;
+}
+
+.Form > fieldset {
+    flex: 1;
 }
 
 .Form-group {

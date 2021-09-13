@@ -1,12 +1,11 @@
 import React, {useContext, useEffect, useState} from 'react';
-import Editor from '../components/Editor'
 
-function CreatePage(props) {
+function ProfilePage(props) {
   return (
     <div className="Page-wrapper">
-      <Editor/>
+      <h1>Profile</h1>
     </div>
   );
 }
 
-export default CreatePage;
+export default ProfilePage;

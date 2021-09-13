@@ -5,6 +5,8 @@
   margin-right: calc(var(--std-padding) * -1);
   margin-left: calc(var(--std-padding) * -1);
   padding-left: var(--std-padding);
+  /*margin-left: calc((var(--std-padding) + 322px) * -1);*/
+  /*padding-left: calc(var(--std-padding) + 322px);*/
   padding-bottom: calc(var(--std-padding) * 2);
   padding-top: calc(var(--std-padding) * 2);
   margin-top: calc(var(--std-padding) * -2);
@@ -15,5 +17,56 @@
 }
 
 .MyNFTs-cards-holder .Card {
-  flex: 0 0 auto;
+  -webkit-animation: text-focus-in .5s cubic-bezier(0.550, 0.085, 0.680, 0.530) both;
+  animation: text-focus-in .5s cubic-bezier(0.550, 0.085, 0.680, 0.530) both;
+}
+
+.MyNFTs-cards-holder .Card:nth-of-type(1) {
+  animation-delay: .2s;
+}
+
+.MyNFTs-cards-holder .Card:nth-of-type(2) {
+  animation-delay: 0s;
+}
+
+.MyNFTs-cards-holder .Card:nth-of-type(3) {
+  animation-delay: .3s;
+}
+
+.MyNFTs-cards-holder .Card:nth-of-type(4) {
+  animation-delay: .5s;
+}
+
+.MyNFTs-cards-holder .Card:nth-of-type(5) {
+  animation-delay: .7s;
+}
+
+.MyNFTs-cards-holder .Card:nth-of-type(6) {
+  animation-delay: .5s;
+}
+
+.MyNFTs-cards-holder .Card:first-of-type {
+  margin-left: var(--desktop-menu-width);
+}
+
+.MyNFTs-loader-holder {
+  padding-left: var(--desktop-menu-width);
+}
+
+.MyNFTs-loader-holder .Loader {
+  width: 140px;
+  height: auto;
+  text-align: center;
+  margin: 150px auto 0;
+}
+
+.MyNFTs-loader-holder .Loader .Loader-info {
+  text-transform: uppercase;
+  color: var(--l-gold-text);
+  font-size: 1.4rem;
+  margin-top: .5rem;
+}
+
+.MyNFTs-loader-holder .Loader img {
+  height: 120px;
 }

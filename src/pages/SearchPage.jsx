@@ -17,32 +17,30 @@ function SearchPage() {
   const [query, setQuery] = useState([]);
 
   return (
-    <>
-      <div>
-        <h1 className="App-page-title">
-          Search by tag
-        </h1>
-        <form className="Form">
-          <DebounceInput
-            placeholder="e.g.: celebrity"
-            minLength={3}
-            debounceTimeout={700}
-            value={query}
-            onChange={e => {
-              setQuery(e.target.value.toLowerCase());
-              queryMoralisSearchByTag(e.target.value, setTokens);
-            }}
-          />
-          {/*<br/>*/}
-          {/*<br/>*/}
-          {/*{query.length > 0 ? <>*/}
-          {/*  {tokens.length > 0 ? (*/}
-          {/*    <SliderMain items={tokens} />*/}
-          {/*  ) : <AlertMessage text="Nothing was found. Try another tag to search."/>}*/}
-          {/*</> : <AlertMessage text="Start typing to search"/>}*/}
-        </form>
-      </div>
-    </>
+    <div className="Page-wrapper">
+      <h1 className="App-page-title">
+        Search by tag
+      </h1>
+      <form className="Form">
+        <DebounceInput
+          placeholder="e.g.: celebrity"
+          minLength={3}
+          debounceTimeout={700}
+          value={query}
+          onChange={e => {
+            setQuery(e.target.value.toLowerCase());
+            queryMoralisSearchByTag(e.target.value, setTokens);
+          }}
+        />
+        {/*<br/>*/}
+        {/*<br/>*/}
+        {/*{query.length > 0 ? <>*/}
+        {/*  {tokens.length > 0 ? (*/}
+        {/*    <SliderMain items={tokens} />*/}
+        {/*  ) : <AlertMessage text="Nothing was found. Try another tag to search."/>}*/}
+        {/*</> : <AlertMessage text="Start typing to search"/>}*/}
+      </form>
+    </div>
   );
 }
 

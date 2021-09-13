@@ -96,7 +96,7 @@ function Card(props) {
 
   const owner = props.owner;
 
-  if (!state.cardData) return 'Loading...'
+  if (!state.cardData) return '';
   
   const isValidDate = moment(state.cardData.eventDate, "YYYY-MM-DD HH:mm:ss").isValid();
   const exactTime = state.cardData.eventDate.split(' ').length === 2;
@@ -153,7 +153,7 @@ function Card(props) {
           </div>
         </div>
         <div className="Card-back">
-          <div className="Card-back-actions-main">
+          <div className="Card-back-actions">
 
             {state.cardData.description && state.cardData.description.length && (
               <button
@@ -246,18 +246,29 @@ function Card(props) {
             )}
 
           </div>
-          <div className="Card-back-actions-secondary">
-            <button onClick={() => setState(() => {
+          <div className="Card-back-info">
+            <div className="Card-ipfs-hash" onClick={() => setState(() => {
               playSound('cardFlip2');
               return { ...state, rotated: false };
             })}>
-              <SVG flipBack/>
-            </button>
+              <Jdenticon size="60" value={props.tokenIpfsHash}/>
+            </div>
+            {/*<div>*/}
+            {/*  <Element specs={props.specs} index={0}/>*/}
+            {/*  <Element specs={props.specs} index={1}/>*/}
+            {/*  <Element specs={props.specs} index={2}/>*/}
+            {/*  <Element specs={props.specs} index={3}/>*/}
+            {/*</div>*/}
           </div>
         </div>
       </div>
     </>
   );
+}
+
+function Element(props) {
+  const specsArray = props.specs.split('');
+  return <span>{specsArray[props.index]}</span>
 }
 
 export default Card;

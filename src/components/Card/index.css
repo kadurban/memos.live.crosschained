@@ -2,6 +2,7 @@
   --card-width: 320px;
   --card-height: 450px;
   --card-preview-side: 260px;
+  --card-id-side: 60px;
 
   color: var(--l-text-color);
   cursor: pointer;
@@ -83,7 +84,7 @@
   display: flex;
   flex-direction: column;
   transform: rotateY(-180deg);
-  padding: var(--std-padding);
+  padding: calc(var(--std-padding) / 4);
   background-position: -100%;
 }
 
@@ -92,18 +93,6 @@
   background-position: 50%;
   transform: rotateY(0deg);
 }
-
-/*.Card-front:before {*/
-/*  position: absolute;*/
-/*  display: block;*/
-/*  content: "";*/
-/*  top: 0;*/
-/*  left: 0;*/
-/*  right: 0;*/
-/*  bottom: 0;*/
-/*  opacity: 0.25;*/
-/*  z-index: -1;*/
-/*}*/
 
 .Card-rotated .Card-front {
   transform: rotateY(180deg);
@@ -153,12 +142,16 @@
   position: absolute;
   z-index: -2;
   width: 100%;
-  height: 100%;
+  /*height: 100%;*/
 }
 
 .Card-preview > div svg {
-  max-width: 100%;
-  max-height: 100%;
+  /*max-width: 100%;*/
+  /*max-height: 100%;*/
+  transform: scale(.9);
+  border-radius: 100%;
+  overflow: hidden;
+  opacity: .2;
 }
 
 .Card-preview.Card-preview-loading {
@@ -233,66 +226,15 @@
   color: #ffffffbd;
 }
 
-
-/*
-.Card-back-action-button {
-  margin: 10px;
-  height: 90px;
-  width: 100px;
+.Card-back-actions {
+  flex: auto;
 }
 
-.Card-back-action-button .icon {
-  transform: scale(1.4);
+.Card-ipfs-hash {
+  width: var(--card-id-side);
+  height: var(--card-id-side);
+  background-color: #fff;
+  overflow: hidden;
+  border-radius: 100%;
+  box-shadow: 0 0 14px #ffffff;
 }
-
-.Card-back-action-button svg {
-  width: 1.61rem;
-}
-
-.Card-back-action-button svg g,
-.Card-back-action-button svg path:nth-child(2) {
-  fill: rgb(221,203,126) !important;
-}
-
-.dark .Card-back-action-button svg g,
-.dark .Card-back-action-button svg path:nth-child(2) {
-  fill: rgb(197,179,99) !important;
-}
-
-.Card-back-actions-main {
-  flex: 1;
-  flex-wrap: wrap;
-  display: flex;
-  align-content: center;
-  justify-content: center;
-}
-
-.Card-back-actions-secondary {
-  flex: 0;
-}
-
-.Card-back-actions-secondary > button {
-  transform: scale(1.4);
-}
-
-@keyframes placeholderAnimate {
-  0%{ background-position: 100% 0; }
-  20%{ background-position: 100% 0; }
-  50%{ background-position: 0 0; }
-  100%{ background-position: 0 0; }
-}
-
-@keyframes feedback-animation {
-  0%{
-    transform: scale(0);
-    opacity: 0;
-  }
-  20%{
-    transform: scale(1);
-    opacity: 1;
-  }
-  100%{
-    transform: scale(1);
-    opacity: 1;
-  }
-}*/

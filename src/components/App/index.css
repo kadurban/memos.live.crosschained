@@ -10,14 +10,14 @@
   width: 100%;
   min-height: 100%;
   position: relative;
-  padding-left: 322px;
+  padding-left: var(--desktop-menu-width);
   box-sizing: border-box;
 }
 
 .App-primary-content-left {
   position: absolute;
-  inset: 0px 322px 0px 0px;
-  width: 322px;
+  inset: 0px var(--desktop-menu-width) 0px 0px;
+  width: var(--desktop-menu-width);
   height: 100%;
   overflow: auto;
   /*box-shadow: rgba(0,0,0,.06) 7px 2px 26px 0px;*/
@@ -26,7 +26,9 @@
   /*padding: calc(var(--std-padding) / 2) var(--std-padding);*/
   z-index: 1;
   display: none;
-  box-shadow: #ffffff 20px 1px 30px 2px;
+  box-shadow: #ffffffbd 9px 0 20px 7px;
+  background-color: rgba(255,255,255, .7);
+  backdrop-filter: blur(10px);
 }
 
 .App-primary-content-right {
@@ -58,7 +60,7 @@
 
   .App-primary-content-right {
     position: absolute;
-    inset: 0px 0px 0px 322px;
+    inset: 0;
     padding: var(--std-padding);
     /*background: rgb(249, 250, 251);*/
     overflow: auto;
