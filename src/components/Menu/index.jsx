@@ -33,10 +33,10 @@ function Menu() {
       <div className="Menu-primary">
         <div className="Menu-primary-highlight"/>
         <NavLink exact to="/" className="Menu-primary-item" activeClassName="selected" onClick={onMenuClick}>
-          <SVG home/> Main page
+          <SVG carousel/> Main page
         </NavLink>
         <NavLink to="/new" className="Menu-primary-item" onClick={onMenuClick}>
-          <SVG addEvent/> Create NFT
+          <SVG wizard/> NFT Wizard
         </NavLink>
         <NavLink to="/search" className="Menu-primary-item" activeClassName="selected" onClick={onMenuClick}>
           <SVG search/> Search

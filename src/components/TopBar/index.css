@@ -6,7 +6,7 @@
   justify-content: space-between;
   background: rgb(255, 255, 255);
   box-shadow: var(--shadow-color) 0.4375rem 0.125rem 1.625rem 0px;
-  background: radial-gradient(circle, rgba(255,255,255,1) 0%, rgba(255,255,255,1) 8%, rgb(250 245 226) 92%);
+  /*background: linear-gradient(321deg, rgb(255 255 255) 0%, rgba(252,240,181,1) 100%);*/
   z-index: 2;
 }
 

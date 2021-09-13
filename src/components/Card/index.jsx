@@ -38,7 +38,7 @@ const constructDataForCardView = (attributes) => {
   }, {eventDate: '', tags: [], texts: [], audios: [], images: [], videos: [] });
 }
 
-function DurationTimer(props) {
+export function DurationTimer(props) {
   const [, updateState] = React.useState();
   const duration = moment.duration(moment(props.eventDate, 'YYYY-MM-DD HH:mm:ss').diff(moment(Date.now())));
   const inEventInPast = duration.asSeconds().toString().charAt(0) === '-';

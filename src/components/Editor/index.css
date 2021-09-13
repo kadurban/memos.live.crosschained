@@ -6,6 +6,27 @@
 
 .Form > fieldset {
     flex: 1;
+    border: none;
+    padding: 0;
+    margin: 0;
+    margin-right: calc(var(--std-padding) / 2);
+    padding-right: calc(var(--std-padding) / 2);
+    border-right: 1px solid rgba(212,199,141,.4);
+}
+
+.Form > fieldset:last-of-type {
+    margin-right: 0;
+    /*padding-right: 0;*/
+    border-right: none;
+}
+
+.Form > fieldset legend {
+    text-transform: uppercase;
+    font-size: 1.2rem;
+    margin-bottom: 1rem;
+    color: var(--l-gold-text);
+    width: 100%;
+    text-align: center;
 }
 
 .Form-group {
@@ -13,20 +34,15 @@
     margin-bottom: var(--std-margin);
 }
 
-.Form-group-set-time {
+.Form .Form-group .Form-label {
     display: flex;
-    width: 100%;
+    flex-direction: revert;
+    align-items: center;
+    line-height: 1.8rem;
 }
 
-.Form-group-set-time-switch {
-    min-height: 40px;
-    flex: 2 1;
-    position: relative;
-    top: 3px;
-}
-
-.Form-group-set-time-input {
-    flex: auto;
+.Form .Form-group .Form-label .icon {
+    margin-left: .5rem;
 }
 
 .Form-group-file-wrapper {
@@ -44,10 +60,6 @@
     opacity: 0;
     z-index: 2;
     -webkit-tap-highlight-color: transparent;
-}
-
-.Form-group-file-wrapper > input[type=file]:active + button {
-    box-shadow: inset 0 3px 0px #7474741c, inset 0 -3px 0px #ffffffe8;
 }
 
 .Form-label {
@@ -96,11 +108,12 @@
     right: 0;
     pointer-events: none;
     opacity: 0;
-    padding: calc(--std-padding / 2) var(--std-padding);
+    padding: .5rem;
     z-index: 10;
     background-color: rgb(218,229,240);
     box-shadow: 0 3px 8px #39485747;
     border-radius: var(--std-border-radius);
+    font-size: .9rem;
 }
 
 .Form-validation-message {
@@ -158,7 +171,11 @@
 
 .Form-file-preview-controls > button {
     width: auto;
-    padding-top: 6px;
+    border: none;
+    padding: 0;
+    position: relative;
+    top: -2px;
+    left: 8px;
 }
 
 .Form-file-preview-controls > button .icon svg g, .icon svg path:nth-child(2) {
@@ -189,17 +206,18 @@
 .Form input[type=text],
 .Form input[type=date],
 .Form input[type=time],
+.Form .react-tag-input__input,
 .Form textarea {
-    border-radius: var(--std-border-radius);
-    border: 1px solid var(--std-border-color);
     width: 100%;
     height: 40px;
-    padding-left: calc(var(--std-padding) / 2);
-    padding-right: calc(var(--std-padding) / 2);
     line-height: 2rem;
     background-color: var(--l-input-bg-color);
     z-index: 1;
     position: relative;
+    border-radius: 0;
+    border: none;
+    border-bottom: 2px solid var(--std-border-color);
+    padding: 0;
 }
 
 .Form input[type="date"] {
@@ -227,10 +245,20 @@
 }
 
 .Form textarea {
-    padding: calc(var(--std-padding) / 2);
+    /*padding: calc(var(--std-padding) / 2);*/
     display: block;
     width: 100%;
     resize: none;
-    min-height: 6rem;
+    min-height: 4rem;
     line-height: 1.2rem;
+}
+
+.Card-preview-before-mint {
+    position: relative;
+}
+
+#marketPreview {
+    position: absolute;
+    top: 0;
+    opacity: .3;
 }

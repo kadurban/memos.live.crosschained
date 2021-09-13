@@ -28,6 +28,11 @@
    transform: none;
  }
 
+.Card.Card-inactive {
+  pointer-events: none !important;
+  margin: auto auto var(--std-padding);
+}
+
 .Card-front,
 .Card-back {
   background-size: 200% !important;

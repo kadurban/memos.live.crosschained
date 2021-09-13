@@ -44,7 +44,6 @@
 }
 
 .Menu-primary-highlight {
-    background: #fff;
     border-radius: var(--std-border-radius);
     margin-left: -1rem;
     margin-right: -1rem;
@@ -56,8 +55,8 @@
     right: 0;
     height: 54px;
     z-index: 1;
-    transition: top .2s ease-out;
-    background-color: var(--accent-color);
+    background-image: linear-gradient(321deg, rgba(252,240,181,1) 0%, rgba(235,219,141,1) 100%);  background-size: 200%;
+    transition: all .2s ease-out;
 }
 
 .Menu-primary-item .icon {
