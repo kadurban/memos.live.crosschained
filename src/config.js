@@ -23,12 +23,14 @@ function getConfig() {
       MORALIS_APP_ID: 'YGa7VBVv6LC36UmV8FcAW1BpwPHzfs0a0QvYZMwS',
       MORALIS_SERVER_URL: 'https://grd67eeqwloc.moralisweb3.com:2053/server',
       MINT_CONTRACT_ADDRESS: '0x021C643724fe02a130cb4bA3e551af13991C760D',
+      ITEMS_TO_FILTER: ['5', '1', '7', '6', '3', '2', '4']
     },
     mumbai: {
       NETWORK_NAME: 'mumbai',
       MORALIS_APP_ID: 'yCh3QlUbZuOyiJbKFyOYMR3DrzQOCBv9GCnBs96I',
       MORALIS_SERVER_URL: 'https://vw1uxhuol8vp.bigmoralis.com:2053/server',
       MINT_CONTRACT_ADDRESS: '0x021C643724fe02a130cb4bA3e551af13991C760D',
+      ITEMS_TO_FILTER: []
     }
   };
 
@@ -37,7 +39,7 @@ function getConfig() {
 
   return {
     ...config[currentNetwork],
-    MAX_FILE_SIZE: 22020096,
+    MAX_FILE_SIZE: 45000000,
     EXTENSIONS
   }
 }

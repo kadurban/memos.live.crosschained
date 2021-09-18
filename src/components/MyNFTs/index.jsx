@@ -2,11 +2,14 @@ import React, { useEffect, useState, useContext, useRef } from 'react';
 import SettingsContext from "../../SettingsContext";
 import Card from "../Card";
 import AlertMessage from "../AlertMessage";
+import { getSpecsFromHash } from "../../lib/utils";
 import Loader from "../Loader";
 import './index.css';
 
 async function getUserNfts() {
-  const options = { chain: window.config.NETWORK_NAME };
+  const options = {
+    chain: window.config.NETWORK_NAME
+  };
 
   // window.Moralis.Web3API.account.getNFTs(options).then(msg => console.log(msg))
   const retrievedNfts = await window.Moralis.Web3API.account.getNFTs(options);
@@ -16,7 +19,8 @@ async function getUserNfts() {
     return retrievedNfts.result;
   }
   if (window.config.NETWORK_NAME === 'rinkeby') {
-    return retrievedNfts;
+    // return retrievedNfts;
+    return retrievedNfts.filter((item) => !window.config.ITEMS_TO_FILTER.includes(item.token_id));
   }
 
   // console.error('Critical error ================ :')
@@ -75,8 +79,7 @@ function MyNFTs(props) {
                   tokenUri={nft.token_uri}
                   tokenIpfsHash={nft.token_uri.split('ipfs/')[1]}
                   specs={getSpecsFromHash(nft.token_uri.split('ipfs/')[1])}
-                  tokenId={nft.token_id}
-                  owner={nft}
+                  // owner={nft}
                 />
               ))}
             </div>
@@ -85,11 +88,6 @@ function MyNFTs(props) {
       )}
     </section>
   );
-}
-
-function getSpecsFromHash(hash) {
-  const filtered =  hash.split('').filter(i => /[0-9]/gi.test(i));
-  return filtered.join('').substr(0, 4);
 }
 
 export default MyNFTs;

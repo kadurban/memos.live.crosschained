@@ -1,4 +1,4 @@
-import React, { useState, useContext } from 'react';
+import React, {useState, useContext, useEffect, useRef} from 'react';
 import { useForm } from 'react-hook-form';
 import {v4 as uuid} from 'uuid';
 import moment from 'moment';
@@ -6,12 +6,13 @@ import { toast } from 'react-toastify';
 import SettingsContext from '../../SettingsContext';
 import ReactTagInput from "@pathofdev/react-tag-input";
 import AlertMessage from '../AlertMessage';
-import { DurationTimer } from '../Card';
+import Card from '../Card';
 import Loader from '../Loader';
 import CanvasRenderer from '../CanvasRenderer';
 import SVG from "../../SVG";
-import { playSound, randomInteger } from "../../lib/utils";
+import { playSound, randomInteger, getSpecsFromHash } from "../../lib/utils";
 import TextareaAutosize from 'react-textarea-autosize';
+import html2canvas from 'html2canvas';
 import './index.css';
 import {getConfig} from "../../config";
 import Moralis from "moralis";
@@ -67,6 +68,8 @@ function Editor() {
   const [tags, setTags] = React.useState([]);
   const [linkedItems, setLinkedItems] = React.useState([]);
   const { register, handleSubmit, formState: { errors }, watch } = useForm();
+  const CardPreviewBeforeMint = useRef(null);
+  const CardPreviewBeforeMintGenerated = useRef(null);
   const { settingsState } = useContext(SettingsContext);
 
   const [previewName, setPreviewName] = useState('');
@@ -75,6 +78,20 @@ function Editor() {
   const [previewImage, setPreviewImage] = useState(null);
   const isValidDate = moment(previewDate, "YYYY-MM-DD HH:mm:ss").isValid();
   const exactTime = previewDate.length > 0 && previewTime.length > 0;
+
+  useEffect(() => {
+    if (CardPreviewBeforeMint && CardPreviewBeforeMintGenerated) {
+      setTimeout(function () {
+        html2canvas(CardPreviewBeforeMint.current, {
+          allowTaint: true,
+          useCORS: true
+        }).then(function(canvas) {
+          CardPreviewBeforeMintGenerated.current.innerHTML = '';
+          CardPreviewBeforeMintGenerated.current.appendChild(canvas);
+        });
+      }, 300);
+    }
+  });
 
   const specifyTime = watch('specifyTime');
 
@@ -85,6 +102,12 @@ function Editor() {
     if (image && [...IMAGE_EXTENSIONS, ...VIDEO_EXTENSIONS].includes(extension) && image.size <= config.MAX_FILE_SIZE) {
       setImageFile(image);
       setPreviewImage(URL.createObjectURL(image));
+
+      var reader = new FileReader();
+      reader.onloadend = function () {
+        CardPreviewBeforeMintGenerated.current.src = reader.result;
+      }
+      reader.readAsDataURL(image);
     } else {
       alert(`Please select a correct file type for preview. Supported: ${[...IMAGE_EXTENSIONS, ...VIDEO_EXTENSIONS].join(', ')}. Max 20mb.`);
     }
@@ -95,10 +118,10 @@ function Editor() {
       const extension = file.name.split('.').pop().toLowerCase();
 
       let fileType = null;
-      if (TEXT_EXTENSIONS.includes(extension)) fileType = 'Text File';
-      if (IMAGE_EXTENSIONS.includes(extension)) fileType = 'Image File';
-      if (AUDIO_EXTENSIONS.includes(extension)) fileType = 'Audio File';
-      if (VIDEO_EXTENSIONS.includes(extension)) fileType = 'Video File';
+      if (TEXT_EXTENSIONS.includes(extension)) fileType = 'Text';
+      if (IMAGE_EXTENSIONS.includes(extension)) fileType = 'Image';
+      if (AUDIO_EXTENSIONS.includes(extension)) fileType = 'Audio';
+      if (VIDEO_EXTENSIONS.includes(extension)) fileType = 'Video';
 
       return {
         file,
@@ -116,13 +139,15 @@ function Editor() {
   const onFormSubmit = async (data) => {
     console.log('Form data:');
     console.log(data);
+    // await sleep(500);
 
     console.log('===> Uploading files to IPFS');
     setUploadStatusInProgress(true);
     document.body.style.overflow = 'hidden';
 
-    console.log('===> Saving main image');
-    const savedImage = new Moralis.File(`${uuid()}.${data.image[0].name.split('.').pop()}`, data.image[0]);
+    console.log('===> Saving marketplace image');
+    const marketplaceImage = CardPreviewBeforeMintGenerated.current.querySelector('canvas').toDataURL();
+    const savedImage = new Moralis.File(`${uuid()}.${data.image[0].name.split('.').pop()}`, { base64: marketplaceImage });
     await savedImage.saveIPFS();
     const saveiImageUrl = savedImage.ipfs();
     let metaData = {
@@ -185,9 +210,6 @@ function Editor() {
     await tokenMetadataFile.saveIPFS();
     const tokenURI = tokenMetadataFile.ipfs();
 
-    setUploadStatusInProgress(false);
-    document.body.style.overflow = 'auto';
-
     console.log('Metadata saved:');
     console.log(metaData);
 
@@ -196,8 +218,12 @@ function Editor() {
     toast.info("1 step to finish. Confirm minting by signing transaction.");
     const soundNumber = randomInteger(0, 7);
     playSound(soundsArray[soundNumber]);
+    setUploadStatusInProgress(false);
+    document.body.style.overflow = 'auto';
 
-    await mintToken(tokenURI)
+    await mintToken(tokenURI);
+
+    window.location.reload();
   }
 
   const mintToken = async (tokenURI) => {
@@ -225,6 +251,24 @@ function Editor() {
 
     return tokenId;
   };
+
+  if (tokenURI) {
+    return (
+      <>
+        <h1>Full Preview Before Minting</h1>
+
+        <AlertMessage text="You can play with your newly created card and check if everything looking good. And if so then you only need to sign a transaction to put your NFT to the blockchain."/>
+
+        <div className="Editor-full-preview">
+          <Card
+            tokenUri={tokenURI}
+            tokenIpfsHash={tokenURI.split('ipfs/')[1]}
+            specs={getSpecsFromHash(tokenURI.split('ipfs/')[1])}
+          />
+        </div>
+      </>
+    )
+  }
 
   return (
     <>
@@ -265,7 +309,7 @@ function Editor() {
 
                 <div className="Form-group">
                   <label className="Form-label">
-                    Description
+                    Description <small style={{ marginLeft: '.2rem', color: '#afafaf' }}>(text or markdown)</small>
                   </label>
                   <TextareaAutosize
                     cacheMeasurements
@@ -277,9 +321,6 @@ function Editor() {
                 </div>
 
                 <div className="Form-group">
-                  {/*<label className="Form-label" >*/}
-                  {/*  Preview image <SVG hintIcon dataHint={`Image or animation for the front side. Supported: ${[...IMAGE_EXTENSIONS, ...VIDEO_EXTENSIONS].join(', ')}. Max 20mb.`} />*/}
-                  {/*</label>*/}
                   {image && (
                     <FilePreview file={image} valid={true}>
                       <button onClick={() => {
@@ -349,122 +390,155 @@ function Editor() {
                 </div>
 
               </fieldset>
-              {/*<fieldset>*/}
-              {/*  <legend>Related data</legend>*/}
+              <fieldset>
+                <legend>Related data</legend>
 
-              {/*  <div className="Form-group">*/}
-              {/*    <label className="Form-label">*/}
-              {/*      Extra files (image, video, audio, text): <SVG hintIcon dataHint={`Invalid or unsupported files will not be attached. Supported are: ${[...UPLOADER_SUPPORTED_EXTENSIONS].join(', ')}. Max 20mb.`} />*/}
-              {/*    </label>*/}
-              {/*    <div className="Form-group-files-list-wrapper">*/}
-              {/*      {attachedFiles.map(({ file, uuid, valid }) => (*/}
-              {/*        <FilePreview key={uuid} uuid={uuid} file={file} valid={valid}>*/}
-              {/*          <button*/}
-              {/*            onClick={() => {*/}
-              {/*              const filtered = attachedFiles.filter(f => f.uuid !== uuid);*/}
-              {/*              setAttachedFiles([...filtered]);*/}
-              {/*            }}*/}
-              {/*            type="button"*/}
-              {/*          >*/}
-              {/*            <SVG trash />*/}
-              {/*          </button>*/}
-              {/*        </FilePreview>*/}
-              {/*      ))}*/}
-              {/*    </div>*/}
-              {/*    <div className="Form-group-file-wrapper">*/}
-              {/*      <input*/}
-              {/*        type="file"*/}
-              {/*        name="files"*/}
-              {/*        multiple={true}*/}
-              {/*        accept={UPLOADER_SUPPORTED_EXTENSIONS.map(ext => '.' + ext)}*/}
-              {/*        onChange={handleFilesChange}*/}
-              {/*      />*/}
-              {/*      <button className="btn-regular btn-big" type="button">*/}
-              {/*        <SVG upload /> Add file(s)*/}
-              {/*      </button>*/}
-              {/*    </div>*/}
-              {/*  </div>*/}
+                <div className="Form-group">
+                  <label className="Form-label">
+                    Extra files (image, video, audio, text): <SVG hintIcon dataHint={`Invalid or unsupported files will not be attached. Supported are: ${[...UPLOADER_SUPPORTED_EXTENSIONS].join(', ')}. Max 20mb.`} />
+                  </label>
+                  <div className="Form-group-files-list-wrapper">
+                    {attachedFiles.map(({ file, uuid, valid }) => (
+                      <FilePreview key={uuid} uuid={uuid} file={file} valid={valid}>
+                        <button
+                          onClick={() => {
+                            const filtered = attachedFiles.filter(f => f.uuid !== uuid);
+                            setAttachedFiles([...filtered]);
+                          }}
+                          type="button"
+                        >
+                          <SVG trash />
+                        </button>
+                      </FilePreview>
+                    ))}
+                  </div>
+                  <div className="Form-group-file-wrapper">
+                    <input
+                      type="file"
+                      name="files"
+                      multiple={true}
+                      accept={UPLOADER_SUPPORTED_EXTENSIONS.map(ext => '.' + ext)}
+                      onChange={handleFilesChange}
+                    />
+                    <button className="btn-regular btn-big" type="button">
+                      <SVG plus /> Add file(s)
+                    </button>
+                  </div>
+                </div>
 
-              {/*  <div className="Form-group">*/}
-              {/*    <label className="Form-label">*/}
-              {/*      Tags <SVG hintIcon dataHint="Use it to help others find your NFT. 3-5 tags should be enough." />*/}
-              {/*    </label>*/}
-              {/*    <ReactTagInput*/}
-              {/*      maxTags={7}*/}
-              {/*      removeOnBackspace={true}*/}
-              {/*      tags={tags}*/}
-              {/*      onChange={(newTags) => setTags(newTags)}*/}
-              {/*    />*/}
-              {/*  </div>*/}
+                <div className="Form-group">
+                  <label className="Form-label">
+                    Tags <SVG hintIcon dataHint="Use it to help others find your NFT. 3-5 tags should be enough." />
+                  </label>
+                  <ReactTagInput
+                    maxTags={7}
+                    removeOnBackspace={true}
+                    tags={tags}
+                    onChange={(newTags) => setTags(newTags)}
+                  />
+                </div>
 
-              {/*  <div className="Form-group">*/}
-              {/*    <label className="Form-label">*/}
-              {/*      Linked items: <SVG hintIcon dataHint="Specify token addresses of NFTs that are associated with NFT you are creating now." />*/}
-              {/*    </label>*/}
-              {/*    <ReactTagInput*/}
-              {/*      maxTags={50}*/}
-              {/*      removeOnBackspace={true}*/}
-              {/*      tags={linkedItems}*/}
-              {/*      onChange={(newItems) => setLinkedItems(newItems)}*/}
-              {/*    />*/}
-              {/*  </div>*/}
+                {/*<div className="Form-group">*/}
+                {/*  <label className="Form-label">*/}
+                {/*    Linked items: <SVG hintIcon dataHint="Specify token addresses of NFTs that are associated with NFT you are creating now." />*/}
+                {/*  </label>*/}
+                {/*  <ReactTagInput*/}
+                {/*    maxTags={50}*/}
+                {/*    removeOnBackspace={true}*/}
+                {/*    tags={linkedItems}*/}
+                {/*    onChange={(newItems) => setLinkedItems(newItems)}*/}
+                {/*  />*/}
+                {/*</div>*/}
 
-              {/*  <div className="Form-group">*/}
-              {/*    <label className="Form-label">*/}
-              {/*      Royalty % /!*<SVG hintIcon dataHint="Your fees for secondary sales. Small values are prefered." />*!/*/}
-              {/*    </label>*/}
-              {/*    <div className="Form-royalty-picker">*/}
-              {/*      <button type="button" className={`btn-regular ${royalty === 3 ? 'active' : ''}`} onClick={() => setRoyalty(3)}>*/}
-              {/*        3%*/}
-              {/*      </button>*/}
-              {/*      <button type="button" className={`btn-regular ${royalty === 5 ? 'active' : ''}`} onClick={() => setRoyalty(5)}>*/}
-              {/*        5%*/}
-              {/*      </button>*/}
-              {/*      <button type="button" className={`btn-regular ${royalty === 7 ? 'active' : ''}`} onClick={() => setRoyalty(7)}>*/}
-              {/*        7%*/}
-              {/*      </button>*/}
-              {/*      <input*/}
-              {/*        type="number"*/}
-              {/*        min={0} max={99}*/}
-              {/*        value={royalty}*/}
-              {/*        {...register("royalty")}*/}
-              {/*        onChange={(e) => {*/}
-              {/*          setRoyalty(parseInt(e.target.value > 99 ? 99 : e.target.value < 0 ? 0 : e.target.value, 10));*/}
-              {/*        }}*/}
-              {/*      />*/}
-              {/*    </div>*/}
-              {/*  </div>*/}
+                {/*<div className="Form-group">*/}
+                {/*  <label className="Form-label">*/}
+                {/*    Royalty % /!*<SVG hintIcon dataHint="Your fees for secondary sales. Small values are prefered." />*!/*/}
+                {/*  </label>*/}
+                {/*  <div className="Form-royalty-picker">*/}
+                {/*    <button type="button" className={`btn-regular ${royalty === 3 ? 'active' : ''}`} onClick={() => setRoyalty(3)}>*/}
+                {/*      3%*/}
+                {/*    </button>*/}
+                {/*    <button type="button" className={`btn-regular ${royalty === 5 ? 'active' : ''}`} onClick={() => setRoyalty(5)}>*/}
+                {/*      5%*/}
+                {/*    </button>*/}
+                {/*    <button type="button" className={`btn-regular ${royalty === 7 ? 'active' : ''}`} onClick={() => setRoyalty(7)}>*/}
+                {/*      7%*/}
+                {/*    </button>*/}
+                {/*    <input*/}
+                {/*      type="number"*/}
+                {/*      min={0} max={99}*/}
+                {/*      value={royalty}*/}
+                {/*      {...register("royalty")}*/}
+                {/*      onChange={(e) => {*/}
+                {/*        setRoyalty(parseInt(e.target.value > 99 ? 99 : e.target.value < 0 ? 0 : e.target.value, 10));*/}
+                {/*      }}*/}
+                {/*    />*/}
+                {/*  </div>*/}
+                {/*</div>*/}
 
-              {/*</fieldset>*/}
+              </fieldset>
               <fieldset>
                 <legend>Preview</legend>
 
-                <div className="Card-preview-before-mint">
-                  <div className="Card Card-inactive">
-                    <div className="Card-front">
-                      <div className="Card-timer">
-                        <div className="Card-date">
-                          {isValidDate ? (
-                            moment(`${previewDate} ${previewTime}`, "YYYY-MM-DD HH:mm:ss").format(exactTime ? 'LLL' : 'LL')
-                          ) : null}
+                <div className="Card-preview-before-mint-wrap">
+                  <div className="Card-preview-before-mint" ref={CardPreviewBeforeMint}>
+                    <div className="Card Card-inactive">
+                      <div className="Card-front">
+                        <div className="Card-timer">
+                          <div className="Card-date">
+                            {isValidDate ? (
+                              moment(`1954-02-12 23:22:21`, "YYYY-MM-DD HH:mm:ss").format(exactTime ? 'LLL' : 'LL')
+                            ) : null}
+                          </div>
                         </div>
-                        <div className="Card-date-ago">
-                          {isValidDate && <DurationTimer eventDate={`${previewDate} ${previewTime}`} exactTime={exactTime}/>}
+                        <div className="Card-preview" style={{opacity: 0}}>
+                          <img src={previewImage}/>
                         </div>
-                      </div>
-                      <div className="Card-preview ">
-                        <img src={previewImage}/>
-                      </div>
-                      <div className="Card-title">
-                        {previewName}
+                        <div className="Card-title">
+                          {previewName}
+                        </div>
                       </div>
                     </div>
+
+                    <CanvasRenderer imageUrl={previewImage}/>
+
+                    {/*<div className="Card-preview-before-mint">*/}
+                    {/*  <div className="Card Card-inactive">*/}
+                    {/*    <div className="Card-front">*/}
+                    {/*      <div className="Card-timer">*/}
+                    {/*        <div className="Card-date">*/}
+                    {/*          {isValidDate ? (*/}
+                    {/*            moment(`${previewDate} ${previewTime}`, "YYYY-MM-DD HH:mm:ss").format(exactTime ? 'LLL' : 'LL')*/}
+                    {/*          ) : null}*/}
+                    {/*        </div>*/}
+                    {/*        <div className="Card-date-ago">*/}
+                    {/*          {isValidDate && <DurationTimer eventDate={`${previewDate} ${previewTime}`} exactTime={exactTime}/>}*/}
+                    {/*        </div>*/}
+                    {/*      </div>*/}
+                    {/*      <div className="Card-preview ">*/}
+                    {/*        <img src={previewImage}/>*/}
+                    {/*      </div>*/}
+                    {/*      <div className="Card-title">*/}
+                    {/*        {previewName}*/}
+                    {/*      </div>*/}
+                    {/*    </div>*/}
+                    {/*  </div>*/}
+
+                    {/*  <CanvasRenderer*/}
+                    {/*    titleStr={previewName}*/}
+                    {/*    dateStr={isValidDate ? moment(`${previewDate} ${previewTime}`, "YYYY-MM-DD HH:mm:ss").format(exactTime ? 'LLL' : 'LL') : ''}*/}
+                    {/*  />*/}
                   </div>
 
-                  <CanvasRenderer
-                    titleStr={previewName}
-                    dateStr={isValidDate ? moment(`${previewDate} ${previewTime}`, "YYYY-MM-DD HH:mm:ss").format(exactTime ? 'LLL' : 'LL') : ''}
-                  />
+                  <div className="Card-preview-before-mint-generated" ref={CardPreviewBeforeMintGenerated}/>
+                </div>
+
+                <div className="important-note">
+                  IMPORTANT!
+                  <br/>
+                  This is an exact view of card on other marketplaces like OpenSea, Rarible and many others.
+                  <br/>
+                  Make sure that everything looks nice and well. You will not have chance to change it after minting.
                 </div>
 
                 <button className="btn-mint btn-big" type={"submit"}>

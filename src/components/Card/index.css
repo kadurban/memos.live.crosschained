@@ -30,7 +30,7 @@
 
 .Card.Card-inactive {
   pointer-events: none !important;
-  margin: auto auto var(--std-padding);
+  /*margin: auto auto var(--std-padding);*/
 }
 
 .Card-front,
@@ -89,7 +89,6 @@
   display: flex;
   flex-direction: column;
   transform: rotateY(-180deg);
-  padding: calc(var(--std-padding) / 4);
   background-position: -100%;
 }
 
@@ -200,6 +199,7 @@
   object-fit: cover;
   width: calc(300px - var(--std-padding) - var(--std-padding));
   height: calc(300px - var(--std-padding) - var(--std-padding));
+  transform: scale(1.18);
 }
 
 .Card-timer {
@@ -231,15 +231,141 @@
   color: #ffffffbd;
 }
 
-.Card-back-actions {
-  flex: auto;
-}
-
 .Card-ipfs-hash {
   width: var(--card-id-side);
   height: var(--card-id-side);
   background-color: #fff;
   overflow: hidden;
   border-radius: 100%;
-  box-shadow: 0 0 14px #ffffff;
+  box-shadow: 2px 2px 18px 8px #eadea6b0;
+  box-sizing: border-box;
+}
+
+.Card-back-actions {
+  flex: auto;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  align-content: center;
+  justify-content: space-around;
+}
+
+.Card-back-actions.count-0 {
+  display: none;
+}
+
+.Card-back-actions.count-1 button {
+  transform: scale(1.4);
+}
+
+.Card-back-actions.count-2 {
+  flex-direction: column;
+  justify-content: space-evenly;
+  padding: 3rem 0;
+}
+
+.Card-back-actions.count-2 button {
+  margin: 0 2rem;
+  transform: scale(1.2);
+}
+
+.Card-back-actions.count-3 {
+  flex-direction: row;
+  display: flex;
+  justify-content: space-evenly;
+}
+
+.Card-back-actions.count-3 button {
+  margin: 2rem;
+}
+
+.Card-back-actions.count-4 {
+  flex-direction: row;
+  flex-wrap: wrap;
+  align-content: space-around;
+  justify-content: space-between;
+  padding: 6rem 3rem;
+}
+
+.Card-back-actions.count-4 button {
+  margin: 0 20px;
+}
+
+
+.Card-back-actions.count-5 {
+  flex-direction: row;
+  flex-wrap: wrap;
+  align-content: space-around;
+  justify-content: space-evenly;
+  padding: 7rem 1rem;
+  position: relative;
+  top: 2rem;
+}
+
+.Card-back-actions.count-5 button {
+  margin: 0 10px;
+  padding: 0;
+}
+
+.Card-back-actions.count-5 button:nth-child(2) {
+  position: relative;
+  top: -5rem;
+}
+
+.Card-back-info.larger {
+  height: auto;
+}
+
+.Card-back-info.larger .Card-back-action-button {
+  transform: scale(4);
+  box-shadow: none;
+}
+
+.Card-back-action-button {
+  border: none;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  justify-content: space-evenly;
+  align-content: flex-end;
+  /*margin: 37px 20px;*/
+  width: var(--card-id-side);
+  height: var(--card-id-side);
+  background-color: #fff;
+  overflow: hidden;
+  border-radius: 100%;
+  box-shadow: 2px 2px 18px 8px #eadea6b0;
+
+  animation-name: button-animation;
+  animation-duration: 3s;
+  animation-fill-mode: forwards;
+  animation-iteration-count: infinite;
+  animation-timing-function: linear;
+}
+
+@-webkit-keyframes button-animation {
+  0% {
+    transform: scale(1);
+  }
+  15% {transform: scale(2.2);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+.Card-back-action-button .icon {
+  margin: 0;
+}
+
+.Card-back-action-button svg {
+  width: 40px;
+  height: 40px;
+}
+
+.Card-back-action-button svg path:nth-child(2) {
+  fill: var(--std-border-color) !important;
+}
+
+.Card-back-info {
+  height: 120px;
 }

@@ -55,6 +55,9 @@ function App() {
                     <Route path="/about" render={props => <AboutPage {...props} />} />
                     <Route path="/search" render={props => <SearchPage {...props} />} />
                     <Route path="/profile" render={props => <ProfilePage {...props} />} />
+                    <Route path="/chat" render={props => <div>
+                      <h1>Coming soon...</h1>
+                    </div>} />
                     <Route path="/" render={props => <MainPage {...props} />} />
                   </Switch>
                 </div>

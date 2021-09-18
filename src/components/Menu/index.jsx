@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React, {useContext, useEffect} from 'react';
 import { Link, NavLink } from "react-router-dom";
 import SettingsContext from '../../SettingsContext';
 import SVG from '../../SVG';
@@ -24,6 +24,10 @@ function Menu() {
     }, 200);
   };
 
+  useEffect(() => {
+    moveHighlight(document.querySelector('.active').offsetTop);
+  }, [])
+
   return (
     <div className="Menu">
       {/*<button className="Menu-close-btn" onClick={onMenuClick}>*/}
@@ -32,16 +36,19 @@ function Menu() {
 
       <div className="Menu-primary">
         <div className="Menu-primary-highlight"/>
-        <NavLink exact to="/" className="Menu-primary-item" activeClassName="selected" onClick={onMenuClick}>
-          <SVG carousel/> Main page
+        <NavLink exact to="/" className="Menu-primary-item" onClick={onMenuClick}>
+          <SVG carousel/> Discover
+        </NavLink>
+        <NavLink exact to="/ьн" className="Menu-primary-item" onClick={onMenuClick}>
+          <SVG carousel/> My collection
         </NavLink>
         <NavLink to="/new" className="Menu-primary-item" onClick={onMenuClick}>
-          <SVG wizard/> NFT Wizard
+          <SVG wizard/> Wizard
         </NavLink>
-        <NavLink to="/search" className="Menu-primary-item" activeClassName="selected" onClick={onMenuClick}>
+        <NavLink to="/search" className="Menu-primary-item" onClick={onMenuClick}>
           <SVG search/> Search
         </NavLink>
-        <NavLink to="/about" className="Menu-primary-item" activeClassName="selected" onClick={onMenuClick}>
+        <NavLink to="/about" className="Menu-primary-item" onClick={onMenuClick}>
           <SVG question/> About
         </NavLink>
       </div>

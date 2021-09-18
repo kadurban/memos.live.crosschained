@@ -1,8 +1,11 @@
 .AlertMessage {
-    padding: var(--std-padding);
+    padding: calc(var(--std-padding) / 3) calc(var(--std-padding) / 2);
     border-radius: var(--std-border-radius);
     border: 1px solid var(--std-border-color);
     background-color: rgb(243,236,203);
+    margin-bottom: var(--std-padding);
+    font-size: .9rem;
+    line-height: 1.6rem;
 }
 
 .AlertMessage-text {

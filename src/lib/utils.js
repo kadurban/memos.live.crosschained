@@ -74,3 +74,12 @@ export function randomInteger(min, max) {
   let rand = min - 0.5 + Math.random() * (max - min + 1);
   return Math.round(rand);
 }
+
+export function sleep(ms) {
+  return new Promise(resolve => setTimeout(resolve, ms));
+}
+
+export function getSpecsFromHash(hash) {
+  const filtered =  hash.split('').filter(i => /[0-9]/gi.test(i));
+  return filtered.join('').substr(0, 4);
+}

@@ -3,21 +3,41 @@ import React, {useEffect} from 'react';
 const cardWidth = 320;
 const cardHeight = 450;
 const imageSize = 260;
+// const imageUrl = 'https://ipfs.moralis.io:2053/ipfs/QmPWqdvbZ5aSXE1AbU5dPCviPrNnZyuj1BLsjCQHAF4vSP';
+const imageUrl = 'https://ipfs.moralis.io:2053/ipfs/QmQ11FGzpRVbdPwL6e3QmgXr7tzoE9qPhjfEHV3mUW3iDU';
+// const imageUrl = 'https://oecdenvironmentfocusblog.files.wordpress.com/2020/06/wed-blog-shutterstock_1703194387_low_nwm.jpg?w=640';
+// const imageUrl = 'https://i.pinimg.com/originals/fa/47/2c/fa472c8a65ef4f5f32a8e972ba648fae.jpg';
 
-async function createPreview({ imageUrl }) {
+async function createPreview({ dateStr, titleStr }) {
   const canvas = document.getElementById('marketPreview');
   const canvasResizer = document.getElementById('resizer');
   const ctx = canvas.getContext('2d');
   const gradient = ctx.createRadialGradient(cardWidth/2, cardHeight/2, 20, cardWidth/2, cardHeight/2, 390);
+
   ctx.beginPath();
   gradient.addColorStop(0, 'rgba(255,255,255,1)');
   gradient.addColorStop(0.28, 'rgba(255,255,255,1)');
   gradient.addColorStop(0.72, 'rgba(228,205,105,1)');
-  ctx.closePath();
+
   ctx.fillStyle = gradient;
   ctx.roundRect(0, 0, cardWidth, cardHeight, 16);
   ctx.fill();
   ctx.closePath();
+
+  ctx.beginPath();
+  ctx.textAlign = 'center';
+  ctx.fillStyle = 'rgba(0, 0, 0, 0.8)';
+  ctx.font = "16px -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif";
+  ctx.fillText(dateStr, cardWidth/2, 35);
+  ctx.closePath();
+
+  ctx.beginPath();
+  ctx.textAlign = 'center';
+  ctx.fillStyle = 'rgba(0, 0, 0, 0.8)';
+  ctx.font = "19px -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif";
+  ctx.fillText(fittingString(ctx, titleStr, cardWidth-50), cardWidth/2, cardHeight-48);
+  ctx.closePath();
+
   await resizeMainImage(canvasResizer, imageUrl);
 
   ctx.beginPath();
@@ -67,7 +87,8 @@ async function resizeMainImage(canvas, imageUrl) {
 function CanvasRenderer(props) {
   useEffect(() => {
     createPreview({
-      imageUrl: props.imageUrl
+      dateStr: props.dateStr,
+      titleStr: 'asddsadas asd asdasd asadas dasdasda sdasad asd asdasd asd asd asasd asdas '
     });
   });
 
@@ -75,6 +96,7 @@ function CanvasRenderer(props) {
     <>
       <canvas id="resizer" width={imageSize} height={imageSize} style={{ position: 'absolute', transform: 'scale(0)', pointerEvents: 'none', zIndex: -1000 }}/>
       <canvas id="marketPreview" width={cardWidth} height={cardHeight}/>
+      {/*<canvas id="canvas" width={cardWidth} height={cardHeight} style={{ display: 'block', margin: 'auto' }}/>*/}
     </>
   );
 }
@@ -90,6 +112,25 @@ CanvasRenderingContext2D.prototype.roundRect = function (x, y, width, height, ra
   this.arcTo(x, y, x + width, y, radius);
   this.closePath();
   return this;
+}
+
+function fittingString(c, str, maxWidth) {
+  let width = c.measureText(str).width;
+  const ellipsis = '…';
+  const ellipsisWidth = c.measureText(ellipsis).width;
+  console.log('=================================')
+  if (width <= maxWidth || width <= ellipsisWidth) {
+    return str;
+  } else {
+    let len = str.length;
+    while (width >= maxWidth - ellipsisWidth && len-- > 0) {
+      str = str.substring(0, len);
+      console.log('=================================')
+      console.log(str)
+      width = c.measureText(str).width;
+    }
+    return str + ellipsis;
+  }
 }
 
 export default CanvasRenderer;

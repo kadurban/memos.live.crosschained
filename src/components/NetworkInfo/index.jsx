@@ -52,11 +52,10 @@ function NetworkInfo(props) {
       )}
       <div className="NetworkInfo-selector">
         <select value={NETWORK_NAME} onChange={(e) => changeNetwork(e.target.value)}>
-          <option disabled>Main nets ───</option>
-          <option value="polygon">Polygon</option>
+          <option value="polygon" disabled>Polygon</option>
           <option value="ethereum" disabled>Ethereum (soon)</option>
           <option value="bsc" disabled>BSC (soon)</option>
-          <option disabled>Test nets ───</option>
+          <option disabled>─── Test nets ───</option>
           <option value="mumbai">Mumbai</option>
           <option value="rinkeby">Rinkeby</option>
         </select>

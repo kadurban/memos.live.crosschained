@@ -23,7 +23,7 @@ export default function Viewer(props) {
   useEffect(async () => {
     playSound('viewerIn');
     if (props.type === 'texts') {
-      const responseData = await getContentByUrl({ url: state.contents[0].link });
+      const responseData = await getContentByUrl(state.contents[0].link);
       const contents = state.contents;
       contents[state.currentItemIndex].data = responseData
       setState({ ...state, contents });
@@ -69,143 +69,152 @@ export default function Viewer(props) {
       )}
 
       <div className="Viewer-inner">
-        <div className="Viewer-content-area">
+        <div className="Viewer-content-area-wrap">
+          <div className="Viewer-content-area">
 
 
 
-          {props.type === 'description' && state.contents}
+            {props.type === 'description' && (
+              <ReactMarkdown
+                className="markdown"
+                skipHtml={true}
+              >
+                {state.contents}
+              </ReactMarkdown>
+            )}
 
 
 
-          {props.type === 'texts' && (
-            <Swiper
-              observer={true}
-              virtual={{ addSlidesAfter: 1, addSlidesBefore: 1 }}
-              slidesPerView={1}
-              speed={200}
-              spaceBetween={50}
-              onSlideChange={async (swiper) => {
-                const responseData = await getContentByUrl({ url: state.contents[swiper.activeIndex].link });
-                const contents = state.contents;
-                contents[swiper.activeIndex].data = responseData
-                setState({ ...state, currentItemIndex: swiper.activeIndex, contents });
-              }}
-            >
-              {state.contents.map((item, index) => (
-                <SwiperSlide key={index} virtualIndex={index}>
-                  <div className="Vewer-texts-inner">
-                    {state.contents[index].data && <div className="Vewer-texts-inner-text">
-                      <ReactMarkdown
-                        className="markdown"
-                        skipHtml={true}
-                      >
-                        {state.contents[index].data}
-                      </ReactMarkdown>
-                    </div> || <Loader />}
-                  </div>
-                </SwiperSlide>
-              ))}
-            </Swiper>
-          )}
+            {props.type === 'texts' && (
+              <Swiper
+                observer={true}
+                virtual={{ addSlidesAfter: 1, addSlidesBefore: 1 }}
+                slidesPerView={1}
+                speed={200}
+                spaceBetween={50}
+                onSlideChange={async (swiper) => {
+                  const responseData = await getContentByUrl(state.contents[swiper.activeIndex].link);
+                  const contents = state.contents;
+                  contents[swiper.activeIndex].data = responseData
+                  setState({ ...state, currentItemIndex: swiper.activeIndex, contents });
+                }}
+              >
+                {state.contents.map((item, index) => (
+                  <SwiperSlide key={index} virtualIndex={index}>
+                    <div className="Vewer-texts-inner">
+                      {state.contents[index].data && <div className="Vewer-texts-inner-text">
+                        <ReactMarkdown
+                          className="markdown"
+                          skipHtml={true}
+                        >
+                          {state.contents[index].data}
+                        </ReactMarkdown>
+                      </div> || <Loader />}
+                    </div>
+                  </SwiperSlide>
+                ))}
+              </Swiper>
+            )}
 
 
-          
-          {props.type === 'audios' && (
-            <Swiper
-              observer={true}
-              virtual={{ addSlidesAfter: 1, addSlidesBefore: 1 }}
-              slidesPerView={1}
-              speed={200}
-              spaceBetween={50}
-              onSlideChange={async (swiper) => {
-                setState({ ...state, currentItemIndex: swiper.activeIndex });
-                for (const item of state.contents) {
-                  // window.createjs.Sound.stop(item);
-                }
-              }}
-            >
-              {state.contents.map((item, index) => (
-                <SwiperSlide key={index} virtualIndex={index}>
-                  {state.contents[index] && (
-                    <div className="Vewer-audios-inner">
-                      {/* <div className="Viewer-audios-visualizer">
-                        visualisation...
-                      </div> */}
-                      {/* <div className="Viewer-audios-name">
-                          {state.contents[index].name}
-                      </div> */}
-                      <div className="Viewer-audios-controls">
-                        <button onClick={() => {
-                          // const audio = new Howl({ src: [state.contents[index]] });
-                          // audio.once('load', function(){
-                          //   audio.play();
-                          // });
-                        }}>
-                          <SVG play />
-                        </button>
+
+            {props.type === 'audios' && (
+              <Swiper
+                observer={true}
+                virtual={{ addSlidesAfter: 1, addSlidesBefore: 1 }}
+                slidesPerView={1}
+                speed={200}
+                spaceBetween={50}
+                onSlideChange={async (swiper) => {
+                  setState({ ...state, currentItemIndex: swiper.activeIndex });
+                  for (const item of state.contents) {
+                    // window.createjs.Sound.stop(item);
+                  }
+                }}
+              >
+                {state.contents.map((item, index) => (
+                  <SwiperSlide key={index} virtualIndex={index}>
+                    {state.contents[index] && (
+                      <div className="Vewer-audios-inner">
+                        {/* <div className="Viewer-audios-visualizer">
+                          visualisation...
+                        </div> */}
+                        {/* <div className="Viewer-audios-name">
+                            {state.contents[index].name}
+                        </div> */}
+                        <div className="Viewer-audios-controls">
+                          <button onClick={() => {
+                            // const audio = new Howl({ src: [state.contents[index]] });
+                            // audio.once('load', function(){
+                            //   audio.play();
+                            // });
+                          }}>
+                            <SVG play />
+                          </button>
+                        </div>
                       </div>
-                    </div>
-                  ) || <Loader />}
-                </SwiperSlide>
-              ))}
-            </Swiper>
-          )}
+                    ) || <Loader />}
+                  </SwiperSlide>
+                ))}
+              </Swiper>
+            )}
 
 
 
-          {props.type === 'images' && (
-            <Swiper
-              observer={true}
-              virtual={{ addSlidesAfter: 1, addSlidesBefore: 1 }}
-              slidesPerView={1}
-              speed={200}
-              onSlideChange={async (swiper) => {
-                setState({ ...state, currentItemIndex: swiper.activeIndex });
-              }}
-            >
-              {state.contents.map((item, index) => (
-                <SwiperSlide key={index} virtualIndex={index}>
-                  {state.contents[index] && (
-                    <div className="Viewer-images-inner">
-                      <img
-                        src={state.contents[index]}
-                      />
-                    </div>
-                  ) || <Loader />}
-                </SwiperSlide>
-              ))}
-            </Swiper>
-          )}
+            {props.type === 'images' && (
+              <Swiper
+                observer={true}
+                virtual={{ addSlidesAfter: 1, addSlidesBefore: 1 }}
+                slidesPerView={1}
+                speed={200}
+                onSlideChange={async (swiper) => {
+                  setState({ ...state, currentItemIndex: swiper.activeIndex });
+                }}
+              >
+                {state.contents.map((item, index) => (
+                  <SwiperSlide key={index} virtualIndex={index}>
+                    {state.contents[index] && (
+                      <div className="Viewer-images-inner">
+                        <img
+                          src={state.contents[index]}
+                        />
+                      </div>
+                    ) || <Loader />}
+                  </SwiperSlide>
+                ))}
+              </Swiper>
+            )}
 
 
 
-          {props.type === 'videos' && (
-            <Swiper
-              observer={true}
-              virtual={{ addSlidesAfter: 1, addSlidesBefore: 1 }}
-              slidesPerView={1}
-              speed={200}
-              onSlideChange={async (swiper) => {
-                setState({ ...state, currentItemIndex: swiper.activeIndex });
-              }}
-            >
-              {state.contents.map((item, index) => (
-                <SwiperSlide key={index} virtualIndex={index}>
-                  {state.contents[index] && (
-                    <div className="Vewer-images-inner">
-                      <video
-                        src={state.contents[index]}
-                        controls
-                      // poster={props.preview}
-                      >
-                        Your browser doesn't support embedded videos :(
-                      </video>
-                    </div>
-                  ) || <Loader />}
-                </SwiperSlide>
-              ))}
-            </Swiper>
-          )}
+            {props.type === 'videos' && (
+              <Swiper
+                observer={true}
+                virtual={{ addSlidesAfter: 1, addSlidesBefore: 1 }}
+                slidesPerView={1}
+                speed={200}
+                onSlideChange={async (swiper) => {
+                  setState({ ...state, currentItemIndex: swiper.activeIndex });
+                }}
+              >
+                {state.contents.map((item, index) => (
+                  <SwiperSlide key={index} virtualIndex={index}>
+                    {state.contents[index] && (
+                      <div className="Vewer-images-inner">
+                        <video
+                          src={state.contents[index]}
+                          controls
+                        // poster={props.preview}
+                        >
+                          Your browser doesn't support embedded videos :(
+                        </video>
+                      </div>
+                    ) || <Loader />}
+                  </SwiperSlide>
+                ))}
+              </Swiper>
+            )}
+          </div>
         </div>
       </div>
     </div>
