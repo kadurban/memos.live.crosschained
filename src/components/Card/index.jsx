@@ -124,10 +124,14 @@ function Card(props) {
       )}
     
       <div className={`Card ${state.rotated && 'Card-rotated' || ''} ${props.appearsAnimation ? props.appearsAnimation: ''}`}>
-        <div className="Card-front" onClick={() => setState(() => {
-          playSound('cardFlip1');
-          return { ...state, rotated: true };
-        })}>
+        <button
+          tabIndex={state.rotated ? -1 : 0}
+          className="Card-front"
+          onClick={() => setState(() => {
+            playSound('cardFlip1');
+            return { ...state, rotated: true };
+          })}
+        >
           <div className="Card-timer">
             <div className="Card-date">
               {isValidDate ? (
@@ -157,15 +161,20 @@ function Card(props) {
               buttons={false}
             />
           </div>
-        </div>
-        <div className="Card-back" onClick={() => setState(() => {
-          playSound('cardFlip2');
-          return { ...state, rotated: false };
-        })}>
+        </button>
+
+        <div
+          className="Card-back"
+          onClick={() => setState(() => {
+            playSound('cardFlip2');
+            return { ...state, rotated: false };
+          })}
+        >
           <div className={`Card-back-actions count-${totalActionTypesCount}`}>
 
             {state.cardData.images && state.cardData.images.length > 0 && (
               <button
+                tabIndex={state.rotated ? 0 : -1}
                 className="Card-back-action-button"
                 onClick={(e) => setState(() => {
                   e.stopPropagation();
@@ -185,6 +194,7 @@ function Card(props) {
 
             {state.cardData.videos && state.cardData.videos.length > 0 && (
               <button
+                tabIndex={state.rotated ? 0 : -1}
                 className="Card-back-action-button"
                 onClick={(e) => setState(() => {
                   e.stopPropagation();
@@ -204,6 +214,7 @@ function Card(props) {
 
             {state.cardData.description && state.cardData.description.length && (
               <button
+                tabIndex={state.rotated ? 0 : -1}
                 className="Card-back-action-button"
                 onClick={(e) => setState(() => {
                   e.stopPropagation();
@@ -223,6 +234,7 @@ function Card(props) {
 
             {state.cardData.texts && state.cardData.texts.length > 0 && (
               <button
+                tabIndex={state.rotated ? 0 : -1}
                 className="Card-back-action-button"
                 onClick={(e) => setState(() => {
                   e.stopPropagation();
@@ -242,6 +254,7 @@ function Card(props) {
 
             {state.cardData.audios && state.cardData.audios.length > 0 && (
               <button
+                tabIndex={state.rotated ? 0 : -1}
                 className="Card-back-action-button"
                 onClick={(e) => setState(() => {
                   e.stopPropagation();
@@ -260,13 +273,18 @@ function Card(props) {
             )}
 
           </div>
+
+          <button
+            tabIndex={state.rotated ? 0 : -1}
+            className="Card-back-action-button flip-back"
+            onClick={() => setState(() => {
+              playSound('cardFlip2');
+              return { ...state, rotated: false };
+            })}
+          >
+            <SVG flipBack/>
+          </button>
           {/*<div className={`Card-back-info ${totalActionTypesCount === 0 ? 'larger' : ''}`}>*/}
-          {/*  <button className="Card-back-action-button" onClick={() => setState(() => {*/}
-          {/*    playSound('cardFlip2');*/}
-          {/*    return { ...state, rotated: false };*/}
-          {/*  })}>*/}
-          {/*    <Jdenticon size="60" value={props.tokenIpfsHash}/>*/}
-          {/*  </button>*/}
             {/*<div>*/}
             {/*  <Element specs={props.specs} index={0}/>*/}
             {/*  <Element specs={props.specs} index={1}/>*/}

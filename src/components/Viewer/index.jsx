@@ -91,7 +91,7 @@ export default function Viewer(props) {
                 virtual={{ addSlidesAfter: 1, addSlidesBefore: 1 }}
                 slidesPerView={1}
                 speed={200}
-                spaceBetween={50}
+                spaceBetween={0}
                 onSlideChange={async (swiper) => {
                   const responseData = await getContentByUrl(state.contents[swiper.activeIndex].link);
                   const contents = state.contents;
@@ -101,15 +101,17 @@ export default function Viewer(props) {
               >
                 {state.contents.map((item, index) => (
                   <SwiperSlide key={index} virtualIndex={index}>
-                    <div className="Vewer-texts-inner">
-                      {state.contents[index].data && <div className="Vewer-texts-inner-text">
-                        <ReactMarkdown
-                          className="markdown"
-                          skipHtml={true}
-                        >
-                          {state.contents[index].data}
-                        </ReactMarkdown>
-                      </div> || <Loader />}
+                    <div className="Viewer-texts-inner">
+                      {(state.contents[index].data &&
+                        <div className="Viewer-texts-inner-text">
+                          <ReactMarkdown
+                            className="markdown"
+                            skipHtml={true}
+                          >
+                            {state.contents[index].data}
+                          </ReactMarkdown>
+                        </div>
+                      ) || <Loader />}
                     </div>
                   </SwiperSlide>
                 ))}
@@ -135,7 +137,7 @@ export default function Viewer(props) {
                 {state.contents.map((item, index) => (
                   <SwiperSlide key={index} virtualIndex={index}>
                     {state.contents[index] && (
-                      <div className="Vewer-audios-inner">
+                      <div className="Viewer-audios-inner">
                         {/* <div className="Viewer-audios-visualizer">
                           visualisation...
                         </div> */}
@@ -200,7 +202,7 @@ export default function Viewer(props) {
                 {state.contents.map((item, index) => (
                   <SwiperSlide key={index} virtualIndex={index}>
                     {state.contents[index] && (
-                      <div className="Vewer-images-inner">
+                      <div className="Viewer-images-inner">
                         <video
                           src={state.contents[index]}
                           controls

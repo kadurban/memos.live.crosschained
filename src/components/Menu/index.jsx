@@ -37,9 +37,9 @@ function Menu() {
       <div className="Menu-primary">
         <div className="Menu-primary-highlight"/>
         <NavLink exact to="/" className="Menu-primary-item" onClick={onMenuClick}>
-          <SVG carousel/> Discover
+          <SVG compas/> Discover
         </NavLink>
-        <NavLink exact to="/ьн" className="Menu-primary-item" onClick={onMenuClick}>
+        <NavLink exact to="/my" className="Menu-primary-item" onClick={onMenuClick}>
           <SVG carousel/> My collection
         </NavLink>
         <NavLink to="/new" className="Menu-primary-item" onClick={onMenuClick}>

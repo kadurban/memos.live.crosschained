@@ -53,6 +53,17 @@
   transition: all cubic-bezier(0.34, 0.37, 0.21, 1.48) .6s;
   box-shadow: 0 1rem 2rem #ddca7899;
   color: var(--l-text-color);
+  border: none;
+  font-size: inherit;
+  text-transform: inherit;
+  line-height: inherit;
+}
+
+.Card-front:focus,
+.Card-front:hover,
+.Card-back:focus,
+.Card-back:hover {
+  box-shadow: 0 1rem 2rem #ddca7899;
 }
 
 .dark .Card-front,
@@ -273,6 +284,8 @@
   flex-direction: row;
   display: flex;
   justify-content: space-evenly;
+  position: relative;
+  top: 1rem;
 }
 
 .Card-back-actions.count-3 button {
@@ -340,6 +353,14 @@
   animation-fill-mode: forwards;
   animation-iteration-count: infinite;
   animation-timing-function: linear;
+}
+
+.Card-back-action-button.flip-back {
+  position: absolute;
+  background-color: transparent;
+  box-shadow: none;
+  bottom: 0;
+  transform: scale(.8);
 }
 
 @-webkit-keyframes button-animation {

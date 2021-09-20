@@ -25,7 +25,9 @@ export default function Loader({ isUploader, isOverlay, text }) {
           </div>
           <div className="Loader-info">
             <h2>
-              Uploading attached files.
+              Files are uploading now.
+              <br/>
+              Please wait.
             </h2>
             <p>
               This may take some time.

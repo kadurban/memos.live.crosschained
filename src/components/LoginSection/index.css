@@ -33,6 +33,9 @@
 
 .Dropdown-trigger {
   cursor: pointer;
+  padding: 0;
+  border: none;
+  box-shadow: none;
 }
 
 .Dropdown-content button,

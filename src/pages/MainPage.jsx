@@ -1,10 +1,10 @@
 import React, {useContext, useEffect, useState} from 'react';
-import MyNFTs from '../components/MyNFTs'
+import Loader from '../components/Loader'
 
 function MainPage(props) {
   return (
-    <div className="Page-wrapper main">
-      <MyNFTs/>
+    <div className="Page-wrapper">
+      <Loader/>
     </div>
   );
 }

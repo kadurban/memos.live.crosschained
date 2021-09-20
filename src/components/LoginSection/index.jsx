@@ -54,13 +54,13 @@ function LoginSection() {
       )}
       {settingsState.user && (
         <div className="Dropdown">
-          <div
+          <button
             className="Dropdown-trigger"
             onClick={() => dropdownContent.current.classList.toggle('Dropdown-content-active')}
             title={settingsState.user.attributes.ethAddress}
           >
             <Jazzicon diameter={40} seed={jsNumberForAddress(settingsState.user.attributes.ethAddress)}/>
-          </div>
+          </button>
           <div className="Dropdown-content" ref={dropdownContent}>
             <div className="User-address">
               {addressShoring(settingsState.user.attributes.ethAddress)}

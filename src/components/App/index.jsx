@@ -5,6 +5,7 @@ import CreatePage from '../../pages/CreatePage';
 import AboutPage from '../../pages/AboutPage';
 import SearchPage from '../../pages/SearchPage';
 import ProfilePage from '../../pages/ProfilePage';
+import MyCollectionPage from '../../pages/MyCollectionPage';
 import Loader from '../../components/Loader';
 import SettingsContext from '../../SettingsContext';
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
@@ -12,11 +13,11 @@ import ErrorBoundary from '../ErrorBoundary';
 import {getConfig} from "../../config";
 // import bgDark from '../../assets/img/bg-dark.jpg';
 // import bgLight from '../../assets/img/bg-light.jpg';
-import logoLight from '../../assets/img/logo-light.png';
-import logoDark from '../../assets/img/logo-dark.png';
+// import logoLight from '../../assets/img/logo-light.png';
+// import logoDark from '../../assets/img/logo-dark.png';
 import TopBar from '../TopBar'
 import Menu from '../Menu'
-// import 'swiper/swiper-bundle.css';
+import 'swiper/swiper-bundle.css';
 import './index.css';
 
 window.Moralis = Moralis;
@@ -50,11 +51,11 @@ function App() {
                 </div>
                 <div className="App-primary-content-right">
                   <Switch>
-                    {/*<Route path="/profile" render={props => <ProfilePage {...props} />} />*/}
                     <Route path="/new" render={props => <CreatePage {...props} />} />
                     <Route path="/about" render={props => <AboutPage {...props} />} />
                     <Route path="/search" render={props => <SearchPage {...props} />} />
                     <Route path="/profile" render={props => <ProfilePage {...props} />} />
+                    <Route path="/my" render={props => <MyCollectionPage {...props} />} />
                     <Route path="/chat" render={props => <div>
                       <h1>Coming soon...</h1>
                     </div>} />

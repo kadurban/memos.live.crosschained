@@ -86,8 +86,10 @@ function Editor() {
           allowTaint: true,
           useCORS: true
         }).then(function(canvas) {
-          CardPreviewBeforeMintGenerated.current.innerHTML = '';
-          CardPreviewBeforeMintGenerated.current.appendChild(canvas);
+          if (CardPreviewBeforeMintGenerated.current) {
+            CardPreviewBeforeMintGenerated.current.innerHTML = '';
+            CardPreviewBeforeMintGenerated.current.appendChild(canvas);
+          }
         });
       }, 300);
     }
@@ -165,28 +167,28 @@ function Editor() {
     if (moment(data.eventDate, 'YYYY-MM-DD HH:mm:ss').isValid()) {
       metaData.attributes.push({
         key: 'Date',
-        value: data.eventDate,
+        value: data.exactTime ? `${data.eventDate} ${data.exactTime}` : data.eventDate,
         trait_type: 'Event Date'
       });
     }
 
     // tags to attributes
-    for (const tag of tags) {
-      metaData.attributes.push({
-        key: 'Tag',
-        value: tag,
-        trait_type: 'Tag'
-      });
-    }
+    // for (const tag of tags) {
+    //   metaData.attributes.push({
+    //     key: 'Tag',
+    //     value: tag,
+    //     trait_type: 'Tag'
+    //   });
+    // }
 
     // Linked items to attributes
-    for (const linkedItem of linkedItems) {
-      metaData.attributes.push({
-        key: 'Linked Item',
-        value: linkedItem,
-        trait_type: 'Linked Item'
-      });
-    }
+    // for (const linkedItem of linkedItems) {
+    //   metaData.attributes.push({
+    //     key: 'Linked Item',
+    //     value: linkedItem,
+    //     trait_type: 'Linked Item'
+    //   });
+    // }
 
     // save attached files and create attributes object
     for (const fileObject of attachedFiles) {
@@ -426,17 +428,17 @@ function Editor() {
                   </div>
                 </div>
 
-                <div className="Form-group">
-                  <label className="Form-label">
-                    Tags <SVG hintIcon dataHint="Use it to help others find your NFT. 3-5 tags should be enough." />
-                  </label>
-                  <ReactTagInput
-                    maxTags={7}
-                    removeOnBackspace={true}
-                    tags={tags}
-                    onChange={(newTags) => setTags(newTags)}
-                  />
-                </div>
+                {/*<div className="Form-group">*/}
+                {/*  <label className="Form-label">*/}
+                {/*    Tags <SVG hintIcon dataHint="Use it to help others find your NFT. 3-5 tags should be enough." />*/}
+                {/*  </label>*/}
+                {/*  <ReactTagInput*/}
+                {/*    maxTags={7}*/}
+                {/*    removeOnBackspace={true}*/}
+                {/*    tags={tags}*/}
+                {/*    onChange={(newTags) => setTags(newTags)}*/}
+                {/*  />*/}
+                {/*</div>*/}
 
                 {/*<div className="Form-group">*/}
                 {/*  <label className="Form-label">*/}

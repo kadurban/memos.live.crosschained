@@ -1,13 +1,13 @@
 .Loader {
     display: block;
-    width: 70px;
-    height: 70px;
+    width: 80px;
+    height: 80px;
     position: relative;
 }
 
 .Loader-logo {
     animation-name: logo-spin;
-    animation-duration: 2s;
+    animation-duration: 3s;
     animation-fill-mode: forwards;
     animation-iteration-count: infinite;
     animation-timing-function: linear;
