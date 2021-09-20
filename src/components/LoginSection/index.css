@@ -3,13 +3,12 @@
 }
 
 .Dropdown-content {
-  /*display: flex;*/
   display: none;
   position: absolute;
   box-shadow: var(--shadow-color) 0px 0.25rem 0.75rem 0px;
   background-color: #fff;
   padding: calc(var(--std-padding) / 2);
-  top: 100%;
+  top: calc(100% + 7px);
   right: 0;
   flex-direction: column;
   text-align: right;
@@ -35,6 +34,11 @@
   cursor: pointer;
   padding: 0;
   border: none;
+  box-shadow: none;
+}
+
+.Dropdown-trigger:focus,
+.Dropdown-trigger:hover {
   box-shadow: none;
 }
 
@@ -107,3 +111,20 @@
   }
 }
 
+.net-info {
+  text-align: right;
+  margin-right: .5rem;
+  line-height: 1rem;
+  color: #9b9b9b;
+  text-transform: initial;
+}
+
+.net-info span {
+  color: #9b9b9b;
+}
+
+.net-icon {
+  position: relative;
+  top: 3px;
+  margin-right: .4rem;
+}

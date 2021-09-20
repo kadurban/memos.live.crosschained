@@ -4,7 +4,8 @@ import Loader from '../components/Loader'
 function MainPage(props) {
   return (
     <div className="Page-wrapper">
-      <Loader/>
+      <h1>Discover</h1>
+      Page development is in progress
     </div>
   );
 }

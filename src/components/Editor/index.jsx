@@ -241,7 +241,7 @@ function Editor() {
     }, [tokenURI]);
 
     const txParams = {
-      to: window.config.MINT_CONTRACT_ADDRESS,
+      to: settingsState.appConfiguration.MINT_CONTRACT_ADDRESS,
       from: window.ethereum.selectedAddress,
       data: encodedFunction
     };

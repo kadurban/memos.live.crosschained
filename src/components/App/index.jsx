@@ -7,6 +7,7 @@ import SearchPage from '../../pages/SearchPage';
 import ProfilePage from '../../pages/ProfilePage';
 import MyCollectionPage from '../../pages/MyCollectionPage';
 import Loader from '../../components/Loader';
+import UnsupportedChainInfo from '../../components/UnsupportedChainInfo';
 import SettingsContext from '../../SettingsContext';
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import ErrorBoundary from '../ErrorBoundary';
@@ -19,23 +20,47 @@ import TopBar from '../TopBar'
 import Menu from '../Menu'
 import 'swiper/swiper-bundle.css';
 import './index.css';
+import MyNFTs from "../MyNFTs";
 
 window.Moralis = Moralis;
-window.config = getConfig();
 window.soundsLoaded = {};
-
-console.info(`%c ${window.config.NETWORK_NAME} `, 'background: rgb(172 255 172); color: #000; font-size: 24px;');
 
 function App() {
   const { settingsState, setSettingsState } = useContext(SettingsContext);
   const [ appLoaded, setAppLoadedStatus ] = useState(false);
+  const [ isChainSupported, setIsChainSupported ] = useState(false);
 
   useEffect(() => {
-    Moralis.initialize(window.config.MORALIS_APP_ID);
-    Moralis.serverURL = window.config.MORALIS_SERVER_URL;
-    const user = window.Moralis.User.current();
-    setSettingsState((prevSettingsState) => ({ ...prevSettingsState, user }));
-    setAppLoadedStatus(true);
+    if (!window.ethereum || !window.ethereum.on) {
+      // alert('You need Metamask to use this');
+      console.info(`%c Current network is not supported`, 'background: rgb(255 255 172); color: #000; font-size: 24px;');
+      setSettingsState((prevSettingsState) => ({ ...prevSettingsState, appConfiguration: null}));
+    } else {
+      initializeAppConfiguration(setSettingsState);
+    }
+
+    async function initializeAppConfiguration() {
+      const web3 = new Moralis.Web3(window.ethereum);
+      const chainId = await web3.eth.net.getId();
+      const appConfiguration = getConfig(chainId);
+
+      if (appConfiguration.MORALIS_APP_ID) {
+        Moralis.initialize(appConfiguration.MORALIS_APP_ID);
+        Moralis.serverURL = appConfiguration.MORALIS_SERVER_URL;
+        const user = Moralis.User.current();
+        setSettingsState((prevSettingsState) => ({...prevSettingsState, appConfiguration, user }));
+        console.info(`%c ${appConfiguration.NETWORK_NAME} `, 'background: rgb(172 255 172); color: #000; font-size: 24px;');
+        setIsChainSupported(true);
+      } else {
+        setIsChainSupported(false);
+      }
+
+      setAppLoadedStatus(true);
+
+      Moralis.onChainChanged(() => {
+        window.location.reload();
+      });
+    }
   }, []);
 
   return (
@@ -46,21 +71,22 @@ function App() {
             <TopBar/>
             <div className="App-primary-content">
               <div className="App-primary-content-inner">
-                <div className="App-primary-content-left">
+                {isChainSupported && <div className="App-primary-content-left">
                   <Menu/>
-                </div>
+                </div>}
                 <div className="App-primary-content-right">
-                  <Switch>
-                    <Route path="/new" render={props => <CreatePage {...props} />} />
-                    <Route path="/about" render={props => <AboutPage {...props} />} />
-                    <Route path="/search" render={props => <SearchPage {...props} />} />
-                    <Route path="/profile" render={props => <ProfilePage {...props} />} />
-                    <Route path="/my" render={props => <MyCollectionPage {...props} />} />
-                    <Route path="/chat" render={props => <div>
-                      <h1>Coming soon...</h1>
-                    </div>} />
-                    <Route path="/" render={props => <MainPage {...props} />} />
-                  </Switch>
+                  {isChainSupported ? (
+                    <Switch>
+                      <Route path="/new" render={props => <CreatePage {...props} />} />
+                      <Route path="/about" render={props => <AboutPage {...props} />} />
+                      {/*<Route path="/search" render={props => <SearchPage {...props} />} />*/}
+                      <Route path="/profile" render={props => <ProfilePage {...props} />} />
+                      <Route path="/my" render={props => <MyCollectionPage {...props} />} />
+                      <Route path="/" render={props => <MainPage {...props} />} />
+                    </Switch>
+                  ) : (
+                    <UnsupportedChainInfo/>
+                  )}
                 </div>
               </div>
             </div>

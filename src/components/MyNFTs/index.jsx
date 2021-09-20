@@ -6,21 +6,21 @@ import { getSpecsFromHash } from "../../lib/utils";
 import Loader from "../Loader";
 import './index.css';
 
-async function getUserNfts() {
+async function getUserNfts(state) {
   const options = {
-    chain: window.config.NETWORK_NAME
+    chain: state.appConfiguration.NETWORK_NAME
   };
 
   // window.Moralis.Web3API.account.getNFTs(options).then(msg => console.log(msg))
   const retrievedNfts = await window.Moralis.Web3API.account.getNFTs(options);
   console.log('My NFTs:');
   console.log(retrievedNfts);
-  if (window.config.NETWORK_NAME === 'mumbai') {
+  if (state.appConfiguration.NETWORK_NAME === 'mumbai') {
     return retrievedNfts.result;
   }
-  if (window.config.NETWORK_NAME === 'rinkeby') {
+  if (state.appConfiguration.NETWORK_NAME === 'rinkeby') {
     // return retrievedNfts;
-    return retrievedNfts.filter((item) => !window.config.ITEMS_TO_FILTER.includes(item.token_id));
+    return retrievedNfts.filter((item) => !state.appConfiguration.ITEMS_TO_FILTER.includes(item.token_id));
   }
 
   // console.error('Critical error ================ :')
@@ -37,7 +37,7 @@ function MyNFTs(props) {
     let retrievedNfts = [];
 
     if (settingsState.user) {
-      retrievedNfts = await getUserNfts();
+      retrievedNfts = await getUserNfts(settingsState);
     }
 
     setNftList(retrievedNfts);

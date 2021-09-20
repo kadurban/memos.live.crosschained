@@ -1,0 +1,37 @@
+.UnsupportedChainInfo {
+  text-align: center;
+}
+
+.UnsupportedChainInfo .buttons-holder {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  flex-wrap: wrap;
+  text-transform: uppercase;
+}
+
+.UnsupportedChainInfo button {
+  margin: 0 1rem;
+  flex-direction: column;
+  align-self: center;
+  align-content: stretch;
+  justify-content: space-evenly;
+  width: 200px;
+  height: 200px;
+  text-align: center;
+  display: flex;
+  border: none;
+  background-image: linear-gradient(321deg, rgb(202 183 91) 0%, rgba(235,219,141,1) 100%);  background-size: 200%;
+  color: #fff;
+}
+
+.UnsupportedChainInfo button[disabled] {
+  /*opacity: .5;*/
+  pointer-events: none;
+}
+
+.UnsupportedChainInfo button > div {
+  position: relative;
+  z-index: 1;
+}
+

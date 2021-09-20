@@ -94,3 +94,9 @@
   font-size: .6rem;
   color: #9f9145;
 }
+
+.Top-bar-right-network-info {
+  margin-right: .5rem;
+  position: relative;
+  top: 3px;
+}
