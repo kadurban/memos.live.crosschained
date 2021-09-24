@@ -57,16 +57,12 @@ const FilePreview = ({ file, valid, children }) => (
   </div>
 );
 
-function Editor() {
-  const [royalty, setRoyalty] = useState(3);
+function Wizard() {
   const [isUploading, setUploadStatusInProgress] = useState(false);
   const [tokenURI, setTokenURI] = useState(null);
   const [metaData, setMetaData] = useState(null);
   const [attachedFiles, setAttachedFiles] = useState([]);
   const [image, setImageFile] = useState(null);
-  const [tokenId, setTokenId] = useState(null);
-  const [tags, setTags] = React.useState([]);
-  const [linkedItems, setLinkedItems] = React.useState([]);
   const { register, handleSubmit, formState: { errors }, watch } = useForm();
   const CardPreviewBeforeMint = useRef(null);
   const CardPreviewBeforeMintGenerated = useRef(null);
@@ -261,7 +257,7 @@ function Editor() {
 
         <AlertMessage text="You can play with your newly created card and check if everything looking good. And if so then you only need to sign a transaction to put your NFT to the blockchain."/>
 
-        <div className="Editor-full-preview">
+        <div className="Wizard-full-preview">
           <Card
             tokenUri={tokenURI}
             tokenIpfsHash={tokenURI.split('ipfs/')[1]}
@@ -274,10 +270,6 @@ function Editor() {
 
   return (
     <>
-      <h1>
-        Wizard
-      </h1>
-
       {isUploading && <Loader isUploader/>}
 
       <div className="light-background-with-padding">
@@ -555,4 +547,4 @@ function Editor() {
   );
 }
 
-export default Editor;
+export default Wizard;

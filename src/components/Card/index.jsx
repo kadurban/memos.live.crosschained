@@ -24,7 +24,7 @@ const constructDataForCardView = ({name, attributes}) => {
       case 'File':
         if (attribute.trait_type === 'Text') acc.texts.push({ link: attribute.value, data: null });
         if (attribute.trait_type === 'Image') acc.images.push(attribute.value);
-        if (attribute.trait_type === 'Audio') acc.audios.push(attribute.value);
+        // if (attribute.trait_type === 'Audio') acc.audios.push(attribute.value);
         if (attribute.trait_type === 'Video') acc.videos.push(attribute.value);
         break;
 

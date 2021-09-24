@@ -11,8 +11,8 @@ async function changeNetwork(id) {
 export default function UnsupportedChainInfo(props) {
   return (
     <div className="UnsupportedChainInfo">
-      <h1>Chain selection</h1>
-      <strong>Switch your wallet</strong> to one of the following <strong>supported</strong> networks:
+      <h1>Choose network</h1>
+      <strong>Switch your wallet</strong> to one of the following supported networks:
       <br/>
       <br/>
       {/*<div className="buttons-holder">*/}

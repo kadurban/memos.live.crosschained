@@ -64,7 +64,7 @@ function LoginSection() {
                 {addressShoring(settingsState.user.attributes.ethAddress)}
               </span>
               <br/>
-              <span class="net-icon">
+              <span className="net-icon">
                 {settingsState.appConfiguration.NETWORK_NAME === 'ethereum' && <EthereumIcon/>}
                 {settingsState.appConfiguration.NETWORK_NAME === 'rinkeby' && <EthereumIcon/>}
                 {settingsState.appConfiguration.NETWORK_NAME === 'polygon' && <PolygonIcon/>}

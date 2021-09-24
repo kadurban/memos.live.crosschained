@@ -120,46 +120,46 @@ export default function Viewer(props) {
 
 
 
-            {props.type === 'audios' && (
-              <Swiper
-                observer={true}
-                virtual={{ addSlidesAfter: 1, addSlidesBefore: 1 }}
-                slidesPerView={1}
-                speed={200}
-                spaceBetween={50}
-                onSlideChange={async (swiper) => {
-                  setState({ ...state, currentItemIndex: swiper.activeIndex });
-                  for (const item of state.contents) {
-                    // window.createjs.Sound.stop(item);
-                  }
-                }}
-              >
-                {state.contents.map((item, index) => (
-                  <SwiperSlide key={index} virtualIndex={index}>
-                    {state.contents[index] && (
-                      <div className="Viewer-audios-inner">
-                        {/* <div className="Viewer-audios-visualizer">
-                          visualisation...
-                        </div> */}
-                        {/* <div className="Viewer-audios-name">
-                            {state.contents[index].name}
-                        </div> */}
-                        <div className="Viewer-audios-controls">
-                          <button onClick={() => {
-                            // const audio = new Howl({ src: [state.contents[index]] });
-                            // audio.once('load', function(){
-                            //   audio.play();
-                            // });
-                          }}>
-                            <SVG play />
-                          </button>
-                        </div>
-                      </div>
-                    ) || <Loader />}
-                  </SwiperSlide>
-                ))}
-              </Swiper>
-            )}
+            {/*{props.type === 'audios' && (*/}
+            {/*  <Swiper*/}
+            {/*    observer={true}*/}
+            {/*    virtual={{ addSlidesAfter: 1, addSlidesBefore: 1 }}*/}
+            {/*    slidesPerView={1}*/}
+            {/*    speed={200}*/}
+            {/*    spaceBetween={50}*/}
+            {/*    onSlideChange={async (swiper) => {*/}
+            {/*      setState({ ...state, currentItemIndex: swiper.activeIndex });*/}
+            {/*      for (const item of state.contents) {*/}
+            {/*        // window.createjs.Sound.stop(item);*/}
+            {/*      }*/}
+            {/*    }}*/}
+            {/*  >*/}
+            {/*    {state.contents.map((item, index) => (*/}
+            {/*      <SwiperSlide key={index} virtualIndex={index}>*/}
+            {/*        {(state.contents[index] &&*/}
+            {/*          <div className="Viewer-audios-inner">*/}
+            {/*            /!* <div className="Viewer-audios-visualizer">*/}
+            {/*              visualisation...*/}
+            {/*            </div> *!/*/}
+            {/*            /!* <div className="Viewer-audios-name">*/}
+            {/*                {state.contents[index].name}*/}
+            {/*            </div> *!/*/}
+            {/*            <div className="Viewer-audios-controls">*/}
+            {/*              <button onClick={() => {*/}
+            {/*                // const audio = new Howl({ src: [state.contents[index]] });*/}
+            {/*                // audio.once('load', function(){*/}
+            {/*                //   audio.play();*/}
+            {/*                // });*/}
+            {/*              }}>*/}
+            {/*                <SVG play />*/}
+            {/*              </button>*/}
+            {/*            </div>*/}
+            {/*          </div>*/}
+            {/*        ) || <Loader />}*/}
+            {/*      </SwiperSlide>*/}
+            {/*    ))}*/}
+            {/*  </Swiper>*/}
+            {/*)}*/}
 
 
 
@@ -175,11 +175,9 @@ export default function Viewer(props) {
               >
                 {state.contents.map((item, index) => (
                   <SwiperSlide key={index} virtualIndex={index}>
-                    {state.contents[index] && (
+                    {(state.contents[index] &&
                       <div className="Viewer-images-inner">
-                        <img
-                          src={state.contents[index]}
-                        />
+                        <img src={state.contents[index]} alt=""/>
                       </div>
                     ) || <Loader />}
                   </SwiperSlide>
@@ -201,8 +199,8 @@ export default function Viewer(props) {
               >
                 {state.contents.map((item, index) => (
                   <SwiperSlide key={index} virtualIndex={index}>
-                    {state.contents[index] && (
-                      <div className="Viewer-images-inner">
+                    {(state.contents[index] &&
+                      <div className="Viewer-videos-inner">
                         <video
                           src={state.contents[index]}
                           controls

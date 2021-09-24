@@ -1,8 +1,9 @@
 .AlertMessage {
     padding: calc(var(--std-padding) / 3) calc(var(--std-padding) / 2);
     border-radius: var(--std-border-radius);
-    border: 1px solid var(--std-border-color);
-    background-color: rgb(243,236,203);
+    border: 5px solid #f3e4a0;
+    box-shadow: var(--shadow-color) 0px 0.25rem 0.75rem 0px;
+    background-color: #fff;
     margin-bottom: var(--std-padding);
     font-size: .9rem;
     line-height: 1.6rem;

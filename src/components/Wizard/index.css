@@ -1,5 +1,5 @@
 .Form {
-    margin: 0 auto calc(var(--std-margin) * 5);
+    /*margin: 0 auto calc(var(--std-margin) * 5);*/
     display: flex;
     flex-direction: row;
 }
@@ -302,7 +302,7 @@
     z-index: 1;
 }
 
-.Editor-full-preview .Card {
+.Wizard-full-preview .Card {
     margin: 0 auto;
     -webkit-animation: swirl-in-fwd 1s ease-out both;
     animation: swirl-in-fwd 1s ease-out both;

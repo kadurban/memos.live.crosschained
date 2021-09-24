@@ -6,12 +6,12 @@ const VIDEO_EXTENSIONS = ['mp4', 'webm', 'mov'];
 function getConfig(currentNetworkId) {
   const EXTENSIONS = {
     TEXT_EXTENSIONS,
-    AUDIO_EXTENSIONS,
+    // AUDIO_EXTENSIONS,
     IMAGE_EXTENSIONS,
     VIDEO_EXTENSIONS,
     UPLOADER_SUPPORTED_EXTENSIONS: [
       ...TEXT_EXTENSIONS,
-      ...AUDIO_EXTENSIONS,
+      // ...AUDIO_EXTENSIONS,
       ...IMAGE_EXTENSIONS,
       ...VIDEO_EXTENSIONS,
     ]

@@ -67,19 +67,16 @@
   flex-direction: row;
 }
 
-@media screen and (min-width: 450px) {
-
-}
-
 .Top-bar-menu-btn {
-  display: initial;
+  /*display: initial;*/
+  display: none;
 }
 
-@media screen and (min-width: 768px) {
-  .Top-bar-menu-btn {
-    display: none;
-  }
-}
+/*@media screen and (min-width: 768px) {*/
+/*  .Top-bar-menu-btn {*/
+/*    display: none;*/
+/*  }*/
+/*}*/
 
 .Top-bar-logo-text {
   line-height: 1rem;

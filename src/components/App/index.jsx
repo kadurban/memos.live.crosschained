@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useContext } from 'react';
 import Moralis from 'moralis';
 import MainPage from '../../pages/MainPage';
-import CreatePage from '../../pages/CreatePage';
+import WizardPage from '../../pages/WizardPage';
 import AboutPage from '../../pages/AboutPage';
 import SearchPage from '../../pages/SearchPage';
 import ProfilePage from '../../pages/ProfilePage';
@@ -32,9 +32,10 @@ function App() {
 
   useEffect(() => {
     if (!window.ethereum || !window.ethereum.on) {
-      // alert('You need Metamask to use this');
+      alert('You need Metamask to use this application');
       console.info(`%c Current network is not supported`, 'background: rgb(255 255 172); color: #000; font-size: 24px;');
       setSettingsState((prevSettingsState) => ({ ...prevSettingsState, appConfiguration: null}));
+      setAppLoadedStatus(true);
     } else {
       initializeAppConfiguration(setSettingsState);
     }
@@ -77,9 +78,8 @@ function App() {
                 <div className="App-primary-content-right">
                   {isChainSupported ? (
                     <Switch>
-                      <Route path="/new" render={props => <CreatePage {...props} />} />
+                      <Route path="/new" render={props => <WizardPage {...props} />} />
                       <Route path="/about" render={props => <AboutPage {...props} />} />
-                      {/*<Route path="/search" render={props => <SearchPage {...props} />} />*/}
                       <Route path="/profile" render={props => <ProfilePage {...props} />} />
                       <Route path="/my" render={props => <MyCollectionPage {...props} />} />
                       <Route path="/" render={props => <MainPage {...props} />} />

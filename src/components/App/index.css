@@ -3,6 +3,7 @@
   flex-flow: column;
   align-items: flex-start;
   height: 100vh;
+  min-width: 1200px;
 }
 
 .App-primary-content-inner {
@@ -20,12 +21,10 @@
   width: var(--desktop-menu-width);
   height: 100%;
   overflow: auto;
-  /*box-shadow: rgba(0,0,0,.06) 7px 2px 26px 0px;*/
-  /*background: rgb(255, 255, 255);*/
   padding: var(--std-padding);
-  /*padding: calc(var(--std-padding) / 2) var(--std-padding);*/
   z-index: 1;
-  display: none;
+  /*display: none;*/
+  display: initial;
   box-shadow: #ffffffbd 9px 0 20px 7px;
   background-color: rgba(255,255,255, .7);
   backdrop-filter: blur(10px);
@@ -54,15 +53,15 @@
 }
 
 @media screen and (min-width: 768px) {
-  .App-primary-content-left {
-    display: initial;
-  }
+  /*.App-primary-content-left {*/
+  /*  display: initial;*/
+  /*}*/
 
-  .App-primary-content-right {
-    position: absolute;
-    inset: 0;
-    padding: var(--std-padding);
-    /*background: rgb(249, 250, 251);*/
-    overflow: auto;
-  }
+  /*.App-primary-content-right {*/
+  /*  position: absolute;*/
+  /*  inset: 0;*/
+  /*  padding: var(--std-padding);*/
+  /*  !*background: rgb(249, 250, 251);*!*/
+  /*  overflow: auto;*/
+  /*}*/
 }
