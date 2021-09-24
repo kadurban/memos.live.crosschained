@@ -273,6 +273,7 @@ function Wizard() {
       {isUploading && <Loader isUploader/>}
 
       <div className="light-background-with-padding">
+        <AlertMessage text="Join memos.live community and get extra passive income on every secondary sale of NFT you create."/>
         <form
           className="Form"
           autoComplete="off"
@@ -280,9 +281,7 @@ function Wizard() {
         >
 
           {!settingsState.user ? (
-            <AlertMessage
-              text="You need to login to be able to create new"
-            />
+            <AlertMessage text="You need to login to be able to create new"/>
           ) : (
             <>
               <fieldset style={{width: '200px'}}>
@@ -481,7 +480,7 @@ function Wizard() {
                         <div className="Card-timer">
                           <div className="Card-date">
                             {isValidDate ? (
-                              moment(`1954-02-12 23:22:21`, "YYYY-MM-DD HH:mm:ss").format(exactTime ? 'LLL' : 'LL')
+                              moment(previewDate, "YYYY-MM-DD HH:mm:ss").format(exactTime ? 'LLL' : 'LL')
                             ) : null}
                           </div>
                         </div>

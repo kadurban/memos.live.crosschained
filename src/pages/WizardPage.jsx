@@ -1,5 +1,6 @@
-import React, {useContext, useEffect, useState} from 'react';
+import React from 'react';
 import Wizard from '../components/Wizard'
+import AlertMessage from '../components/AlertMessage'
 
 function WizardPage(props) {
   return (

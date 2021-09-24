@@ -67,7 +67,7 @@ body::after {
   position: absolute;
   top: 0;
   right: 0;
-  background: url(https://i.pinimg.com/originals/6d/03/73/6d03732a7e0048aa73c0911eb67d94e1.jpg);
+  background: url(./assets/img/bg.jpg);
   bottom: 0;
   left: 0;
   opacity: .6;
@@ -696,6 +696,11 @@ a {
   border-radius: 15px;
   box-shadow: var(--shadow-color) 0 0 1.625rem 0px;
   max-width: 900px;
+}
+
+.light-background-with-padding .AlertMessage {
+  box-shadow: none;
+  border-width: 2px;
 }
 
 .markdown a {

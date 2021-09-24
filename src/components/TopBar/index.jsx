@@ -22,7 +22,7 @@ function TopBar() {
                 memos.live
               </div>
               <div>
-                Humanity Memories NFTs
+                Memorable NFTs
               </div>
             </div>
           </div>
