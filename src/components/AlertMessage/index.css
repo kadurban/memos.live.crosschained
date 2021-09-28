@@ -7,6 +7,8 @@
     margin-bottom: var(--std-padding);
     font-size: .9rem;
     line-height: 1.6rem;
+    text-align: center;
+    max-width: var(--readable-container-width);
 }
 
 .AlertMessage-text {
@@ -14,5 +16,12 @@
 }
 
 .AlertMessage-controls {
-    margin-top: var(--std-margin);
+    /*margin-top: var(--std-margin);*/
+    display: inline-block;
+}
+
+.AlertMessage .btn,
+.AlertMessage .btn-action,
+.AlertMessage .btn-big {
+    margin-bottom: 1rem;
 }

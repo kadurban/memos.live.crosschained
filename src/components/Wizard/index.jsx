@@ -4,7 +4,7 @@ import {v4 as uuid} from 'uuid';
 import moment from 'moment';
 import { toast } from 'react-toastify';
 import SettingsContext from '../../SettingsContext';
-import ReactTagInput from "@pathofdev/react-tag-input";
+import { login } from "../LoginSection";
 import AlertMessage from '../AlertMessage';
 import Card from '../Card';
 import Loader from '../Loader';
@@ -66,7 +66,7 @@ function Wizard() {
   const { register, handleSubmit, formState: { errors }, watch } = useForm();
   const CardPreviewBeforeMint = useRef(null);
   const CardPreviewBeforeMintGenerated = useRef(null);
-  const { settingsState } = useContext(SettingsContext);
+  const { settingsState, setSettingsState } = useContext(SettingsContext);
 
   const [previewName, setPreviewName] = useState('');
   const [previewDate, setPreviewDate] = useState('');
@@ -144,13 +144,13 @@ function Wizard() {
     document.body.style.overflow = 'hidden';
 
     console.log('===> Saving marketplace image');
-    const marketplaceImage = CardPreviewBeforeMintGenerated.current.querySelector('canvas').toDataURL();
-    const savedImage = new Moralis.File(`${uuid()}.${data.image[0].name.split('.').pop()}`, { base64: marketplaceImage });
+    const imageDataBase64 = CardPreviewBeforeMintGenerated.current.querySelector('canvas').toDataURL();
+    const savedImage = new Moralis.File(`${uuid()}.${data.image[0].name.split('.').pop()}`, { base64: imageDataBase64 });
     await savedImage.saveIPFS();
     const saveiImageUrl = savedImage.ipfs();
     let metaData = {
       image: saveiImageUrl,
-      // image_data: '',
+      // image_data: svgCode, // TODO: Put svg here
       external_url: 'https://memos.live/',
       description: data.description,
       name: data.name,
@@ -210,6 +210,7 @@ function Wizard() {
 
     console.log('Metadata saved:');
     console.log(metaData);
+    console.log(tokenURI);
 
     setTokenURI(tokenURI);
     setMetaData(metaData);
@@ -227,14 +228,19 @@ function Wizard() {
   const mintToken = async (tokenURI) => {
     const web3 = new Moralis.Web3(window.ethereum);
 
+    tokenURI = 'ipfs/' + tokenURI.split('ipfs/')[1];
+
     const encodedFunction = web3.eth.abi.encodeFunctionCall({
-      name: 'mintToken',
+      name: 'mint',
       type: 'function',
       inputs: [{
+        type: 'address',
+        name: 'recipient'
+      }, {
         type: 'string',
-        name: 'tokenURI'
+        name: 'metadata'
       }]
-    }, [tokenURI]);
+    }, [window.ethereum.selectedAddress, tokenURI]);
 
     const txParams = {
       to: settingsState.appConfiguration.MINT_CONTRACT_ADDRESS,
@@ -242,12 +248,10 @@ function Wizard() {
       data: encodedFunction
     };
 
-    const tokenId = await window.ethereum.request({
+    return await window.ethereum.request({
       method: 'eth_sendTransaction',
       params: [txParams]
     });
-
-    return tokenId;
   };
 
   if (tokenURI) {
@@ -260,8 +264,9 @@ function Wizard() {
         <div className="Wizard-full-preview">
           <Card
             tokenUri={tokenURI}
-            tokenIpfsHash={tokenURI.split('ipfs/')[1]}
-            specs={getSpecsFromHash(tokenURI.split('ipfs/')[1])}
+            // tokenIpfsHash={'https://ipfs.moralis.io:2053/ipfs/QmY2AEigcqjeC3uyprugYzNKNmS26UqqtUPopqjLEF3nAU'}
+            // specs={getSpecsFromHash(tokenURI.split('ipfs/')[1])}
+            // specs={[]}
           />
         </div>
       </>
@@ -272,8 +277,13 @@ function Wizard() {
     <>
       {isUploading && <Loader isUploader/>}
 
+      <AlertMessage
+        text="You can get extra income on every secondary sale of NFT you create."
+      >
+        <a target="_blank" href="https://nftkt.io/c1xq5g">Become a Collaborator</a>
+      </AlertMessage>
+
       <div className="light-background-with-padding">
-        <AlertMessage text="Join memos.live community and get extra passive income on every secondary sale of NFT you create."/>
         <form
           className="Form"
           autoComplete="off"
@@ -281,7 +291,13 @@ function Wizard() {
         >
 
           {!settingsState.user ? (
-            <AlertMessage text="You need to login to be able to create new"/>
+            <AlertMessage
+              text="You need to login to be able to create new"
+            >
+              <button className="btn-action btn-big" onClick={() => login(setSettingsState)} type="button">
+                <SVG wallet/> Connect Wallet
+              </button>
+            </AlertMessage>
           ) : (
             <>
               <fieldset style={{width: '200px'}}>
@@ -534,7 +550,7 @@ function Wizard() {
                   Make sure that everything looks nice and well. You will not have chance to change it after minting.
                 </div>
 
-                <button className="btn-mint btn-big" type={"submit"}>
+                <button className="btn-action btn-big" type="submit">
                   <SVG bolt/> Mint
                 </button>
               </fieldset>

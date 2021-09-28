@@ -19,7 +19,7 @@ function TopBar() {
             <img src={logoLight} alt="memos.live"/>
             <div className="Top-bar-logo-text">
               <div>
-                memos.live
+                memos.live <small style={{ fontSize: '.6rem' }}>beta</small>
               </div>
               <div>
                 Memorable NFTs

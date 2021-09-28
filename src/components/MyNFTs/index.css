@@ -1,4 +1,4 @@
-.MyNFTs-cards-holder {
+.NftList-cards-holder {
   display: flex;
   flex-wrap: nowrap;
   overflow-x: auto;
@@ -12,40 +12,40 @@
   margin-top: calc(var(--std-padding) * -2);
 }
 
-.MyNFTs-cards-holder::-webkit-scrollbar {
+.NftList-cards-holder::-webkit-scrollbar {
   display: none;
 }
 
-.MyNFTs-cards-holder .Card {
+.NftList-cards-holder .Card {
   -webkit-animation: text-focus-in .5s cubic-bezier(0.550, 0.085, 0.680, 0.530) both;
   animation: text-focus-in .5s cubic-bezier(0.550, 0.085, 0.680, 0.530) both;
 }
 
-.MyNFTs-cards-holder .Card:nth-of-type(1) {
+.NftList-cards-holder .Card:nth-of-type(1) {
   animation-delay: .2s;
 }
 
-.MyNFTs-cards-holder .Card:nth-of-type(2) {
+.NftList-cards-holder .Card:nth-of-type(2) {
   animation-delay: 0s;
 }
 
-.MyNFTs-cards-holder .Card:nth-of-type(3) {
+.NftList-cards-holder .Card:nth-of-type(3) {
   animation-delay: .3s;
 }
 
-.MyNFTs-cards-holder .Card:nth-of-type(4) {
+.NftList-cards-holder .Card:nth-of-type(4) {
   animation-delay: .5s;
 }
 
-.MyNFTs-cards-holder .Card:nth-of-type(5) {
+.NftList-cards-holder .Card:nth-of-type(5) {
   animation-delay: .7s;
 }
 
-.MyNFTs-cards-holder .Card:nth-of-type(6) {
+.NftList-cards-holder .Card:nth-of-type(6) {
   animation-delay: .5s;
 }
 
-.MyNFTs-cards-holder .Card:first-of-type {
+.NftList-cards-holder .Card:first-of-type {
   margin-left: var(--desktop-menu-width);
 }
 

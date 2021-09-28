@@ -25,7 +25,7 @@ function Menu() {
   };
 
   useEffect(() => {
-    moveHighlight(document.querySelector('.active').offsetTop);
+    moveHighlight(document.querySelector('.active')?.offsetTop);
   }, [])
 
   return (

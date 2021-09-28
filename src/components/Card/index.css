@@ -21,12 +21,17 @@
 }
 
 .Card:active {
-   transform: scale(.97);
- }
+ transform: scale(.97);
+}
 
-.Card.Card-rotated:active {
-   transform: none;
- }
+.Card:active .Card-front,
+.Card:active .Card-back {
+  background-size: 160% !important;
+}
+
+/*.Card.Card-rotated:active {*/
+/*  transform: scale(.97);*/
+/*}*/
 
 .Card.Card-inactive {
   pointer-events: none !important;
@@ -166,7 +171,7 @@
   transform: scale(.9);
   border-radius: 100%;
   overflow: hidden;
-  opacity: .2;
+  opacity: .8;
 }
 
 .Card-preview.Card-preview-loading {

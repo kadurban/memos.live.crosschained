@@ -1,5 +1,7 @@
 .idea
 src_old
+deploy_testnets.sh
+deploy_mainnets.sh
 
 # dependencies
 /node_modules
@@ -24,6 +26,3 @@ src_old
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
-
-deploy_testnets.sh
-deploy_mainnets.sh

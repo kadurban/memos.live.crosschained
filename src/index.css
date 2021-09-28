@@ -3,6 +3,7 @@
   --accent-color: #ebdb8da8;
   --shadow-color: #ebdb8da8;
   --desktop-menu-width: 322px;
+  --readable-container-width: 900px;
 
   --std-padding: 1.5625rem;
   --std-margin: 1.5625rem;
@@ -293,7 +294,7 @@ button.btn-big {
   white-space: initial;
   flex-direction: column;
   display: flex;
-  padding: 0.5rem 0 1rem;
+  padding: 1rem;
   margin: auto;
   /*z-index: 2;*/
 }
@@ -313,11 +314,11 @@ button.btn-big .icon svg path:nth-child(2) {
   fill: #e9db98;
 }
 
-button.btn-mint .icon svg path:nth-child(2) {
+button.btn-action .icon svg path:nth-child(2) {
   fill: #bfa524;
 }
 
-.btn-mint {
+.btn-action {
   border-radius: 1rem;
   border: none;
   box-shadow: var(--shadow-color) 0px 0.25rem 0.75rem 0px;
@@ -327,7 +328,7 @@ button.btn-mint .icon svg path:nth-child(2) {
   transition: background-position .2s ease-out;
 }
 
-.btn-mint:hover {
+.btn-action:hover {
   background-position: 100% 0;
 }
 
@@ -354,11 +355,11 @@ a {
   margin-left: var(--desktop-menu-width);
 }
 
-.Page-wrapper.main,
-.Page-wrapper.fullwidth {
+.Page-wrapper.main {
   margin-left: 0;
 }
 
+.Page-wrapper.main .AlertMessage,
 .Page-wrapper.main h1:first-of-type {
   margin-left: var(--desktop-menu-width);
 }
@@ -695,12 +696,13 @@ a {
   padding: var(--std-padding);
   border-radius: 15px;
   box-shadow: var(--shadow-color) 0 0 1.625rem 0px;
-  max-width: 900px;
+  max-width: var(--readable-container-width);
 }
 
 .light-background-with-padding .AlertMessage {
   box-shadow: none;
   border-width: 2px;
+  width: 100%;
 }
 
 .markdown a {

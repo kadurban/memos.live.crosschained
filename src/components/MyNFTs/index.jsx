@@ -2,30 +2,50 @@ import React, { useEffect, useState, useContext, useRef } from 'react';
 import SettingsContext from "../../SettingsContext";
 import Card from "../Card";
 import AlertMessage from "../AlertMessage";
+import { login } from "../LoginSection";
 import { getSpecsFromHash } from "../../lib/utils";
 import Loader from "../Loader";
 import './index.css';
+import SVG from "../../SVG";
 
-async function getUserNfts(state) {
+// async function getUserNfts(settingsState) {
+//   const { NETWORK_NAME } = settingsState.appConfiguration;
+//   const options = {
+//     chain: NETWORK_NAME
+//   };
+//
+//   // window.Moralis.Web3API.account.getNFTs(options).then(msg => console.log(msg))
+//   const retrievedNfts = await window.Moralis.Web3API.account.getNFTs(options);
+//   console.log('User NFTs:');
+//   console.log(retrievedNfts);
+//   if (NETWORK_NAME === 'mumbai' || NETWORK_NAME === 'polygon') {
+//     return retrievedNfts.result;
+//   }
+//   // if (settingsState.appConfiguration.NETWORK_NAME === 'rinkeby') {
+//   //   return retrievedNfts.filter((item) => !settingsState.appConfiguration.ITEMS_TO_FILTER.includes(item.token_id));
+//   // }
+// }
+
+async function getUserNFTs(settingsState) {
+  const { NETWORK_NAME, MINT_CONTRACT_ADDRESS } = settingsState.appConfiguration;
   const options = {
-    chain: state.appConfiguration.NETWORK_NAME
+    chain: NETWORK_NAME,
+    address: settingsState.user.attributes.ethAddress,
+    token_address: MINT_CONTRACT_ADDRESS
   };
 
   // window.Moralis.Web3API.account.getNFTs(options).then(msg => console.log(msg))
-  const retrievedNfts = await window.Moralis.Web3API.account.getNFTs(options);
-  console.log('My NFTs:');
+  const retrievedNfts = await window.Moralis.Web3API.account.getNFTsForContract(options);
+  console.log('Recent NFTs:');
   console.log(retrievedNfts);
-  if (state.appConfiguration.NETWORK_NAME === 'mumbai') {
+  if (NETWORK_NAME === 'mumbai' || NETWORK_NAME === 'polygon') {
     return retrievedNfts.result;
   }
-  if (state.appConfiguration.NETWORK_NAME === 'rinkeby') {
-    // return retrievedNfts;
-    return retrievedNfts.filter((item) => !state.appConfiguration.ITEMS_TO_FILTER.includes(item.token_id));
-  }
-
-  // console.error('Critical error ================ :')
-  // console.error(e)
+  // if (settingsState.appConfiguration.NETWORK_NAME === 'rinkeby') {
+  //   return retrievedNfts.filter((item) => !settingsState.appConfiguration.ITEMS_TO_FILTER.includes(item.token_id));
+  // }
 }
+
 
 function MyNFTs(props) {
   const { settingsState, setSettingsState } = useContext(SettingsContext);
@@ -37,7 +57,8 @@ function MyNFTs(props) {
     let retrievedNfts = [];
 
     if (settingsState.user) {
-      retrievedNfts = await getUserNfts(settingsState);
+      // retrievedNfts = await getUserNfts(settingsState);
+      retrievedNfts = await getUserNFTs(settingsState);
     }
 
     setNftList(retrievedNfts);
@@ -54,10 +75,22 @@ function MyNFTs(props) {
   return (
     <section className="MyNFTs">
       {!settingsState.user ? (
-        <AlertMessage text="You need to connect your wallet to see your NFTs"/>
+        <>
+          <AlertMessage text="You need to connect your wallet to see your NFTs">
+            <button
+              className="btn-action btn-big"
+              onClick={() => {
+                login(setSettingsState, () => {
+                  setTimeout(() => window.location.reload(), 1000)
+                });
+              }}
+            >
+              <SVG wallet/> Connect Wallet
+            </button>
+          </AlertMessage>
+        </>
       ) : (
         <>
-          <h1>Most Recent</h1>
           {!nftListLoaded && (
             <div className="MyNFTs-loader-holder">
               <Loader text="Loading"/>
@@ -70,15 +103,15 @@ function MyNFTs(props) {
           )}
 
           {nftListLoaded && nftList.length > 0 && (
-            <div className="MyNFTs-cards-holder" ref={scrollableElementRef}>
+            <div className="NftList-cards-holder" ref={scrollableElementRef}>
               {/*<div className="MyNFTs-cards-holder-arrow-next"/>*/}
               {/*<div className="MyNFTs-cards-holder-arrow-prev"/>*/}
               {nftList.map((nft, i) => (
                 <Card
                   key={nft.token_uri + i}
                   tokenUri={nft.token_uri}
-                  tokenIpfsHash={nft.token_uri.split('ipfs/')[1]}
-                  specs={getSpecsFromHash(nft.token_uri.split('ipfs/')[1])}
+                  // tokenIpfsHash={nft.token_uri.split('ipfs/')[1]}
+                  // specs={getSpecsFromHash(nft.token_uri.split('ipfs/')[1])}
                   // owner={nft}
                 />
               ))}

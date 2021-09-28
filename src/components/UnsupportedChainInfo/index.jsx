@@ -31,12 +31,12 @@ export default function UnsupportedChainInfo(props) {
       {/*</div>*/}
       <br/>
       <div className="buttons-holder">
-        <div>
-          <button disabled onClick={() => changeNetwork('0x4')}>
-            <EthereumIcon/>
-            Rinkeby
-          </button>
-        </div>
+        {/*<div>*/}
+        {/*  <button disabled onClick={() => changeNetwork('0x4')}>*/}
+        {/*    <EthereumIcon/>*/}
+        {/*    Rinkeby*/}
+        {/*  </button>*/}
+        {/*</div>*/}
         <div>
           <button disabled onClick={() => changeNetwork('0x80001')}>
             <PolygonIcon/>

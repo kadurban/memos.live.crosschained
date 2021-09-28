@@ -10,7 +10,7 @@ function ProfilePage(props) {
 
       <section className="Profile">
         <div className="light-background-with-padding">
-          <form className="Form" onSubmit={() => {}} style={{opacity: .3}}>
+          <form className="Form" onSubmit={() => {}} style={{opacity: .6}}>
             <div>
               <div className="Form-group">
                 <label htmlFor="display-name">Display Name</label>

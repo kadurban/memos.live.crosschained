@@ -10,15 +10,20 @@ function addressShoring(str) {
   return '0x' + (str.substring(2, 6) + '...' + str.substring(str.length - 4, str.length)).toUpperCase();
 }
 
+export async function login(setSettingsState, cb) {
+  if (!localStorage.getItem('supportAlert1')) {
+    alert('Only Mumbai (Polygon testnet) is supported ATM.');
+    localStorage.setItem('supportAlert1', true);
+  }
+  const user = await window.Moralis.Web3.authenticate();
+  setSettingsState((prevSettingsState) => ({ ...prevSettingsState, user }));
+  toast.info('Wallet connected');
+  if (cb) cb();
+}
+
 function LoginSection() {
   const { settingsState, setSettingsState } = useContext(SettingsContext);
   const dropdownContent = useRef(null);
-
-  async function login() {
-    const user = await window.Moralis.Web3.authenticate();
-    setSettingsState((prevSettingsState) => ({ ...prevSettingsState, user }));
-    toast.info('Wallet connected');
-  }
 
   function logout() {
     window.Moralis.User.logOut();
@@ -48,7 +53,7 @@ function LoginSection() {
   return (
     <div>
       {!settingsState.user && (
-        <button onClick={() => login()}>
+        <button onClick={() => login(setSettingsState)}>
           <SVG wallet/> Connect Wallet
         </button>
       )}

@@ -80,6 +80,6 @@ export function sleep(ms) {
 }
 
 export function getSpecsFromHash(hash) {
-  const filtered =  hash.split('').filter(i => /[0-9]/gi.test(i));
-  return filtered.join('').substr(0, 4);
+  const filtered =  hash?.split('').filter(i => /[0-9]/gi.test(i));
+  return filtered?.join('').substr(0, 4);
 }

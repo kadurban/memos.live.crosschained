@@ -50,7 +50,8 @@ function App() {
         Moralis.serverURL = appConfiguration.MORALIS_SERVER_URL;
         const user = Moralis.User.current();
         setSettingsState((prevSettingsState) => ({...prevSettingsState, appConfiguration, user }));
-        console.info(`%c ${appConfiguration.NETWORK_NAME} `, 'background: rgb(172 255 172); color: #000; font-size: 24px;');
+        const consoleColor = appConfiguration.IS_PROD ? 'rgb(255 190 0)' : 'rgb(200 250 200)';
+        console.info(`%c ${appConfiguration.NETWORK_NAME} `, `background: ${consoleColor}; color: #000; font-size: 24px;`);
         setIsChainSupported(true);
       } else {
         setIsChainSupported(false);
@@ -61,6 +62,10 @@ function App() {
       Moralis.onChainChanged(() => {
         window.location.reload();
       });
+
+      // Moralis.onAccountsChanged(() => {
+      //   window.location.reload();
+      // });
     }
   }, []);
 

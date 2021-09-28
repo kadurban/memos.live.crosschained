@@ -92,6 +92,15 @@
   color: #9f9145;
 }
 
+.Top-bar-logo-text small {
+  font-size: 0.6rem;
+  color: #0062b0b0;
+  text-transform: uppercase;
+  margin-left: .2rem;
+  position: relative;
+  top: -11px;
+}
+
 .Top-bar-right-network-info {
   margin-right: .5rem;
   position: relative;

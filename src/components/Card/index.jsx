@@ -62,6 +62,14 @@ export function DurationTimer(props) {
   );
 }
 
+// function moveLight(e) {
+//   var rect = e.target.getBoundingClientRect();
+//   var x = e.clientX - rect.left;
+//   var y = e.clientY - rect.top;
+//   console.log('+++');
+//   console.log(x, y);
+// }
+
 function Card(props) {
   const imgEl = useRef(null);
   const [state, setState] = useState({
@@ -77,14 +85,12 @@ function Card(props) {
       const metadataStr = await getContentByUrl(props.tokenUri);
       const metadata = JSON.parse(metadataStr);
       const cardData = constructDataForCardView(metadata);
-      // console.log('Card data (transformed metadata):')
-      // console.log(metadata)
-      // console.log(cardData)
       setState({
         ...state,
         cardData: {
           ...cardData,
           image: metadata.image,
+          // image_data: metadata.image_data && metadata.image_data.substr(0, 4) === '<svg' ? metadata.image_data : null,
           name: metadata.name,
           description: metadata.description,
         }
@@ -123,7 +129,7 @@ function Card(props) {
         </Portal>
       )}
     
-      <div className={`Card ${state.rotated && 'Card-rotated' || ''} ${props.appearsAnimation ? props.appearsAnimation: ''}`}>
+      <div className={`Card ${(state.rotated && 'Card-rotated') || ''} ${props.appearsAnimation ? props.appearsAnimation: ''}`}>
         <button
           tabIndex={state.rotated ? -1 : 0}
           className="Card-front"
@@ -131,6 +137,7 @@ function Card(props) {
             playSound('cardFlip1');
             return { ...state, rotated: true };
           })}
+          // onMouseMove={(e) => moveLight(e)}
         >
           <div className="Card-timer">
             <div className="Card-date">
@@ -144,7 +151,7 @@ function Card(props) {
           </div>
           <div className={`Card-preview ${!state.imageLoaded ? 'Card-preview-loading' : ''}`}>
             {(!state.imageLoaded || state.imageLoadError) && (
-              <Jdenticon size="268" value={props.tokenIpfsHash}/>
+              <Jdenticon size="268" value={props.tokenUri}/>
             )}
             <img
               style={{ opacity: !state.imageLoaded ? 0 : 1 }}
@@ -298,9 +305,9 @@ function Card(props) {
   );
 }
 
-function Element(props) {
-  const specsArray = props.specs.split('');
-  return <span>{specsArray[props.index]}</span>
-}
+// function Element(props) {
+//   const specsArray = props.specs.split('');
+//   return <span>{specsArray[props.index]}</span>
+// }
 
 export default Card;
