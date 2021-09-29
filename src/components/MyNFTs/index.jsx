@@ -36,7 +36,7 @@ async function getUserNFTs(settingsState) {
 
   // window.Moralis.Web3API.account.getNFTs(options).then(msg => console.log(msg))
   const retrievedNfts = await window.Moralis.Web3API.account.getNFTsForContract(options);
-  console.log('Recent NFTs:');
+  console.log('User NFTs:');
   console.log(retrievedNfts);
   if (NETWORK_NAME === 'mumbai' || NETWORK_NAME === 'polygon') {
     return retrievedNfts.result;

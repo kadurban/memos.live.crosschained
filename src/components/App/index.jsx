@@ -45,12 +45,12 @@ function App() {
       const chainId = await web3.eth.net.getId();
       const appConfiguration = getConfig(chainId);
 
-      if (appConfiguration.MORALIS_APP_ID) {
+      if (appConfiguration.MORALIS_APP_ID && appConfiguration.MINT_CONTRACT_ADDRESS) {
         Moralis.initialize(appConfiguration.MORALIS_APP_ID);
         Moralis.serverURL = appConfiguration.MORALIS_SERVER_URL;
         const user = Moralis.User.current();
         setSettingsState((prevSettingsState) => ({...prevSettingsState, appConfiguration, user }));
-        const consoleColor = appConfiguration.IS_PROD ? 'rgb(255 190 0)' : 'rgb(200 250 200)';
+        const consoleColor = appConfiguration.IS_MAINNET ? 'rgb(255 190 0)' : 'rgb(200 250 200)';
         console.info(`%c ${appConfiguration.NETWORK_NAME} `, `background: ${consoleColor}; color: #000; font-size: 24px;`);
         setIsChainSupported(true);
       } else {
@@ -97,7 +97,7 @@ function App() {
             </div>
           </div>
         ) : (
-          <Loader/>
+          <Loader isOverlay text="Loading..."/>
         )}
       </Router>
     </ErrorBoundary>

@@ -35,7 +35,7 @@ export default function Loader({ isUploader, isOverlay, text }) {
           </div>
         </div>}
 
-        {!isUploader && <div className="Loader">
+        {!isUploader && !isOverlay && <div className="Loader">
           <img className="Loader-logo" src={logoLight}/>
           {text && (
             <div className="Loader-info">{text}</div>

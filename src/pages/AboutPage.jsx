@@ -21,12 +21,6 @@ function AboutPage(props) {
               The Ultimate Web3 Development Platform
             </span>
           </a>
-          <a href="https://niftykit.com/" target="_blank">
-            <img src="https://niftykit.com/wp-content/uploads/2021/08/niftykit-logomark.png" alt="NiftyKit"/>
-            <span>
-              The No-Code Solution For NFT Smart Contracts
-            </span>
-          </a>
         </div>
       </div>
     </div>

@@ -16,12 +16,12 @@
 }
 
 .AlertMessage-controls {
-    /*margin-top: var(--std-margin);*/
     display: inline-block;
 }
 
 .AlertMessage .btn,
 .AlertMessage .btn-action,
 .AlertMessage .btn-big {
-    margin-bottom: 1rem;
+    margin-bottom: var(--std-margin);
+    margin-top: var(--std-margin);
 }

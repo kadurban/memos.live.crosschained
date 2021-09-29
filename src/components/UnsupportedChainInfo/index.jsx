@@ -1,6 +1,8 @@
 import React from 'react';
 import './index.css';
 
+import AlertMessage from '../AlertMessage';
+
 async function changeNetwork(id) {
   await window.ethereum.request({
     method: 'wallet_switchEthereumChain',
@@ -12,38 +14,26 @@ export default function UnsupportedChainInfo(props) {
   return (
     <div className="UnsupportedChainInfo">
       <h1>Choose network</h1>
-      <strong>Switch your wallet</strong> to one of the following supported networks:
-      <br/>
-      <br/>
-      {/*<div className="buttons-holder">*/}
-      {/*  <div>*/}
-      {/*    <button disabled onClick={() => changeNetwork('0x1')}>*/}
-      {/*      <EthereumIcon/>*/}
-      {/*    </button>*/}
-      {/*    Ethereum*/}
-      {/*  </div>*/}
-      {/*  <div>*/}
-      {/*    <button disabled onClick={() => changeNetwork('0x137')}>*/}
-      {/*      <PolygonIcon/>*/}
-      {/*    </button>*/}
-      {/*    Polygon*/}
-      {/*  </div>*/}
-      {/*</div>*/}
-      <br/>
-      <div className="buttons-holder">
-        {/*<div>*/}
-        {/*  <button disabled onClick={() => changeNetwork('0x4')}>*/}
-        {/*    <EthereumIcon/>*/}
-        {/*    Rinkeby*/}
-        {/*  </button>*/}
-        {/*</div>*/}
-        <div>
-          <button disabled onClick={() => changeNetwork('0x80001')}>
-            <PolygonIcon/>
-            Mumbai
-          </button>
+      <AlertMessage text="Switch your wallet to one of the following supported networks:">
+        <br/>
+        <div className="buttons-holder">
+          <div>
+            <button disabled onClick={() => changeNetwork('0x1')}>
+              <EthereumIcon/>
+              Ethereum
+            </button>
+          </div>
+          <div>
+            <button disabled onClick={() => changeNetwork('0x137')}>
+              <PolygonIcon/>
+              Polygon
+            </button>
+          </div>
         </div>
-      </div>
+        <br/>
+        Supported testnets: Rinkeby, Mumbai
+        <br/>
+      </AlertMessage>
     </div>
   );
 }

@@ -338,7 +338,7 @@ h3,
 h4,
 h5,
 h6 {
-  margin-bottom: 2rem;
+  margin-bottom: 1.7rem;
   font-weight: 400;
   /*text-transform: uppercase;*/
 }
@@ -360,6 +360,7 @@ a {
 }
 
 .Page-wrapper.main .AlertMessage,
+.Page-wrapper.main .light-background-with-padding,
 .Page-wrapper.main h1:first-of-type {
   margin-left: var(--desktop-menu-width);
 }
