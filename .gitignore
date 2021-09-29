@@ -1,7 +1,5 @@
 .idea
 src_old
-deploy_testnets.sh
-deploy_mainnets.sh
 
 # dependencies
 /node_modules

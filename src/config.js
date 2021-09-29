@@ -36,7 +36,7 @@ function getConfig(chainId) {
       ...CONFIG,
       IS_MAINNET: false,
       NETWORK_NAME: 'mumbai',
-      MINT_CONTRACT_ADDRESS: '0x5D581e2dc3C365f39958C64e642F2EDdC06498C7'
+      MINT_CONTRACT_ADDRESS: '0x40f2A0B241a54dF0B5DA1f1C3dA0c4EcaC5EBA97'
     }
   }
 
