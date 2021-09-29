@@ -11,10 +11,6 @@ function addressShoring(str) {
 }
 
 export async function login(setSettingsState, cb) {
-  if (!localStorage.getItem('supportAlert1')) {
-    alert('Only Mumbai (Polygon testnet) is supported ATM.');
-    localStorage.setItem('supportAlert1', true);
-  }
   const user = await window.Moralis.Web3.authenticate();
   setSettingsState((prevSettingsState) => ({ ...prevSettingsState, user }));
   toast.info('Wallet connected');

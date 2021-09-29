@@ -7,6 +7,7 @@ import { getSpecsFromHash } from "../../lib/utils";
 import Loader from "../Loader";
 import './index.css';
 import SVG from "../../SVG";
+import {NavLink} from "react-router-dom";
 
 // async function getUserNfts(settingsState) {
 //   const { NETWORK_NAME } = settingsState.appConfiguration;
@@ -97,9 +98,9 @@ function MyNFTs(props) {
             </div>
           )}
           {nftListLoaded && nftList.length === 0 && (
-            <div className="MyNFTs-loader-holder">
-              Nothing to show
-            </div>
+            <AlertMessage text="Nothing to show">
+              Go to <NavLink to="/wizard">Wizard page</NavLink> to create new NFT card.
+            </AlertMessage>
           )}
 
           {nftListLoaded && nftList.length > 0 && (

@@ -42,7 +42,7 @@ function Menu() {
         <NavLink exact to="/my" className="Menu-primary-item" onClick={onMenuClick}>
           <SVG carousel/> My collection
         </NavLink>
-        <NavLink to="/new" className="Menu-primary-item" onClick={onMenuClick}>
+        <NavLink to="/wizard" className="Menu-primary-item" onClick={onMenuClick}>
           <SVG wizard/> Wizard
         </NavLink>
         {/*<NavLink to="/search" className="Menu-primary-item" onClick={onMenuClick}>*/}

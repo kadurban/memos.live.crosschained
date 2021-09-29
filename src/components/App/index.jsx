@@ -83,7 +83,7 @@ function App() {
                 <div className="App-primary-content-right">
                   {isChainSupported ? (
                     <Switch>
-                      <Route path="/new" render={props => <WizardPage {...props} />} />
+                      <Route path="/wizard" render={props => <WizardPage {...props} />} />
                       <Route path="/about" render={props => <AboutPage {...props} />} />
                       <Route path="/profile" render={props => <ProfilePage {...props} />} />
                       <Route path="/my" render={props => <MyCollectionPage {...props} />} />
