@@ -114,7 +114,6 @@ function Wizard() {
       let fileType = null;
       if (TEXT_EXTENSIONS.includes(extension)) fileType = 'Text';
       if (IMAGE_EXTENSIONS.includes(extension)) fileType = 'Image';
-      if (AUDIO_EXTENSIONS.includes(extension)) fileType = 'Audio';
       if (VIDEO_EXTENSIONS.includes(extension)) fileType = 'Video';
 
       return {
@@ -543,7 +542,7 @@ function Wizard() {
               </div>
 
               <button className="btn-action btn-big" type="submit">
-                <SVG bolt/> Mint
+                <SVG bolt/> Mint on {settingsState.appConfiguration.NETWORK_NAME}
               </button>
             </fieldset>
           </>

@@ -76,9 +76,9 @@ function LoginSection() {
             <Jazzicon diameter={40} seed={jsNumberForAddress(settingsState.user.attributes.ethAddress)}/>
           </button>
           <div className="Dropdown-content" ref={dropdownContent}>
-            <NavLink exact to="/profile" onClick={() => {}}>
-              Profile
-            </NavLink>
+            {/*<NavLink exact to="/profile" onClick={() => {}}>*/}
+            {/*  Profile*/}
+            {/*</NavLink>*/}
             <button onClick={() => logout()}>
               Logout
             </button>

@@ -28,7 +28,7 @@ function getConfig(chainId) {
       ...CONFIG,
       IS_MAINNET: false,
       NETWORK_NAME: 'rinkeby',
-      MINT_CONTRACT_ADDRESS: null
+      MINT_CONTRACT_ADDRESS: '0xE4716B9207939a876700DF6860946Cffb922AFDc'
     }
   }
   if (chainId === 80001) {
@@ -36,7 +36,8 @@ function getConfig(chainId) {
       ...CONFIG,
       IS_MAINNET: false,
       NETWORK_NAME: 'mumbai',
-      MINT_CONTRACT_ADDRESS: '0x40f2A0B241a54dF0B5DA1f1C3dA0c4EcaC5EBA97'
+      // MINT_CONTRACT_ADDRESS: '0x40f2A0B241a54dF0B5DA1f1C3dA0c4EcaC5EBA97'
+      MINT_CONTRACT_ADDRESS: null
     }
   }
 

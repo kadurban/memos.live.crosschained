@@ -19,9 +19,7 @@ function MainPage(props) {
     const retrievedNfts = await window.Moralis.Web3API.token.getNFTOwners(options);
     console.log('Recent NFTs:');
     console.log(retrievedNfts);
-    if (NETWORK_NAME === 'mumbai' || NETWORK_NAME === 'polygon') {
-      return retrievedNfts.result;
-    }
+    return retrievedNfts.result;
   }
 
   // async function searchNFTs(q) {

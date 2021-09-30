@@ -35,16 +35,10 @@ async function getUserNFTs(settingsState) {
     token_address: MINT_CONTRACT_ADDRESS
   };
 
-  // window.Moralis.Web3API.account.getNFTs(options).then(msg => console.log(msg))
   const retrievedNfts = await window.Moralis.Web3API.account.getNFTsForContract(options);
   console.log('User NFTs:');
   console.log(retrievedNfts);
-  if (NETWORK_NAME === 'mumbai' || NETWORK_NAME === 'polygon') {
-    return retrievedNfts.result;
-  }
-  // if (settingsState.appConfiguration.NETWORK_NAME === 'rinkeby') {
-  //   return retrievedNfts.filter((item) => !settingsState.appConfiguration.ITEMS_TO_FILTER.includes(item.token_id));
-  // }
+  return retrievedNfts.result;
 }
 
 
