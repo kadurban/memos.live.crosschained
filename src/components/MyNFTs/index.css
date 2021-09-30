@@ -13,7 +13,7 @@
 }
 
 .NftList-cards-holder::-webkit-scrollbar {
-  display: none;
+  /*display: none;*/
 }
 
 .NftList-cards-holder .Card {
