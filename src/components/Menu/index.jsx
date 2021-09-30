@@ -60,7 +60,7 @@ function Menu() {
         <a href="https://twitter.com/LiveMemos" target="_blank">
           <SVG twitter/>
         </a>
-        <a href="https://t.me/memoslive_chat" target="_blank">
+        <a href="https://t.me/memoslive" target="_blank">
           <SVG telegram/>
         </a>
       </div>
