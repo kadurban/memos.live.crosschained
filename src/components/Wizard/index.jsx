@@ -379,11 +379,11 @@ function Wizard() {
                   <div className="Form-group-set-time-input">
                     <input
                       type="time"
-                      {...register("exactTime")}
+                      {...register("previewTime")}
                       value={previewTime}
                       onChange={(e) => setPreviewTime(e.target.value)}
                     />
-                    {errors.exactTime && <ValidationMessage message={errors.exactTime.message}/>}
+                    {errors.previewTime && <ValidationMessage message={errors.previewTime.message}/>}
                   </div>
                 )}
               </div>
@@ -487,7 +487,7 @@ function Wizard() {
                       <div className="Card-timer">
                         <div className="Card-date">
                           {isValidDate ? (
-                            moment(previewDate, "YYYY-MM-DD HH:mm:ss").format(exactTime ? 'LLL' : 'LL')
+                            moment(exactTime ? `${previewDate} ${previewTime}` : previewDate, "YYYY-MM-DD HH:mm:ss").format(exactTime ? 'LLL' : 'LL')
                           ) : null}
                         </div>
                       </div>
