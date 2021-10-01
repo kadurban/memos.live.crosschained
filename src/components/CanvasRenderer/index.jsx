@@ -15,7 +15,7 @@ async function createPreview({ imageUrl }) {
   gradient.addColorStop(0.72, 'rgba(228,205,105,1)');
   ctx.closePath();
   ctx.fillStyle = gradient;
-  ctx.roundRect(0, 0, cardWidth, cardHeight, 16);
+  ctx.roundRect(0, 0, cardWidth, cardHeight, 32);
   ctx.fill();
   ctx.closePath();
   await resizeMainImage(canvasResizer, imageUrl);

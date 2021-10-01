@@ -7,7 +7,7 @@
   padding-left: var(--std-padding);
   /*margin-left: calc((var(--std-padding) + 322px) * -1);*/
   /*padding-left: calc(var(--std-padding) + 322px);*/
-  padding-bottom: calc(var(--std-padding) * 2);
+  padding-bottom: calc(var(--std-padding) * 3);
   padding-top: calc(var(--std-padding) * 2);
   margin-top: calc(var(--std-padding) * -2);
 }
@@ -45,7 +45,7 @@
   animation-delay: .5s;
 }
 
-.NftList-cards-holder .Card:first-of-type {
+.NftList-cards-holder .Card-holder:first-of-type {
   margin-left: var(--desktop-menu-width);
 }
 

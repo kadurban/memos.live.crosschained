@@ -1,12 +1,11 @@
 .idea
 src_old
-
-# dependencies
 /node_modules
 /_extra
-/hardhat
-/.pnp
-.pnp.js
+/hardhat/artifacts
+/hardhat/cache
+/hardhat/node_modules
+/hardhat/secret.json
 
 # testing
 /coverage

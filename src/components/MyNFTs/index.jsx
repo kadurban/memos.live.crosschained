@@ -101,15 +101,7 @@ function MyNFTs(props) {
             <div className="NftList-cards-holder" ref={scrollableElementRef}>
               {/*<div className="MyNFTs-cards-holder-arrow-next"/>*/}
               {/*<div className="MyNFTs-cards-holder-arrow-prev"/>*/}
-              {nftList.map((nft, i) => (
-                <Card
-                  key={nft.token_uri + i}
-                  tokenUri={nft.token_uri}
-                  // tokenIpfsHash={nft.token_uri.split('ipfs/')[1]}
-                  // specs={getSpecsFromHash(nft.token_uri.split('ipfs/')[1])}
-                  // owner={nft}
-                />
-              ))}
+              {nftList.map((nft, i) => <Card tokenUri={nft.token_uri} key={nft.token_uri + i}/>)}
             </div>
           )}
         </>
