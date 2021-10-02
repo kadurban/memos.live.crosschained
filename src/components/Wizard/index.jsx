@@ -8,13 +8,14 @@ import { login } from "../LoginSection";
 import AlertMessage from '../AlertMessage';
 import Card from '../Card';
 import Loader from '../Loader';
-import CanvasRenderer from '../CanvasRenderer';
+import CanvasRenderer from '../CanvasRenderer/index2';
 import SVG from "../../SVG";
 import { playSound, randomInteger, getSpecsFromHash } from "../../lib/utils";
 import TextareaAutosize from 'react-textarea-autosize';
 import html2canvas from 'html2canvas';
 import './index.css';
 import Moralis from "moralis";
+import logoLight from "../../assets/img/logo-light.png";
 
 const soundsArray = ['effect1', 'effect2', 'effect3', 'effect4', 'effect5', 'effect6', 'effect7', 'effect8'];
 
@@ -56,7 +57,8 @@ function Wizard() {
   const CardPreviewBeforeMintGenerated = useRef(null);
   const { settingsState, setSettingsState } = useContext(SettingsContext);
 
-  const [previewName, setPreviewName] = useState('');
+  const [shadeColor, setShadeColor] = useState('rgba(228,205,105,1)');
+  const [previewName, setPreviewName] = useState('Test text during development');
   const [previewDate, setPreviewDate] = useState('');
   const [previewTime, setPreviewTime] = useState('');
   const [previewImage, setPreviewImage] = useState(null);
@@ -73,17 +75,19 @@ function Wizard() {
 
   useEffect(() => {
     if (CardPreviewBeforeMint && CardPreviewBeforeMintGenerated) {
-      setTimeout(function () {
-        html2canvas(CardPreviewBeforeMint.current, {
-          allowTaint: true,
-          useCORS: true
-        }).then(function(canvas) {
-          if (CardPreviewBeforeMintGenerated.current) {
-            CardPreviewBeforeMintGenerated.current.innerHTML = '';
-            CardPreviewBeforeMintGenerated.current.appendChild(canvas);
-          }
-        });
-      }, 300);
+      // setTimeout(function () {
+      //   html2canvas(CardPreviewBeforeMint.current, {
+      //     allowTaint: true,
+      //     useCORS: true,
+      //     watch: 600,
+      //     height: 600
+      //   }).then(function(canvas) {
+      //     if (CardPreviewBeforeMintGenerated.current) {
+      //       CardPreviewBeforeMintGenerated.current.innerHTML = '';
+      //       CardPreviewBeforeMintGenerated.current.appendChild(canvas);
+      //     }
+      //   });
+      // }, 300);
     }
   });
 
@@ -389,42 +393,42 @@ function Wizard() {
               </div>
 
             </fieldset>
-            <fieldset>
-              <legend>Related data</legend>
+            <fieldset style={{display: 'none'}}>
+              {/*<legend>Related data</legend>*/}
 
-              <div className="Form-group">
-                <label className="Form-label">
-                  Extra files (image, video, audio, text): <SVG hintIcon
-                                                                dataHint={`Invalid or unsupported files will not be attached. Supported are: ${[...UPLOADER_SUPPORTED_EXTENSIONS].join(', ')}. Max 20mb.`}/>
-                </label>
-                <div className="Form-group-files-list-wrapper">
-                  {attachedFiles.map(({file, uuid, valid}) => (
-                    <FilePreview key={uuid} uuid={uuid} file={file} valid={valid}>
-                      <button
-                        onClick={() => {
-                          const filtered = attachedFiles.filter(f => f.uuid !== uuid);
-                          setAttachedFiles([...filtered]);
-                        }}
-                        type="button"
-                      >
-                        <SVG trash/>
-                      </button>
-                    </FilePreview>
-                  ))}
-                </div>
-                <div className="Form-group-file-wrapper">
-                  <input
-                    type="file"
-                    name="files"
-                    multiple={true}
-                    accept={UPLOADER_SUPPORTED_EXTENSIONS.map(ext => '.' + ext)}
-                    onChange={handleFilesChange}
-                  />
-                  <button className="btn-regular btn-big" type="button">
-                    <SVG plus/> Add file(s)
-                  </button>
-                </div>
-              </div>
+              {/*<div className="Form-group">*/}
+              {/*  <label className="Form-label">*/}
+              {/*    Extra files (image, video, audio, text): <SVG hintIcon*/}
+              {/*                                                  dataHint={`Invalid or unsupported files will not be attached. Supported are: ${[...UPLOADER_SUPPORTED_EXTENSIONS].join(', ')}. Max 20mb.`}/>*/}
+              {/*  </label>*/}
+              {/*  <div className="Form-group-files-list-wrapper">*/}
+              {/*    {attachedFiles.map(({file, uuid, valid}) => (*/}
+              {/*      <FilePreview key={uuid} uuid={uuid} file={file} valid={valid}>*/}
+              {/*        <button*/}
+              {/*          onClick={() => {*/}
+              {/*            const filtered = attachedFiles.filter(f => f.uuid !== uuid);*/}
+              {/*            setAttachedFiles([...filtered]);*/}
+              {/*          }}*/}
+              {/*          type="button"*/}
+              {/*        >*/}
+              {/*          <SVG trash/>*/}
+              {/*        </button>*/}
+              {/*      </FilePreview>*/}
+              {/*    ))}*/}
+              {/*  </div>*/}
+              {/*  <div className="Form-group-file-wrapper">*/}
+              {/*    <input*/}
+              {/*      type="file"*/}
+              {/*      name="files"*/}
+              {/*      multiple={true}*/}
+              {/*      accept={UPLOADER_SUPPORTED_EXTENSIONS.map(ext => '.' + ext)}*/}
+              {/*      onChange={handleFilesChange}*/}
+              {/*    />*/}
+              {/*    <button className="btn-regular btn-big" type="button">*/}
+              {/*      <SVG plus/> Add file(s)*/}
+              {/*    </button>*/}
+              {/*  </div>*/}
+              {/*</div>*/}
 
               {/*<div className="Form-group">*/}
               {/*  <label className="Form-label">*/}
@@ -477,60 +481,31 @@ function Wizard() {
               {/*</div>*/}
 
             </fieldset>
+
             <fieldset>
-              <legend>Preview</legend>
+              <legend>Marketplace Image</legend>
 
-              <div className="Card-preview-before-mint-wrap">
-                <div className="Card-preview-before-mint" ref={CardPreviewBeforeMint}>
-                  <div className="Card Card-inactive">
-                    <div className="Card-front">
-                      <div className="Card-timer">
-                        <div className="Card-date">
-                          {isValidDate ? (
-                            moment(exactTime ? `${previewDate} ${previewTime}` : previewDate, "YYYY-MM-DD HH:mm:ss").format(exactTime ? 'LLL' : 'LL')
-                          ) : null}
-                        </div>
-                      </div>
-                      <div className="Card-preview" style={{opacity: 0}}>
-                        <img src={previewImage}/>
-                      </div>
-                      <div className="Card-title">
-                        {previewName}
-                      </div>
-                    </div>
+              <div className="Market-preview-wrap">
+                <div className="Market-preview">
+                  <div className="layer-10"/>
+                  <div className="layer-20"/>
+                  <div className="layer-21">
+                    <img src={logoLight} alt="memos.live"/> memos.live
                   </div>
-
-                  <CanvasRenderer imageUrl={previewImage}/>
-
-                  {/*<div className="Card-preview-before-mint">*/}
-                  {/*  <div className="Card Card-inactive">*/}
-                  {/*    <div className="Card-front">*/}
-                  {/*      <div className="Card-timer">*/}
-                  {/*        <div className="Card-date">*/}
-                  {/*          {isValidDate ? (*/}
-                  {/*            moment(`${previewDate} ${previewTime}`, "YYYY-MM-DD HH:mm:ss").format(exactTime ? 'LLL' : 'LL')*/}
-                  {/*          ) : null}*/}
-                  {/*        </div>*/}
-                  {/*        <div className="Card-date-ago">*/}
-                  {/*          {isValidDate && <DurationTimer eventDate={`${previewDate} ${previewTime}`} exactTime={exactTime}/>}*/}
-                  {/*        </div>*/}
-                  {/*      </div>*/}
-                  {/*      <div className="Card-preview ">*/}
-                  {/*        <img src={previewImage}/>*/}
-                  {/*      </div>*/}
-                  {/*      <div className="Card-title">*/}
-                  {/*        {previewName}*/}
-                  {/*      </div>*/}
-                  {/*    </div>*/}
-                  {/*  </div>*/}
-
-                  {/*  <CanvasRenderer*/}
-                  {/*    titleStr={previewName}*/}
-                  {/*    dateStr={isValidDate ? moment(`${previewDate} ${previewTime}`, "YYYY-MM-DD HH:mm:ss").format(exactTime ? 'LLL' : 'LL') : ''}*/}
-                  {/*  />*/}
+                  <div className="layer-icon">
+                    <SVG sound/>
+                  </div>
+                  <div className="layer-icon">
+                    <SVG sound/>
+                  </div>
+                  <div className="layer-icon">
+                    <SVG sound/>
+                  </div>
+                  <div className="layer-icon">
+                    <SVG sound/>
+                  </div>
+                  {/*<div className="Market-preview-bg"/>*/}
                 </div>
-
-                <div className="Card-preview-before-mint-generated" ref={CardPreviewBeforeMintGenerated}/>
               </div>
 
               <div className="important-note">
@@ -545,6 +520,48 @@ function Wizard() {
                 <SVG bolt/> Mint on {settingsState.appConfiguration.NETWORK_NAME}
               </button>
             </fieldset>
+
+            {/*<fieldset>*/}
+            {/*  <legend>Preview</legend>*/}
+
+            {/*  <div className="Card-preview-before-mint-wrap">*/}
+            {/*    <div className="Card-preview-before-mint" ref={CardPreviewBeforeMint}>*/}
+            {/*      <div className="Card Card-inactive">*/}
+            {/*        <div className="Card-front">*/}
+            {/*          <div className="Card-timer">*/}
+            {/*            <div className="Card-date">*/}
+            {/*              {isValidDate ? (*/}
+            {/*                moment(exactTime ? `${previewDate} ${previewTime}` : previewDate, "YYYY-MM-DD HH:mm:ss").format(exactTime ? 'LLL' : 'LL')*/}
+            {/*              ) : null}*/}
+            {/*            </div>*/}
+            {/*          </div>*/}
+            {/*          <div className="Card-preview" style={{opacity: 0}}>*/}
+            {/*            <img src={previewImage}/>*/}
+            {/*          </div>*/}
+            {/*          <div className="Card-title">*/}
+            {/*            {previewName}*/}
+            {/*          </div>*/}
+            {/*        </div>*/}
+            {/*      </div>*/}
+
+            {/*      <CanvasRenderer imageUrl={previewImage}/>*/}
+            {/*    </div>*/}
+
+            {/*    <div className="Card-preview-before-mint-generated" ref={CardPreviewBeforeMintGenerated}/>*/}
+            {/*  </div>*/}
+
+            {/*  <div className="important-note">*/}
+            {/*    IMPORTANT!*/}
+            {/*    <br/>*/}
+            {/*    This is an exact view of card on other marketplaces like OpenSea, Rarible and many others.*/}
+            {/*    <br/>*/}
+            {/*    Make sure that everything looks nice and well. You will not have chance to change it after minting.*/}
+            {/*  </div>*/}
+
+            {/*  <button className="btn-action btn-big" type="submit">*/}
+            {/*    <SVG bolt/> Mint on {settingsState.appConfiguration.NETWORK_NAME}*/}
+            {/*  </button>*/}
+            {/*</fieldset>*/}
           </>
         </form>
       </div>}

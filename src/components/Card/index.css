@@ -60,7 +60,7 @@
   -webkit-backface-visibility: hidden;
   backface-visibility: hidden;
   transform-style: preserve-3d;
-  transition: all cubic-bezier(0.34, 0.37, 0.21, 1.48) .8s;
+  transition: all cubic-bezier(0.34, 0.37, 0.21, 1.48) .6s;
   box-shadow: 0 1rem 2rem #ddca7899;
   color: var(--l-text-color);
   border: none;

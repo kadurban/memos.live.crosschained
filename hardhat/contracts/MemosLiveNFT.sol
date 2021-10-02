@@ -37,6 +37,7 @@ AccessControl {
         return id;
     }
 
+    // Keep for moderation purposes
     function burn(uint256 id) private onlyAdmin {
         _burn(id);
     }
