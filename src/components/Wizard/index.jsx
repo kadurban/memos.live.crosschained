@@ -16,6 +16,7 @@ import html2canvas from 'html2canvas';
 import './index.css';
 import Moralis from "moralis";
 import logoLight from "../../assets/img/logo-light.png";
+import ClampLines from "react-clamp-lines";
 
 const soundsArray = ['effect1', 'effect2', 'effect3', 'effect4', 'effect5', 'effect6', 'effect7', 'effect8'];
 
@@ -58,7 +59,7 @@ function Wizard() {
   const { settingsState, setSettingsState } = useContext(SettingsContext);
 
   const [shadeColor, setShadeColor] = useState('rgba(228,205,105,1)');
-  const [previewName, setPreviewName] = useState('Test text during development');
+  const [previewName, setPreviewName] = useState('Just anther cool day');
   const [previewDate, setPreviewDate] = useState('');
   const [previewTime, setPreviewTime] = useState('');
   const [previewImage, setPreviewImage] = useState(null);
@@ -74,7 +75,7 @@ function Wizard() {
   } = settingsState.appConfiguration.EXTENSIONS;
 
   useEffect(() => {
-    if (CardPreviewBeforeMint && CardPreviewBeforeMintGenerated) {
+    // if (CardPreviewBeforeMint && CardPreviewBeforeMintGenerated) {
       // setTimeout(function () {
       //   html2canvas(CardPreviewBeforeMint.current, {
       //     allowTaint: true,
@@ -88,7 +89,7 @@ function Wizard() {
       //     }
       //   });
       // }, 300);
-    }
+    // }
   });
 
   const specifyTime = watch('specifyTime');
@@ -103,7 +104,8 @@ function Wizard() {
 
       var reader = new FileReader();
       reader.onloadend = function () {
-        CardPreviewBeforeMintGenerated.current.src = reader.result;
+        console.log(reader.result)
+        // CardPreviewBeforeMintGenerated.current.src = reader.result;
       }
       reader.readAsDataURL(image);
     } else {
@@ -490,19 +492,38 @@ function Wizard() {
                   <div className="layer-10"/>
                   <div className="layer-20"/>
                   <div className="layer-21">
-                    <img src={logoLight} alt="memos.live"/> memos.live
+                    <img src={logoLight} alt="memos.live"/>Interactive NFT at memos.live
+                  </div>
+                  <div className="layer-icon">
+                    <SVG video/>
                   </div>
                   <div className="layer-icon">
                     <SVG sound/>
                   </div>
                   <div className="layer-icon">
-                    <SVG sound/>
+                    <SVG image/>
                   </div>
                   <div className="layer-icon">
-                    <SVG sound/>
+                    <SVG feather/>
                   </div>
-                  <div className="layer-icon">
-                    <SVG sound/>
+                  <div className="layer-11">
+                    <div className="layer-11-inner">
+                      <div className="date">
+                        {isValidDate ? (
+                          moment(exactTime ? `${previewDate} ${previewTime}` : previewDate, "YYYY-MM-DD HH:mm:ss").format(exactTime ? 'LLL' : 'LL')
+                        ) : null}
+                      </div>
+                      <div className="preview">
+                        <img src={previewImage}/>
+                      </div>
+                      <div className="title">
+                        <ClampLines
+                          text={previewName}
+                          lines={3}
+                          buttons={false}
+                        />
+                      </div>
+                    </div>
                   </div>
                   {/*<div className="Market-preview-bg"/>*/}
                 </div>
