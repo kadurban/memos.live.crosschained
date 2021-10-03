@@ -69,7 +69,7 @@ function Wizard() {
   const {
     UPLOADER_SUPPORTED_EXTENSIONS,
     IMAGE_EXTENSIONS,
-    AUDIO_EXTENSIONS,
+    // ANIMATION_EXTENSIONS,
     TEXT_EXTENSIONS,
     VIDEO_EXTENSIONS,
   } = settingsState.appConfiguration.EXTENSIONS;
@@ -98,7 +98,7 @@ function Wizard() {
     const image = event.target.files[0];
     const extension = image.name.split('.').pop().toLowerCase();
 
-    if (image && [...IMAGE_EXTENSIONS, ...VIDEO_EXTENSIONS].includes(extension) && image.size <= settingsState.appConfiguration.MAX_FILE_SIZE) {
+    if (image && IMAGE_EXTENSIONS.includes(extension) && image.size <= settingsState.appConfiguration.MAX_FILE_SIZE) {
       setImageFile(image);
       setPreviewImage(URL.createObjectURL(image));
 
@@ -109,7 +109,7 @@ function Wizard() {
       }
       reader.readAsDataURL(image);
     } else {
-      alert(`Please select a correct file type for preview. Supported: ${[...IMAGE_EXTENSIONS, ...VIDEO_EXTENSIONS].join(', ')}. Max 20mb.`);
+      alert(`Please select a correct file type for preview. Supported: ${IMAGE_EXTENSIONS.join(', ')}. Max 20mb.`);
     }
   }
 
@@ -337,7 +337,7 @@ function Wizard() {
                 )}
                 <div className="Form-group-file-wrapper">
                   <input
-                    accept={[...IMAGE_EXTENSIONS, ...VIDEO_EXTENSIONS].map(ext => `.${ext}`)}
+                    accept={IMAGE_EXTENSIONS.map(ext => `.${ext}`)}
                     type="file"
                     {...register("image", {...formConfig.image})}
                     onChange={handleImageChange}
@@ -492,7 +492,7 @@ function Wizard() {
                   <div className="layer-10"/>
                   <div className="layer-20"/>
                   <div className="layer-21">
-                    <img src={logoLight} alt="memos.live"/>Interactive NFT at memos.live
+                    <img src={logoLight} alt="memos.live"/>memos.live | Memorable Interactive NFT
                   </div>
                   <div className="layer-icon">
                     <SVG video/>
@@ -514,7 +514,9 @@ function Wizard() {
                         ) : null}
                       </div>
                       <div className="preview">
-                        <img src={previewImage}/>
+                        <div className="preview-img-holder">
+                          <img src={previewImage}/>
+                        </div>
                       </div>
                       <div className="title">
                         <ClampLines

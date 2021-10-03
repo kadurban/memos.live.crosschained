@@ -1,5 +1,6 @@
 const TEXT_EXTENSIONS = ['txt', 'md'];
-const IMAGE_EXTENSIONS = ['jpg', 'jpeg', 'png', 'gif'];
+const IMAGE_EXTENSIONS = ['jpg', 'jpeg', 'png'];
+const ANIMATION_EXTENSIONS = ['gif'];
 const VIDEO_EXTENSIONS = ['mp4', 'webm', 'mov'];
 // const AUDIO_EXTENSIONS = ['mp3', 'ogg'];
 // const EXECUTABLE_EXTENSIONS = ['html'];
@@ -8,10 +9,12 @@ const VIDEO_EXTENSIONS = ['mp4', 'webm', 'mov'];
 const EXTENSIONS = {
   TEXT_EXTENSIONS,
   IMAGE_EXTENSIONS,
+  ANIMATION_EXTENSIONS,
   VIDEO_EXTENSIONS,
   UPLOADER_SUPPORTED_EXTENSIONS: [
     ...TEXT_EXTENSIONS,
     ...IMAGE_EXTENSIONS,
+    ...ANIMATION_EXTENSIONS,
     ...VIDEO_EXTENSIONS,
   ]
 };
