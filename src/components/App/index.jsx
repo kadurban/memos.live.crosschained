@@ -45,6 +45,9 @@ function App() {
       const chainId = await web3.eth.net.getId();
       const appConfiguration = getConfig(chainId);
 
+      // const isDarkTheme = localStorage.getItem('isDarkTheme');
+      // setSettingsState((prevSettingsState) => ({...prevSettingsState, isDarkTheme }));
+
       if (appConfiguration.MORALIS_APP_ID && appConfiguration.MINT_CONTRACT_ADDRESS) {
         Moralis.initialize(appConfiguration.MORALIS_APP_ID);
         Moralis.serverURL = appConfiguration.MORALIS_SERVER_URL;
@@ -73,7 +76,7 @@ function App() {
     <ErrorBoundary>
       <Router>
         {appLoaded ? (
-          <div className="App-main-content">
+          <div className="App-main-content ">
             <TopBar/>
             <div className="App-primary-content">
               <div className="App-primary-content-inner">

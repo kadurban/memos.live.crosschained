@@ -3,6 +3,10 @@ import { DebounceInput } from 'react-debounce-input';
 import Card from "../components/Card";
 import SettingsContext from "../SettingsContext";
 
+function shuffle(array) {
+  return array.sort(() => Math.random() - 0.5);
+}
+
 function MainPage(props) {
   const { settingsState, setSettingsState } = useContext(SettingsContext);
   const [ nftListLoaded, setNftListLoadedStatus ] = useState(false);
@@ -10,16 +14,25 @@ function MainPage(props) {
   const scrollableElementRef = useRef(null);
 
   async function getNFTOwners() {
-    const { NETWORK_NAME, MINT_CONTRACT_ADDRESS } = settingsState.appConfiguration;
-    const options = {
-      chain: NETWORK_NAME,
-      address: MINT_CONTRACT_ADDRESS,
-    };
+    const { AVAILABLE_NETWORKS } = settingsState.appConfiguration;
+    let retrievedNfts = [];
 
-    const retrievedNfts = await window.Moralis.Web3API.token.getNFTOwners(options);
+    for (const availableNetwork of AVAILABLE_NETWORKS) {
+      const NFTs = await window.Moralis.Web3API.token.getNFTOwners({
+        chain: availableNetwork.NETWORK_NAME,
+        address: availableNetwork.MINT_CONTRACT_ADDRESS,
+      });
+      if (NFTs.result) {
+        for (const nft of NFTs.result) {
+          nft.onChain = availableNetwork.NETWORK_NAME
+        }
+        retrievedNfts = [...retrievedNfts, ...NFTs.result]
+      }
+    }
+
     console.log('Recent NFTs:');
     console.log(retrievedNfts);
-    return retrievedNfts.result;
+    return shuffle(retrievedNfts);
   }
 
   // async function searchNFTs(q) {
@@ -53,7 +66,7 @@ function MainPage(props) {
         <div className="NftList-cards-holder" ref={scrollableElementRef}>
           {/*<div className="MyNFTs-cards-holder-arrow-next"/>*/}
           {/*<div className="MyNFTs-cards-holder-arrow-prev"/>*/}
-          {nftList.map((nft, i) => <Card tokenUri={nft.token_uri} key={nft.token_uri + i}/>)}
+          {nftList.map((nft, i) => <Card onChain={nft.onChain} tokenUri={nft.token_uri} key={nft.token_uri + i}/>)}
         </div>
       )}
     </div>

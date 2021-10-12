@@ -1,7 +1,7 @@
 :root {
   --main-bg-color: brown;
-  --accent-color: #ebdb8da8;
-  --shadow-color: #ebdb8da8;
+  --accent-color: rgb(222,203,121);
+  --shadow-color: #decb794f;
   --desktop-menu-width: 322px;
   --readable-container-width: 900px;
 

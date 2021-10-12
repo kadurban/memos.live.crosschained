@@ -25,12 +25,33 @@
   transition: transform .2s ease-out;
 }
 
-.Card:active {
+.Card .Card-chain {
+  position: absolute;
+  z-index: -2;
+  top: calc(50% - 25px);
+  /*opacity: .2;*/
+  transform: scale(1.5);
+  left: calc(50% - 25px);
+}
+
+/*.Card .Card-chain.eth {*/
+/*  top: -40px;*/
+/*  right: -13px;*/
+/*  opacity: .6;*/
+/*}*/
+
+/*.Card .Card-chain.polygon {*/
+/*  top: -38px;*/
+/*  right: -29px;*/
+/*  opacity: .8;*/
+/*}*/
+
+.Card:active:not(.Card-rotated) {
  transform: scale(.97);
 }
 
-.Card:active .Card-front,
-.Card:active .Card-back {
+.Card:active:not(.Card-rotated) .Card-front,
+.Card:active:not(.Card-rotated) .Card-back {
   background-size: 160% !important;
 }
 
@@ -139,6 +160,7 @@
   text-shadow: 1px 1px 0 #ffffff6e;
   color: #000000c9;
   padding: 1rem;
+  position: relative;
 }
 
 .dark .Card-title {
@@ -180,11 +202,11 @@
 }
 
 .Card-preview.Card-preview-loading {
-  animation-duration: 3s;
-  animation-fill-mode: forwards;
-  animation-iteration-count: infinite;
-  animation-timing-function: linear;
-  animation-name: placeholderAnimate;
+  /*animation-duration: 3s;*/
+  /*animation-fill-mode: forwards;*/
+  /*animation-iteration-count: infinite;*/
+  /*animation-timing-function: linear;*/
+  /*animation-name: placeholderAnimate;*/
   background: #f6f7f8;
   background: linear-gradient(-65deg,
   rgba(255,255,255,0) 0%,
@@ -263,77 +285,128 @@
 }
 
 .Card-back-actions {
-  flex: auto;
-  display: flex;
-  flex-direction: row;
-  flex-wrap: wrap;
-  align-content: center;
-  justify-content: space-around;
-}
-
-.Card-back-actions.count-0 {
-  display: none;
-}
-
-.Card-back-actions.count-1 button {
-  transform: scale(1.4);
-}
-
-.Card-back-actions.count-2 {
-  flex-direction: column;
-  justify-content: space-evenly;
-  padding: 3rem 0;
-}
-
-.Card-back-actions.count-2 button {
-  margin: 0 2rem;
-  transform: scale(1.2);
-}
-
-.Card-back-actions.count-3 {
-  flex-direction: row;
-  display: flex;
-  justify-content: space-evenly;
+  /*flex: auto;*/
+  /*display: flex;*/
+  /*flex-direction: row;*/
+  /*flex-wrap: wrap;*/
+  /*align-content: center;*/
+  /*justify-content: space-around;*/
+  width: 100%;
+  height: 100%;
   position: relative;
-  top: 1rem;
 }
 
-.Card-back-actions.count-3 button {
-  margin: 2rem;
+.Card-back-actions .Card-back-action-button {
+  position: absolute;
+  display: block;
 }
 
-.Card-back-actions.count-4 {
-  flex-direction: row;
-  flex-wrap: wrap;
-  align-content: space-around;
-  justify-content: space-between;
-  padding: 6rem 3rem;
+.Card-back-actions.count-1 .Card-back-action-button:nth-of-type(1) {
+  top: 75px;
+  left: calc(50% - 30px);
 }
 
-.Card-back-actions.count-4 button {
-  margin: 0 20px;
+.Card-back-actions.count-2 .Card-back-action-button:nth-of-type(1) {
+  top: 195px;
+  left: 5%;
+}
+.Card-back-actions.count-2 .Card-back-action-button:nth-of-type(2) {
+  top: 195px;
+  right: 5%;
 }
 
-
-.Card-back-actions.count-5 {
-  flex-direction: row;
-  flex-wrap: wrap;
-  align-content: space-around;
-  justify-content: space-evenly;
-  padding: 7rem 1rem;
-  position: relative;
-  top: 2rem;
+.Card-back-actions.count-3 .Card-back-action-button:nth-of-type(1) {
+  top: 195px;
+  left: 5%;
+}
+.Card-back-actions.count-3 .Card-back-action-button:nth-of-type(2) {
+  top: 195px;
+  right: 5%;
+}
+.Card-back-actions.count-3 .Card-back-action-button:nth-of-type(3) {
+  top: 195px;
+  right: 5%;
 }
 
-.Card-back-actions.count-5 button {
-  margin: 0 10px;
-  padding: 0;
-}
+/*.Card-back-actions.count-2 .Card-back-action-button:nth-of-type(1) {*/
+/*  top: -150px;*/
+/*}*/
 
-.Card-back-actions.count-5 button:nth-child(2) {
-  position: relative;
-  top: -5rem;
-}
+/*.Card-back-actions.count-2 .Card-back-action-button:nth-of-type(2) {*/
+/*  top: -150px;*/
+/*}*/
+
+
+
+
+
+/*.Card-back-actions.count-0 {*/
+/*  display: none;*/
+/*}*/
+
+/*.Card-back-actions.count-1 button {*/
+/*  transform: scale(2.4);*/
+/*}*/
+
+/*.Card-back-actions.count-2 {*/
+/*  flex-direction: column;*/
+/*  justify-content: space-evenly;*/
+/*  padding: 3rem 0;*/
+/*}*/
+
+/*.Card-back-actions.count-2 button {*/
+/*  margin: 0 2rem;*/
+/*  transform: scale(1.8);*/
+/*}*/
+
+/*.Card-back-actions.count-3 {*/
+/*  flex-direction: row;*/
+/*  display: flex;*/
+/*  justify-content: space-evenly;*/
+/*  position: relative;*/
+/*  top: 1rem;*/
+/*}*/
+
+/*.Card-back-actions.count-3 button {*/
+/*  margin: 2rem;*/
+/*  transform: scale(1.6);*/
+/*}*/
+
+/*.Card-back-actions.count-4 {*/
+/*  flex-direction: row;*/
+/*  flex-wrap: wrap;*/
+/*  align-content: space-around;*/
+/*  justify-content: space-between;*/
+/*  padding: 6rem 3rem;*/
+/*  transform: rotateZ(45deg);*/
+/*}*/
+
+/*.Card-back-actions.count-4 button {*/
+/*  margin: 0 20px;*/
+/*  transform: scale(1.5) rotateZ(-45deg);*/
+/*}*/
+
+
+/*.Card-back-actions.count-5 {*/
+/*  flex-direction: row;*/
+/*  flex-wrap: wrap;*/
+/*  align-content: space-around;*/
+/*  justify-content: space-evenly;*/
+/*  padding: 7rem 1rem;*/
+/*  position: relative;*/
+/*  top: 2rem;*/
+/*}*/
+
+/*.Card-back-actions.count-5 button {*/
+/*  margin: 0 10px;*/
+/*  padding: 0;*/
+/*  transform: scale(1.3);*/
+/*}*/
+
+/*.Card-back-actions.count-5 button:nth-child(2) {*/
+/*  position: relative;*/
+/*  top: -5rem;*/
+/*}*/
 
 .Card-back-info.larger {
   height: auto;
@@ -345,7 +418,6 @@
 }
 
 .Card-back-action-button {
-  border: none;
   flex-direction: row;
   flex-wrap: nowrap;
   justify-content: space-evenly;
@@ -353,10 +425,20 @@
   /*margin: 37px 20px;*/
   width: var(--card-id-side);
   height: var(--card-id-side);
-  background-color: #fff;
   overflow: hidden;
   border-radius: 100%;
-  box-shadow: 2px 2px 18px 8px #eadea6b0;
+  box-shadow: inset rgba(212,199,141, 0) 0px 0 0.75rem 0px;
+  position: relative;
+  background-color: #fff;
+  border: 1px solid #decb79a8;
+}
+
+.Card-back-action-button:hover {
+  box-shadow: none;
+}
+
+.Card-back-action-button:active {
+  box-shadow: inset rgba(212,199,141, .7) 0px 0 0.75rem 0px;
 }
 
 .Card-back-action-button.flip-back {
@@ -377,7 +459,7 @@
 }
 
 .Card-back-action-button svg path:nth-child(2) {
-  fill: var(--std-border-color) !important;
+  fill: rgb(222,203,121) !important;
 }
 
 .Card-back-info {

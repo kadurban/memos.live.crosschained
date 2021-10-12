@@ -18,7 +18,7 @@ function AboutPage(props) {
           <a href="https://moralis.io/" target="_blank">
             <img src="https://moralis.io/wp-content/uploads/2021/01/logo_footer.svg" alt="Moralis"/>
             <span>
-              The Ultimate Web3 Development Platform
+              The Ultimate Web3 Development Platform ❤️
             </span>
           </a>
         </div>

@@ -6,7 +6,7 @@ import { toast } from 'react-toastify';
 import SettingsContext from '../../SettingsContext';
 import { login } from "../LoginSection";
 import AlertMessage from '../AlertMessage';
-import Card from '../Card';
+import Card, { CardIcon } from '../Card';
 import Loader from '../Loader';
 import CanvasRenderer from '../CanvasRenderer/index2';
 import SVG from "../../SVG";
@@ -58,8 +58,7 @@ function Wizard() {
   const CardPreviewBeforeMintGenerated = useRef(null);
   const { settingsState, setSettingsState } = useContext(SettingsContext);
 
-  const [shadeColor, setShadeColor] = useState('rgba(228,205,105,1)');
-  const [previewName, setPreviewName] = useState('Just anther cool day');
+  const [previewName, setPreviewName] = useState('');
   const [previewDate, setPreviewDate] = useState('');
   const [previewTime, setPreviewTime] = useState('');
   const [previewImage, setPreviewImage] = useState(null);
@@ -69,27 +68,27 @@ function Wizard() {
   const {
     UPLOADER_SUPPORTED_EXTENSIONS,
     IMAGE_EXTENSIONS,
-    // ANIMATION_EXTENSIONS,
+    ANIMATION_EXTENSIONS,
     TEXT_EXTENSIONS,
     VIDEO_EXTENSIONS,
   } = settingsState.appConfiguration.EXTENSIONS;
 
   useEffect(() => {
-    // if (CardPreviewBeforeMint && CardPreviewBeforeMintGenerated) {
-      // setTimeout(function () {
-      //   html2canvas(CardPreviewBeforeMint.current, {
-      //     allowTaint: true,
-      //     useCORS: true,
-      //     watch: 600,
-      //     height: 600
-      //   }).then(function(canvas) {
-      //     if (CardPreviewBeforeMintGenerated.current) {
-      //       CardPreviewBeforeMintGenerated.current.innerHTML = '';
-      //       CardPreviewBeforeMintGenerated.current.appendChild(canvas);
-      //     }
-      //   });
-      // }, 300);
-    // }
+    if (CardPreviewBeforeMint && CardPreviewBeforeMintGenerated) {
+      setTimeout(function () {
+        html2canvas(CardPreviewBeforeMint.current, {
+          allowTaint: true,
+          useCORS: true,
+          watch: 600,
+          height: 600
+        }).then(function(canvas) {
+          if (CardPreviewBeforeMintGenerated.current) {
+            CardPreviewBeforeMintGenerated.current.innerHTML = '';
+            CardPreviewBeforeMintGenerated.current.appendChild(canvas);
+          }
+        });
+      }, 300);
+    }
   });
 
   const specifyTime = watch('specifyTime');
@@ -104,8 +103,8 @@ function Wizard() {
 
       var reader = new FileReader();
       reader.onloadend = function () {
-        console.log(reader.result)
-        // CardPreviewBeforeMintGenerated.current.src = reader.result;
+        // console.log(reader.result)
+        CardPreviewBeforeMintGenerated.current.src = reader.result;
       }
       reader.readAsDataURL(image);
     } else {
@@ -119,8 +118,9 @@ function Wizard() {
 
       let fileType = null;
       if (TEXT_EXTENSIONS.includes(extension)) fileType = 'Text';
-      if (IMAGE_EXTENSIONS.includes(extension)) fileType = 'Image';
+      if (IMAGE_EXTENSIONS.includes(extension)) fileType = 'Picture';
       if (VIDEO_EXTENSIONS.includes(extension)) fileType = 'Video';
+      if (ANIMATION_EXTENSIONS.includes(extension)) fileType = 'Video';
 
       return {
         file,
@@ -145,10 +145,12 @@ function Wizard() {
     document.body.style.overflow = 'hidden';
 
     console.log('===> Saving marketplace image');
-    const imageDataBase64 = CardPreviewBeforeMintGenerated.current.querySelector('canvas').toDataURL();
-    const savedImage = new Moralis.File(`${uuid()}.${data.image[0].name.split('.').pop()}`, { base64: imageDataBase64 });
+    const imageDataBase64 = data.image[0].toDataURL();
+    const savedCardFrontImage = new Moralis.File(`${uuid()}.${data.image[0].name.split('.').pop()}`, { base64: imageDataBase64 });
+    const savedImage = new Moralis.File(`${uuid()}.${data.image[0].name.split('.').pop()}`, data.image[0]);
     await savedImage.saveIPFS();
     const saveiImageUrl = savedImage.ipfs();
+
     let metaData = {
       image: saveiImageUrl,
       // image_data: svgCode, // TODO: Put svg here
@@ -165,7 +167,7 @@ function Wizard() {
       metaData.attributes.push({
         key: 'Date',
         value: data.exactTime ? `${data.eventDate} ${data.exactTime}` : data.eventDate,
-        trait_type: 'Event Date'
+        trait_type: 'Date'
       });
     }
 
@@ -355,7 +357,7 @@ function Wizard() {
 
               <div className="Form-group">
                 <label className="Form-label">
-                  Event Date <SVG hintIcon
+                  Date <SVG hintIcon
                                   dataHint="You can specify the date and time which is your new NFT will be associated."/>
                 </label>
                 <input
@@ -485,14 +487,14 @@ function Wizard() {
             </fieldset>
 
             <fieldset>
-              <legend>Marketplace Image</legend>
+              <legend>Cover for Major Marketplaces</legend>
 
               <div className="Market-preview-wrap">
-                <div className="Market-preview">
+                <div className="Market-preview" ref={CardPreviewBeforeMint}>
                   <div className="layer-10"/>
                   <div className="layer-20"/>
                   <div className="layer-21">
-                    <img src={logoLight} alt="memos.live"/>memos.live | Memorable Interactive NFT
+                    <img src={logoLight} alt="memos.live"/>Memorable interactive NFT <br/>Collection driven by Community at memos.live
                   </div>
                   <div className="layer-icon">
                     <SVG video/>
@@ -506,6 +508,10 @@ function Wizard() {
                   <div className="layer-icon">
                     <SVG feather/>
                   </div>
+                  <div className="layer-ray layer-icon1-ray"/>
+                  <div className="layer-ray layer-icon2-ray"/>
+                  <div className="layer-ray layer-icon3-ray"/>
+                  <div className="layer-ray layer-icon4-ray"/>
                   <div className="layer-11">
                     <div className="layer-11-inner">
                       <div className="date">
@@ -519,16 +525,19 @@ function Wizard() {
                         </div>
                       </div>
                       <div className="title">
-                        <ClampLines
-                          text={previewName}
-                          lines={3}
-                          buttons={false}
-                        />
+                        {previewName}
                       </div>
                     </div>
                   </div>
+                  <div className="layer-chain-icon">
+                    <CardIcon onChain={settingsState.appConfiguration.NETWORK_NAME}/>
+                  </div>
                   {/*<div className="Market-preview-bg"/>*/}
                 </div>
+                <div
+                  className="Card-preview-before-mint-generated"
+                  ref={CardPreviewBeforeMintGenerated}
+                />
               </div>
 
               <div className="important-note">

@@ -263,6 +263,7 @@
 .Market-preview-wrap {
     border: 1px solid #ccc;
     overflow: hidden;
+    position: relative;
 }
 
 .Market-preview {
@@ -374,10 +375,10 @@
 .Market-preview .layer-icon .icon svg {
     width: 70%;
     height: 70%;
-    margin: auto;
-    display: block;
-    top: 20px;
-    position: relative;
+    /*margin: auto;*/
+    /*display: block;*/
+    /*top: 20px;*/
+    /*position: relative;*/
 }
 
 .Market-preview .layer-icon .icon svg path:nth-child(2) {
@@ -392,18 +393,48 @@
     height: 120px;
     right: 126px;
     bottom: 154px;
-    background-color: #fff;
+    /*background-color: #fff;*/
     border-radius: 1000px;
-    box-shadow: 0 0 20px 20px #eadea657;
+    /*box-shadow: 0 0 20px 20px #eadea657;*/
     position: absolute;
     z-index: 4;
+}
+
+.layer-ray {
+    background-size: contain;
+    position: absolute;
+    z-index: 3;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+}
+
+.layer-icon1-ray {
+    background: url(../../assets/img/preview-layer-icon1-ray.png);
+}
+.layer-icon2-ray {
+    background: url(../../assets/img/preview-layer-icon2-ray.png);
+}
+
+.layer-icon3-ray {
+    background: url(../../assets/img/preview-layer-icon3-ray.png);
+}
+
+.layer-icon4-ray {
+    background: url(../../assets/img/preview-layer-icon4-ray.png);
+}
+
+.Market-preview div:nth-child(4) {
+    right: 100px;
+    bottom: 42px;
 }
 
 .Market-preview div:nth-child(5) {
     width: 110px;
     height: 110px;
-    bottom: 290px;
-    right: 40px;
+    bottom: 193px;
+    right: 37px;
 }
 
 .Market-preview div:nth-child(5) svg {
@@ -411,10 +442,10 @@
 }
 
 .Market-preview div:nth-child(6) {
-    width: 90px;
-    height: 90px;
-    bottom: 430px;
-    right: 60px;
+    width: 80px;
+    height: 80px;
+    bottom: 358px;
+    right: 48px;
 }
 
 .Market-preview div:nth-child(6) svg {
@@ -424,8 +455,8 @@
 .Market-preview div:nth-child(7) {
     width: 70px;
     height: 70px;
-    bottom: 510px;
-    right: 130px;
+    bottom: 477px;
+    right: 115px;
 }
 
 .Market-preview div:nth-child(7) svg {
@@ -451,64 +482,26 @@
     margin: 0 .5rem;
 }
 
-/*.Market-preview-bg {*/
-/*    position: absolute;*/
-/*    background: url(../../assets/img/bg.jpg);*/
-/*    top: 0;*/
-/*    right: 0;*/
-/*    bottom: 0;*/
-/*    left: 0;*/
-/*    background-size: contain;*/
-/*    transform: scale(1.43) rotate(229deg);*/
-/*    z-index: 1;*/
-/*}*/
+.Wizard-full-preview .Card {
+    margin: auto;
+    -webkit-animation: text-focus-in .5s cubic-bezier(0.550, 0.085, 0.680, 0.530) both;
+    animation: text-focus-in .5s cubic-bezier(0.550, 0.085, 0.680, 0.530) both;
+}
 
-/*.Card-preview-before-mint-wrap {*/
-/*    position: relative;*/
-/*    width: 600px;*/
-/*}*/
+.Card-preview-before-mint-generated {
+    /*position: absolute;*/
+    top: 0;
+    left: 0;
+    width: 100%;
+    z-index: 100;
+}
 
-/*.Card-preview-before-mint {*/
-/*    position: relative;*/
-/*    width: 600px;*/
-/*    top: 0;*/
-/*    left: 0;*/
-/*}*/
-
-/*.Card-preview-before-mint .Card {*/
-/*    z-index: 2;*/
-/*}*/
-
-/*.Card-preview-before-mint .Card-front {*/
-/*    background-image: none;*/
-/*    background-color: transparent;*/
-/*    box-shadow: none;*/
-/*}*/
-
-/*.Card-preview-before-mint-generated {*/
-/*    position: absolute;*/
-/*    top: 0;*/
-/*    left: 0;*/
-/*    z-index: 2;*/
-/*    border-radius: 1rem;*/
-/*    overflow: hidden;*/
-/*}*/
-
-/*.Card-preview-before-mint-generated svg {*/
-/*    display: block;*/
-/*}*/
 
 /*#marketPreview {*/
 /*    position: absolute;*/
 /*    !*left: -350px;*!*/
 /*    top: 0;*/
 /*    z-index: 1;*/
-/*}*/
-
-/*.Wizard-full-preview .Card {*/
-/*    margin: 0 auto;*/
-/*    -webkit-animation: swirl-in-fwd 1s ease-out both;*/
-/*    animation: swirl-in-fwd 1s ease-out both;*/
 /*}*/
 
 /* ----------------------------------------------

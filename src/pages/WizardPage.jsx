@@ -5,7 +5,7 @@ import AlertMessage from '../components/AlertMessage'
 function WizardPage(props) {
   return (
     <div className="Page-wrapper">
-      <h1>Wizard</h1>
+      <h1>NFT Wizard</h1>
       <Wizard/>
     </div>
   );

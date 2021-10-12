@@ -63,6 +63,12 @@ function Menu() {
         <a href="https://t.me/memoslive" target="_blank">
           <SVG telegram/>
         </a>
+        {/*<button onClick={() => setSettingsState((prevSettingsState) => {*/}
+        {/*  localStorage.setItem('isDarkTheme', !settingsState.appConfiguration.isDarkTheme);*/}
+        {/*  return {...prevSettingsState, isDarkTheme: !settingsState.appConfiguration.isDarkTheme };*/}
+        {/*})}>*/}
+        {/*  <SVG bulb/>*/}
+        {/*</button>*/}
       </div>
 
     </div>
