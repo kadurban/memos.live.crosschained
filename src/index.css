@@ -76,6 +76,12 @@ body::after {
   background-size: cover;
 }
 
+img,
+picture {
+   max-width: initial;
+   display: initial;
+}
+
 /* form elements reset */
 input,
 label,

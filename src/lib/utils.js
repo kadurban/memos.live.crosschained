@@ -83,3 +83,14 @@ export function getSpecsFromHash(hash) {
   const filtered =  hash?.split('').filter(i => /[0-9]/gi.test(i));
   return filtered?.join('').substr(0, 4);
 }
+
+export function debounce(f, ms) {
+  let isCooldown = false;
+  return function() {
+    if (isCooldown) return;
+    f.apply(this, arguments);
+    isCooldown = true;
+    setTimeout(() => isCooldown = false, ms);
+  };
+
+}

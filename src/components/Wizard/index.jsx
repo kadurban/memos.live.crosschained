@@ -6,17 +6,16 @@ import { toast } from 'react-toastify';
 import SettingsContext from '../../SettingsContext';
 import { login } from "../LoginSection";
 import AlertMessage from '../AlertMessage';
-import Card, { CardIcon } from '../Card';
+import Card from '../Card';
 import Loader from '../Loader';
-import CanvasRenderer from '../CanvasRenderer/index2';
 import SVG from "../../SVG";
-import { playSound, randomInteger, getSpecsFromHash } from "../../lib/utils";
+import { playSound, randomInteger, debounce } from "../../lib/utils";
 import TextareaAutosize from 'react-textarea-autosize';
 import html2canvas from 'html2canvas';
-import './index.css';
 import Moralis from "moralis";
+import jimp from "jimp";
+import './index.css';
 import logoLight from "../../assets/img/logo-light.png";
-import ClampLines from "react-clamp-lines";
 
 const soundsArray = ['effect1', 'effect2', 'effect3', 'effect4', 'effect5', 'effect6', 'effect7', 'effect8'];
 
@@ -47,15 +46,21 @@ const FilePreview = ({ file, valid, children }) => (
   </div>
 );
 
+// function calculateAspectRatioFit(srcWidth, srcHeight, maxWidth, maxHeight) {
+//   const ratio = Math.min(maxWidth / srcWidth, maxHeight / srcHeight);
+//   return { width: srcWidth*ratio, height: srcHeight*ratio };
+// }
+
 function Wizard() {
   const [isUploading, setUploadStatusInProgress] = useState(false);
   const [tokenURI, setTokenURI] = useState(null);
-  const [metaData, setMetaData] = useState(null);
+  const [metaDataState, setMetaData] = useState(null);
   const [attachedFiles, setAttachedFiles] = useState([]);
   const [image, setImageFile] = useState(null);
   const { register, handleSubmit, formState: { errors }, watch } = useForm();
   const CardPreviewBeforeMint = useRef(null);
   const CardPreviewBeforeMintGenerated = useRef(null);
+  const CardPreviewImage = useRef(null);
   const { settingsState, setSettingsState } = useContext(SettingsContext);
 
   const [previewName, setPreviewName] = useState('');
@@ -73,7 +78,7 @@ function Wizard() {
     VIDEO_EXTENSIONS,
   } = settingsState.appConfiguration.EXTENSIONS;
 
-  useEffect(() => {
+  const renderCanvas = () => {
     if (CardPreviewBeforeMint && CardPreviewBeforeMintGenerated) {
       setTimeout(function () {
         html2canvas(CardPreviewBeforeMint.current, {
@@ -89,7 +94,9 @@ function Wizard() {
         });
       }, 300);
     }
-  });
+  };
+
+  useEffect(renderCanvas, []);
 
   const specifyTime = watch('specifyTime');
 
@@ -98,15 +105,38 @@ function Wizard() {
     const extension = image.name.split('.').pop().toLowerCase();
 
     if (image && IMAGE_EXTENSIONS.includes(extension) && image.size <= settingsState.appConfiguration.MAX_FILE_SIZE) {
-      setImageFile(image);
-      setPreviewImage(URL.createObjectURL(image));
+      const reader = new FileReader();
+      reader.onloadend = async function (data) {
+        const jImage = await jimp.read(this.result);
+        const { width, height } = jImage.bitmap;
 
-      var reader = new FileReader();
-      reader.onloadend = function () {
-        // console.log(reader.result)
-        CardPreviewBeforeMintGenerated.current.src = reader.result;
+        let resizedImage;
+        let resizedWidth;
+        let resizedHeight;
+        if (width > height) {
+          resizedImage = await jImage.resize(jimp.AUTO, 260);
+          resizedWidth = jImage.bitmap.width;
+          resizedHeight = jImage.bitmap.height;
+        } else {
+          resizedImage = await jImage.resize(260, jimp.AUTO);
+          resizedWidth = jImage.bitmap.width;
+          resizedHeight = jImage.bitmap.height;
+        }
+
+        setImageFile(image);
+        CardPreviewImage.current.width = resizedWidth;
+        CardPreviewImage.current.height = resizedHeight;
+        if (resizedWidth >= resizedHeight) {
+          CardPreviewImage.current.style.left = `-${(resizedWidth - resizedHeight) / 2}px`;
+          CardPreviewImage.current.style.top = 0;
+        } else {
+          CardPreviewImage.current.style.left = 0;
+          CardPreviewImage.current.style.top = `-${(resizedHeight - resizedWidth) / 2}px`;
+        }
+        CardPreviewImage.current.src = await resizedImage.getBase64Async(jimp.MIME_PNG);
       }
-      reader.readAsDataURL(image);
+      reader.readAsArrayBuffer(image);
+      setTimeout(renderCanvas, 500);
     } else {
       alert(`Please select a correct file type for preview. Supported: ${IMAGE_EXTENSIONS.join(', ')}. Max 20mb.`);
     }
@@ -136,6 +166,8 @@ function Wizard() {
   }
 
   const onFormSubmit = async (data) => {
+    if (!window.confirm('Is everything ready and you want to mint new NFT?')) return false;
+
     console.log('Form data:');
     console.log(data);
     // await sleep(500);
@@ -170,6 +202,13 @@ function Wizard() {
         trait_type: 'Date'
       });
     }
+
+    // topic for grouping cards like subcollection ???
+    // metaData.attributes.push({
+    //   key: 'Topic',
+    //   value: '',
+    //   trait_type: 'Tag'
+    // });
 
     // tags to attributes
     // for (const tag of tags) {
@@ -309,6 +348,7 @@ function Wizard() {
                   placeholder="e.g.: Bitcoin was Launched"
                   value={previewName}
                   onChange={(e) => setPreviewName(e.target.value)}
+                  onBlur={renderCanvas}
                 />
                 {errors.name && <ValidationMessage message={errors.name.message}/>}
               </div>
@@ -332,6 +372,8 @@ function Wizard() {
                     <button onClick={() => {
                       setImageFile(null);
                       setPreviewImage(null);
+                      CardPreviewImage.current.src = null;
+                      renderCanvas();
                     }} type="button">
                       <SVG trash/>
                     </button>
@@ -365,6 +407,7 @@ function Wizard() {
                   {...register("eventDate", {...formConfig.eventDate})}
                   value={previewDate}
                   onChange={(e) => setPreviewDate(e.target.value)}
+                  onBlur={renderCanvas}
                 />
                 {errors.eventDate && <ValidationMessage message={errors.eventDate.message}/>}
               </div>
@@ -390,6 +433,7 @@ function Wizard() {
                       {...register("previewTime")}
                       value={previewTime}
                       onChange={(e) => setPreviewTime(e.target.value)}
+                      onBlur={renderCanvas}
                     />
                     {errors.previewTime && <ValidationMessage message={errors.previewTime.message}/>}
                   </div>
@@ -490,11 +534,15 @@ function Wizard() {
               <legend>Cover for Major Marketplaces</legend>
 
               <div className="Market-preview-wrap">
+                <div
+                  className="Card-preview-before-mint-generated"
+                  ref={CardPreviewBeforeMintGenerated}
+                />
                 <div className="Market-preview" ref={CardPreviewBeforeMint}>
                   <div className="layer-10"/>
                   <div className="layer-20"/>
                   <div className="layer-21">
-                    <img src={logoLight} alt="memos.live"/>Memorable interactive NFT <br/>Collection driven by Community at memos.live
+                    <img src={logoLight} alt="memos.live"/>memos.live - Memorable Interactive NFTs
                   </div>
                   <div className="layer-icon">
                     <SVG video/>
@@ -519,25 +567,19 @@ function Wizard() {
                           moment(exactTime ? `${previewDate} ${previewTime}` : previewDate, "YYYY-MM-DD HH:mm:ss").format(exactTime ? 'LLL' : 'LL')
                         ) : null}
                       </div>
-                      <div className="preview">
-                        <div className="preview-img-holder">
-                          <img src={previewImage}/>
-                        </div>
-                      </div>
                       <div className="title">
                         {previewName}
                       </div>
                     </div>
                   </div>
-                  <div className="layer-chain-icon">
-                    <CardIcon onChain={settingsState.appConfiguration.NETWORK_NAME}/>
+                  <div className="layer-09">
+                    <div className="preview">
+                      <div className="preview-img-holder">
+                        <img src={previewImage} ref={CardPreviewImage}/>
+                      </div>
+                    </div>
                   </div>
-                  {/*<div className="Market-preview-bg"/>*/}
                 </div>
-                <div
-                  className="Card-preview-before-mint-generated"
-                  ref={CardPreviewBeforeMintGenerated}
-                />
               </div>
 
               <div className="important-note">
@@ -546,6 +588,8 @@ function Wizard() {
                 This is an exact view of card on other marketplaces like OpenSea, Rarible and many others.
                 <br/>
                 Make sure that everything looks nice and well. You will not have chance to change it after minting.
+                <br/>
+                If it looks weird than try to use latest version of your broser.
               </div>
 
               <button className="btn-action btn-big" type="submit">
