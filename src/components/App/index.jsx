@@ -21,44 +21,39 @@ import Menu from '../Menu'
 import 'swiper/swiper-bundle.css';
 import './index.css';
 import MyNFTs from "../MyNFTs";
+import {applyTheme} from "../../lib/utils";
 
 window.Moralis = Moralis;
 window.soundsLoaded = {};
 
+applyTheme();
+
 function App() {
   const { settingsState, setSettingsState } = useContext(SettingsContext);
   const [ appLoaded, setAppLoadedStatus ] = useState(false);
-  const [ isChainSupported, setIsChainSupported ] = useState(false);
 
   useEffect(() => {
-    if (!window.ethereum || !window.ethereum.on) {
-      alert('You need Metamask to use this application');
-      console.info(`%c Current network is not supported`, 'background: rgb(255 255 172); color: #000; font-size: 24px;');
-      setSettingsState((prevSettingsState) => ({ ...prevSettingsState, appConfiguration: null}));
-      setAppLoadedStatus(true);
-    } else {
-      initializeAppConfiguration(setSettingsState);
-    }
+    initializeAppConfiguration(setSettingsState);
 
     async function initializeAppConfiguration() {
-      const web3 = new Moralis.Web3(window.ethereum);
-      const chainId = await web3.eth.net.getId();
+      const web3 = window.ethereum && window.ethereum.on ? new Moralis.Web3(window.ethereum) : null;
+      let chainId = null
+
+      if (web3) chainId = await web3.eth.net.getId();
+      if (!web3) chainId = 1;
       const appConfiguration = getConfig(chainId);
 
-      // const isDarkTheme = localStorage.getItem('isDarkTheme');
-      // setSettingsState((prevSettingsState) => ({...prevSettingsState, isDarkTheme }));
-
-      if (appConfiguration.MORALIS_APP_ID && appConfiguration.MINT_CONTRACT_ADDRESS) {
-        Moralis.initialize(appConfiguration.MORALIS_APP_ID);
-        Moralis.serverURL = appConfiguration.MORALIS_SERVER_URL;
-        const user = Moralis.User.current();
-        setSettingsState((prevSettingsState) => ({...prevSettingsState, appConfiguration, user }));
-        const consoleColor = appConfiguration.IS_MAINNET ? 'rgb(255 190 0)' : 'rgb(200 250 200)';
-        console.info(`%c ${appConfiguration.NETWORK_NAME} `, `background: ${consoleColor}; color: #000; font-size: 24px;`);
-        setIsChainSupported(true);
-      } else {
-        setIsChainSupported(false);
-      }
+      Moralis.initialize(appConfiguration.MORALIS_APP_ID);
+      Moralis.serverURL = appConfiguration.MORALIS_SERVER_URL;
+      const user = Moralis.User.current();
+      setSettingsState((prevSettingsState) => ({
+        ...prevSettingsState,
+        appConfiguration,
+        user,
+        IsChainSupported: true
+      }));
+      const consoleColor = appConfiguration.IS_MAINNET ? 'rgb(255 190 0)' : 'rgb(200 250 200)';
+      console.info(`%c ${appConfiguration.NETWORK_NAME} `, `background: ${consoleColor}; color: #000; font-size: 24px;`);
 
       setAppLoadedStatus(true);
 
@@ -80,21 +75,17 @@ function App() {
             <TopBar/>
             <div className="App-primary-content">
               <div className="App-primary-content-inner">
-                {isChainSupported && <div className="App-primary-content-left">
+                <div className="App-primary-content-left">
                   <Menu/>
-                </div>}
+                </div>
                 <div className="App-primary-content-right">
-                  {isChainSupported ? (
-                    <Switch>
-                      <Route path="/wizard" render={props => <WizardPage {...props} />} />
-                      <Route path="/about" render={props => <AboutPage {...props} />} />
-                      <Route path="/profile" render={props => <ProfilePage {...props} />} />
-                      <Route path="/my" render={props => <MyCollectionPage {...props} />} />
-                      <Route path="/" render={props => <MainPage {...props} />} />
-                    </Switch>
-                  ) : (
-                    <UnsupportedChainInfo/>
-                  )}
+                  <Switch>
+                    <Route path="/wizard" render={props => <WizardPage {...props} />} />
+                    <Route path="/my" render={props => <MyCollectionPage {...props} />} />
+                    <Route path="/profile" render={props => <ProfilePage {...props} />} />
+                    <Route path="/about" render={props => <AboutPage {...props} />} />
+                    <Route path="/" render={props => <MainPage {...props} />} />
+                  </Switch>
                 </div>
               </div>
             </div>

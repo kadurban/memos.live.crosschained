@@ -106,3 +106,7 @@
   position: relative;
   top: 3px;
 }
+
+.Top-bar button {
+  padding: 0rem .6rem;
+}

@@ -8,6 +8,7 @@ import Loader from "../Loader";
 import './index.css';
 import SVG from "../../SVG";
 import {NavLink} from "react-router-dom";
+import ScrollContainer from "react-indiana-drag-scroll";
 
 // async function getUserNfts(settingsState) {
 //   const { NETWORK_NAME } = settingsState.appConfiguration;
@@ -28,17 +29,26 @@ import {NavLink} from "react-router-dom";
 // }
 
 async function getUserNFTs(settingsState) {
-  const { NETWORK_NAME, MINT_CONTRACT_ADDRESS } = settingsState.appConfiguration;
-  const options = {
-    chain: NETWORK_NAME,
-    address: settingsState.user.attributes.ethAddress,
-    token_address: MINT_CONTRACT_ADDRESS
-  };
+  const { AVAILABLE_NETWORKS } = settingsState.appConfiguration;
+  let retrievedNfts = [];
 
-  const retrievedNfts = await window.Moralis.Web3API.account.getNFTsForContract(options);
+  for (const availableNetwork of AVAILABLE_NETWORKS) {
+    const NFTs = await window.Moralis.Web3API.account.getNFTsForContract({
+      chain: availableNetwork.NETWORK_NAME,
+      address: settingsState.user.attributes.ethAddress,
+      token_address: availableNetwork.MINT_CONTRACT_ADDRESS
+    });
+    if (NFTs.result) {
+      for (const nft of NFTs.result) {
+        nft.onChain = availableNetwork.NETWORK_NAME
+      }
+      retrievedNfts = [...retrievedNfts, ...NFTs.result]
+    }
+  }
+
   console.log('User NFTs:');
   console.log(retrievedNfts);
-  return retrievedNfts.result;
+  return retrievedNfts;
 }
 
 
@@ -52,7 +62,6 @@ function MyNFTs(props) {
     let retrievedNfts = [];
 
     if (settingsState.user) {
-      // retrievedNfts = await getUserNfts(settingsState);
       retrievedNfts = await getUserNFTs(settingsState);
     }
 
@@ -86,11 +95,8 @@ function MyNFTs(props) {
         </>
       ) : (
         <>
-          {!nftListLoaded && (
-            <div className="MyNFTs-loader-holder">
-              <Loader text="Loading"/>
-            </div>
-          )}
+          {!nftListLoaded && <Loader/>}
+
           {nftListLoaded && nftList.length === 0 && (
             <AlertMessage text="Nothing to show">
               Go to <NavLink to="/wizard">Wizard page</NavLink> to create new NFT card.
@@ -98,11 +104,9 @@ function MyNFTs(props) {
           )}
 
           {nftListLoaded && nftList.length > 0 && (
-            <div className="NftList-cards-holder" ref={scrollableElementRef}>
-              {/*<div className="MyNFTs-cards-holder-arrow-next"/>*/}
-              {/*<div className="MyNFTs-cards-holder-arrow-prev"/>*/}
-              {nftList.map((nft, i) => <Card tokenUri={nft.token_uri} key={nft.token_uri + i}/>)}
-            </div>
+            <ScrollContainer className="NftList-cards-holder" ref={scrollableElementRef}>
+              {nftList.map((nft, i) => <Card tokenUri={nft.token_uri} key={nft.token_uri + i} onChain={nft.onChain}/>)}
+            </ScrollContainer>
           )}
         </>
       )}

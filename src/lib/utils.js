@@ -92,5 +92,21 @@ export function debounce(f, ms) {
     isCooldown = true;
     setTimeout(() => isCooldown = false, ms);
   };
+}
 
+export function toggleTheme() {
+  const isDarkTheme = localStorage.getItem('isDarkTheme');
+  if (isDarkTheme) {
+    document.body.classList.remove('dark');
+    localStorage.removeItem('isDarkTheme');
+  }
+  if (!isDarkTheme) {
+    document.body.classList.add('dark');
+    localStorage.setItem('isDarkTheme', true);
+  }
+}
+
+export function applyTheme() {
+  const isDarkTheme = localStorage.getItem('isDarkTheme');
+  document.body.classList[isDarkTheme ? 'add' : 'remove']('dark');
 }

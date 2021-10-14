@@ -78,8 +78,8 @@ function getConfig(chainId) {
   if (CONFIG.IS_MAINNET) {
     return {
       ...CONFIG,
-      MORALIS_SERVER_URL: '',
-      MORALIS_APP_ID: ''
+      MORALIS_SERVER_URL: 'https://h5o44mx7eetj.grandmoralis.com:2053/server',
+      MORALIS_APP_ID: 'FNvFOOWbPAhDCJZis6hBetpWO5XnySNepMrw47Ya'
     }
   } else {
     return {

@@ -20,12 +20,21 @@ import logoLight from "../../assets/img/logo-light.png";
 const soundsArray = ['effect1', 'effect2', 'effect3', 'effect4', 'effect5', 'effect6', 'effect7', 'effect8'];
 
 const formConfig = {
-  image: {
-    required: 'Field is required',
-  },
   name: {
     required: 'Field is required',
     maxLength: { value: 100, message: 'Max length is 100' },
+  },
+  eventDate: {
+    required: 'Field is required',
+  },
+  description: {
+    required: 'Field is required',
+  },
+  royalty: {
+    required: 'Field is required',
+  },
+  image: {
+    required: 'Field is required',
   }
 }
 
@@ -46,27 +55,24 @@ const FilePreview = ({ file, valid, children }) => (
   </div>
 );
 
-// function calculateAspectRatioFit(srcWidth, srcHeight, maxWidth, maxHeight) {
-//   const ratio = Math.min(maxWidth / srcWidth, maxHeight / srcHeight);
-//   return { width: srcWidth*ratio, height: srcHeight*ratio };
-// }
-
 function Wizard() {
   const [isUploading, setUploadStatusInProgress] = useState(false);
-  const [tokenURI, setTokenURI] = useState(null);
-  const [metaDataState, setMetaData] = useState(null);
-  const [attachedFiles, setAttachedFiles] = useState([]);
-  const [image, setImageFile] = useState(null);
   const { register, handleSubmit, formState: { errors }, watch } = useForm();
   const CardPreviewBeforeMint = useRef(null);
   const CardPreviewBeforeMintGenerated = useRef(null);
   const CardPreviewImage = useRef(null);
   const { settingsState, setSettingsState } = useContext(SettingsContext);
 
+  const [tokenURI, setTokenURI] = useState(null);
+  const [metaDataState, setMetaData] = useState(null);
+  const [attachedFiles, setAttachedFiles] = useState([]);
+  const [image, setImageFile] = useState(null);
   const [previewName, setPreviewName] = useState('');
   const [previewDate, setPreviewDate] = useState('');
   const [previewTime, setPreviewTime] = useState('');
   const [previewImage, setPreviewImage] = useState(null);
+  const [fileTypesAttached, setFileTypesAttached] = useState({});
+  const [royalty, setRoyalty] = useState(3);
   const isValidDate = moment(previewDate, "YYYY-MM-DD HH:mm:ss").isValid();
   const exactTime = previewDate.length > 0 && previewTime.length > 0;
 
@@ -162,7 +168,16 @@ function Wizard() {
         valid: UPLOADER_SUPPORTED_EXTENSIONS.includes(extension) && file.size <= settingsState.appConfiguration.MAX_FILE_SIZE
       }
     });
-    setAttachedFiles([...attachedFiles, ...newFiles]);
+
+    const resultFilesList = [...attachedFiles, ...newFiles];
+    const fileTypes = resultFilesList.reduce((acc, file) => (
+      {...acc, fileType: file.trait_type}
+    ), {});
+    console.log('===');
+    console.log(fileTypes);
+    // setFileTypesAttached();
+
+    setAttachedFiles(resultFilesList);
   }
 
   const onFormSubmit = async (data) => {
@@ -170,7 +185,6 @@ function Wizard() {
 
     console.log('Form data:');
     console.log(data);
-    // await sleep(500);
 
     console.log('===> Uploading files to IPFS');
     setUploadStatusInProgress(true);
@@ -202,31 +216,6 @@ function Wizard() {
         trait_type: 'Date'
       });
     }
-
-    // topic for grouping cards like subcollection ???
-    // metaData.attributes.push({
-    //   key: 'Topic',
-    //   value: '',
-    //   trait_type: 'Tag'
-    // });
-
-    // tags to attributes
-    // for (const tag of tags) {
-    //   metaData.attributes.push({
-    //     key: 'Tag',
-    //     value: tag,
-    //     trait_type: 'Tag'
-    //   });
-    // }
-
-    // Linked items to attributes
-    // for (const linkedItem of linkedItems) {
-    //   metaData.attributes.push({
-    //     key: 'Linked Item',
-    //     value: linkedItem,
-    //     trait_type: 'Linked Item'
-    //   });
-    // }
 
     // save attached files and create attributes object
     for (const fileObject of attachedFiles) {
@@ -262,9 +251,8 @@ function Wizard() {
     setUploadStatusInProgress(false);
     document.body.style.overflow = 'auto';
 
-    await mintToken(tokenURI);
-
-    window.location.reload();
+    // await mintToken(tokenURI);
+    // window.location.reload();
   }
 
   const mintToken = async (tokenURI) => {
@@ -304,12 +292,7 @@ function Wizard() {
         <AlertMessage text="You can play with your newly created card and check if everything looking good. And if so then you only need to sign a transaction to put your NFT to the blockchain."/>
 
         <div className="Wizard-full-preview">
-          <Card
-            tokenUri={tokenURI}
-            // tokenIpfsHash={'https://ipfs.moralis.io:2053/ipfs/QmY2AEigcqjeC3uyprugYzNKNmS26UqqtUPopqjLEF3nAU'}
-            // specs={getSpecsFromHash(tokenURI.split('ipfs/')[1])}
-            // specs={[]}
-          />
+          <Card tokenUri={tokenURI}/>
         </div>
       </>
     )
@@ -319,26 +302,25 @@ function Wizard() {
     <>
       {isUploading && <Loader isUploader/>}
 
-      {!settingsState.user && (
-        <AlertMessage
-          text="You need to login to be able to create new"
-        >
-          <button className="btn-action btn-big" onClick={() => login(setSettingsState)} type="button">
-            <SVG wallet/> Connect Wallet
-          </button>
-        </AlertMessage>
-      )}
-
-      {settingsState.user && <div className="light-background-with-padding">
+      <div className="light-background-with-padding" style={{ maxWidth: 'none', display: 'inline-block' }}>
+        {!settingsState.user && (
+          <AlertMessage
+            text="You need to login to be able to create new"
+          >
+            <button className="btn-action btn-big" onClick={() => login(setSettingsState)} type="button">
+              <SVG wallet/> Connect Wallet
+            </button>
+          </AlertMessage>
+        )}
         <form
           className="Form"
           autoComplete="off"
           onSubmit={handleSubmit(onFormSubmit)}
         >
           <>
-            <fieldset style={{width: '200px'}}>
+            <fieldset style={{ maxWidth: '260px'}}>
+              <legend>General info</legend>
 
-              <legend>General</legend>
               <div className="Form-group">
                 <label className="Form-label">Name</label>
                 <input
@@ -355,52 +337,8 @@ function Wizard() {
 
               <div className="Form-group">
                 <label className="Form-label">
-                  Description <small style={{marginLeft: '.2rem', color: '#afafaf'}}>(text or markdown)</small>
-                </label>
-                <TextareaAutosize
-                  cacheMeasurements
-                  {...register("description")}
-                  placeholder="e.g.: Bitcoin is a cryptocurrency invented in 2008 by an unknown person or group of people..."
-                  defaultValue=""
-                />
-                {errors.description && <ValidationMessage message={errors.description.message}/>}
-              </div>
-
-              <div className="Form-group">
-                {image && (
-                  <FilePreview file={image} valid={true}>
-                    <button onClick={() => {
-                      setImageFile(null);
-                      setPreviewImage(null);
-                      CardPreviewImage.current.src = null;
-                      renderCanvas();
-                    }} type="button">
-                      <SVG trash/>
-                    </button>
-                  </FilePreview>
-                )}
-                <div className="Form-group-file-wrapper">
-                  <input
-                    accept={IMAGE_EXTENSIONS.map(ext => `.${ext}`)}
-                    type="file"
-                    {...register("image", {...formConfig.image})}
-                    onChange={handleImageChange}
-                    style={{display: !image ? 'block' : 'none'}}
-                  />
-                  {!image && <>
-                    <button className="btn-regular btn-big" type="button">
-                      <SVG previewImage/>
-                      Add preview image
-                    </button>
-                  </>}
-                </div>
-                {!image && errors.image && <ValidationMessage message={errors.image.message}/>}
-              </div>
-
-              <div className="Form-group">
-                <label className="Form-label">
                   Date <SVG hintIcon
-                                  dataHint="You can specify the date and time which is your new NFT will be associated."/>
+                            dataHint="You can specify the date and time which is your new NFT will be associated."/>
                 </label>
                 <input
                   type="date"
@@ -432,102 +370,138 @@ function Wizard() {
                       type="time"
                       {...register("previewTime")}
                       value={previewTime}
-                      onChange={(e) => setPreviewTime(e.target.value)}
-                      onBlur={renderCanvas}
+                      onChange={(e) => {
+                        setPreviewTime(e.target.value);
+                        renderCanvas();
+                      }}
                     />
                     {errors.previewTime && <ValidationMessage message={errors.previewTime.message}/>}
                   </div>
                 )}
               </div>
 
+              <div className="Form-group">
+                <label className="Form-label">
+                  Description <small style={{marginLeft: '.2rem', color: '#afafaf'}}>(text or markdown)</small>
+                </label>
+                <TextareaAutosize
+                  cacheMeasurements
+                  {...register("description", {...formConfig.description})}
+                  placeholder="e.g.: Bitcoin is a cryptocurrency invented in 2008 by an unknown person or group of people..."
+                  defaultValue=""
+                />
+                {errors.description && <ValidationMessage message={errors.description.message}/>}
+              </div>
+
+              <div className="Form-group">
+                <label className="Form-label">
+                  Royalty % <SVG hintIcon dataHint="Your fees for secondary sales. Small values are prefered." />
+                </label>
+                <div className="Form-royalty-picker">
+                  <button type="button" className={`btn-regular ${royalty === 3 ? 'active' : ''}`} onClick={() => setRoyalty(3)}>
+                    3%
+                  </button>
+                  <button type="button" className={`btn-regular ${royalty === 5 ? 'active' : ''}`} onClick={() => setRoyalty(5)}>
+                    5%
+                  </button>
+                  <button type="button" className={`btn-regular ${royalty === 7 ? 'active' : ''}`} onClick={() => setRoyalty(7)}>
+                    7%
+                  </button>
+                  <input
+                    style={{ width: '20px' }}
+                    type="number"
+                    min={0} max={99}
+                    value={royalty}
+                    {...register("royalty", {...formConfig.royalty})}
+                    onChange={(e) => {
+                      setRoyalty(parseInt(e.target.value > 99 ? 99 : e.target.value < 0 ? 0 : e.target.value, 10));
+                    }}
+                  />
+                </div>
+              </div>
             </fieldset>
-            <fieldset style={{display: 'none'}}>
-              {/*<legend>Related data</legend>*/}
 
-              {/*<div className="Form-group">*/}
-              {/*  <label className="Form-label">*/}
-              {/*    Extra files (image, video, audio, text): <SVG hintIcon*/}
-              {/*                                                  dataHint={`Invalid or unsupported files will not be attached. Supported are: ${[...UPLOADER_SUPPORTED_EXTENSIONS].join(', ')}. Max 20mb.`}/>*/}
-              {/*  </label>*/}
-              {/*  <div className="Form-group-files-list-wrapper">*/}
-              {/*    {attachedFiles.map(({file, uuid, valid}) => (*/}
-              {/*      <FilePreview key={uuid} uuid={uuid} file={file} valid={valid}>*/}
-              {/*        <button*/}
-              {/*          onClick={() => {*/}
-              {/*            const filtered = attachedFiles.filter(f => f.uuid !== uuid);*/}
-              {/*            setAttachedFiles([...filtered]);*/}
-              {/*          }}*/}
-              {/*          type="button"*/}
-              {/*        >*/}
-              {/*          <SVG trash/>*/}
-              {/*        </button>*/}
-              {/*      </FilePreview>*/}
-              {/*    ))}*/}
-              {/*  </div>*/}
-              {/*  <div className="Form-group-file-wrapper">*/}
-              {/*    <input*/}
-              {/*      type="file"*/}
-              {/*      name="files"*/}
-              {/*      multiple={true}*/}
-              {/*      accept={UPLOADER_SUPPORTED_EXTENSIONS.map(ext => '.' + ext)}*/}
-              {/*      onChange={handleFilesChange}*/}
-              {/*    />*/}
-              {/*    <button className="btn-regular btn-big" type="button">*/}
-              {/*      <SVG plus/> Add file(s)*/}
-              {/*    </button>*/}
-              {/*  </div>*/}
-              {/*</div>*/}
+            <fieldset style={{ maxWidth: '260px'}}>
+              <legend>Files</legend>
 
-              {/*<div className="Form-group">*/}
-              {/*  <label className="Form-label">*/}
-              {/*    Tags <SVG hintIcon dataHint="Use it to help others find your NFT. 3-5 tags should be enough." />*/}
-              {/*  </label>*/}
-              {/*  <ReactTagInput*/}
-              {/*    maxTags={7}*/}
-              {/*    removeOnBackspace={true}*/}
-              {/*    tags={tags}*/}
-              {/*    onChange={(newTags) => setTags(newTags)}*/}
-              {/*  />*/}
-              {/*</div>*/}
+              <div className="Form-group">
+                {image && (
+                  <FilePreview file={image} valid={true}>
+                    <button onClick={() => {
+                      setImageFile(null);
+                      setPreviewImage(null);
+                      CardPreviewImage.current.src = null;
+                      renderCanvas();
+                    }} type="button">
+                      <SVG trash/>
+                    </button>
+                  </FilePreview>
+                )}
+                <div className="Form-group-file-wrapper">
+                  <input
+                    accept={IMAGE_EXTENSIONS.map(ext => `.${ext}`)}
+                    type="file"
+                    {...register("image", {...formConfig.image})}
+                    onChange={handleImageChange}
+                    style={{display: !image ? 'block' : 'none'}}
+                  />
+                  {!image && <>
+                    <button className="btn-big" type="button">
+                      <SVG previewImage/>
+                      Add preview image
+                    </button>
+                  </>}
+                </div>
+                {errors.image && <ValidationMessage message={errors.image.message}/>}
+              </div>
 
-              {/*<div className="Form-group">*/}
-              {/*  <label className="Form-label">*/}
-              {/*    Linked items: <SVG hintIcon dataHint="Specify token addresses of NFTs that are associated with NFT you are creating now." />*/}
-              {/*  </label>*/}
-              {/*  <ReactTagInput*/}
-              {/*    maxTags={50}*/}
-              {/*    removeOnBackspace={true}*/}
-              {/*    tags={linkedItems}*/}
-              {/*    onChange={(newItems) => setLinkedItems(newItems)}*/}
-              {/*  />*/}
-              {/*</div>*/}
+              <div className="Form-group">
+                <label className="Form-label">
+                  Extra files:
+                  <SVG hintIcon dataHint={`Invalid or unsupported files will not be attached. Supported are: ${[...UPLOADER_SUPPORTED_EXTENSIONS].join(', ')}. Max 50mb.`}/>
+                </label>
+                <div className="Form-group-files-list-wrapper">
+                  {attachedFiles.map(({file, uuid, valid}) => (
+                    <FilePreview key={uuid} uuid={uuid} file={file} valid={valid}>
+                      <button
+                        onClick={() => {
+                          const filtered = attachedFiles.filter(f => f.uuid !== uuid);
+                          setAttachedFiles([...filtered]);
+                        }}
+                        type="button"
+                      >
+                        <SVG trash/>
+                      </button>
+                    </FilePreview>
+                  ))}
+                </div>
+                <div className="Form-group-file-wrapper">
+                  <input
+                    type="file"
+                    name="files"
+                    multiple={true}
+                    accept={UPLOADER_SUPPORTED_EXTENSIONS.map(ext => '.' + ext)}
+                    onChange={handleFilesChange}
+                  />
+                  <button className="btn-big" type="button">
+                    <SVG plus/> Add file(s)
+                  </button>
+                </div>
+              </div>
 
-              {/*<div className="Form-group">*/}
-              {/*  <label className="Form-label">*/}
-              {/*    Royalty % /!*<SVG hintIcon dataHint="Your fees for secondary sales. Small values are prefered." />*!/*/}
-              {/*  </label>*/}
-              {/*  <div className="Form-royalty-picker">*/}
-              {/*    <button type="button" className={`btn-regular ${royalty === 3 ? 'active' : ''}`} onClick={() => setRoyalty(3)}>*/}
-              {/*      3%*/}
-              {/*    </button>*/}
-              {/*    <button type="button" className={`btn-regular ${royalty === 5 ? 'active' : ''}`} onClick={() => setRoyalty(5)}>*/}
-              {/*      5%*/}
-              {/*    </button>*/}
-              {/*    <button type="button" className={`btn-regular ${royalty === 7 ? 'active' : ''}`} onClick={() => setRoyalty(7)}>*/}
-              {/*      7%*/}
-              {/*    </button>*/}
-              {/*    <input*/}
-              {/*      type="number"*/}
-              {/*      min={0} max={99}*/}
-              {/*      value={royalty}*/}
-              {/*      {...register("royalty")}*/}
-              {/*      onChange={(e) => {*/}
-              {/*        setRoyalty(parseInt(e.target.value > 99 ? 99 : e.target.value < 0 ? 0 : e.target.value, 10));*/}
-              {/*      }}*/}
-              {/*    />*/}
-              {/*  </div>*/}
-              {/*</div>*/}
+              <div className="important-note">
+                IMPORTANT!
+                <br/>
+                This is an exact view of the NFT at major marketplaces like OpenSea or Rarible.
+                <br/>
+                Make sure that everything looks nice and well. You will not have chance to change it after minting.
+                <br/>
+                If it looks weird than try to use latest version of your broser.
+              </div>
 
+              <button className="btn-action btn-big" type="submit" disabled={!settingsState.user}>
+                <SVG bolt/> Mint on {settingsState.appConfiguration.NETWORK_NAME}
+              </button>
             </fieldset>
 
             <fieldset>
@@ -581,66 +555,10 @@ function Wizard() {
                   </div>
                 </div>
               </div>
-
-              <div className="important-note">
-                IMPORTANT!
-                <br/>
-                This is an exact view of card on other marketplaces like OpenSea, Rarible and many others.
-                <br/>
-                Make sure that everything looks nice and well. You will not have chance to change it after minting.
-                <br/>
-                If it looks weird than try to use latest version of your broser.
-              </div>
-
-              <button className="btn-action btn-big" type="submit">
-                <SVG bolt/> Mint on {settingsState.appConfiguration.NETWORK_NAME}
-              </button>
             </fieldset>
-
-            {/*<fieldset>*/}
-            {/*  <legend>Preview</legend>*/}
-
-            {/*  <div className="Card-preview-before-mint-wrap">*/}
-            {/*    <div className="Card-preview-before-mint" ref={CardPreviewBeforeMint}>*/}
-            {/*      <div className="Card Card-inactive">*/}
-            {/*        <div className="Card-front">*/}
-            {/*          <div className="Card-timer">*/}
-            {/*            <div className="Card-date">*/}
-            {/*              {isValidDate ? (*/}
-            {/*                moment(exactTime ? `${previewDate} ${previewTime}` : previewDate, "YYYY-MM-DD HH:mm:ss").format(exactTime ? 'LLL' : 'LL')*/}
-            {/*              ) : null}*/}
-            {/*            </div>*/}
-            {/*          </div>*/}
-            {/*          <div className="Card-preview" style={{opacity: 0}}>*/}
-            {/*            <img src={previewImage}/>*/}
-            {/*          </div>*/}
-            {/*          <div className="Card-title">*/}
-            {/*            {previewName}*/}
-            {/*          </div>*/}
-            {/*        </div>*/}
-            {/*      </div>*/}
-
-            {/*      <CanvasRenderer imageUrl={previewImage}/>*/}
-            {/*    </div>*/}
-
-            {/*    <div className="Card-preview-before-mint-generated" ref={CardPreviewBeforeMintGenerated}/>*/}
-            {/*  </div>*/}
-
-            {/*  <div className="important-note">*/}
-            {/*    IMPORTANT!*/}
-            {/*    <br/>*/}
-            {/*    This is an exact view of card on other marketplaces like OpenSea, Rarible and many others.*/}
-            {/*    <br/>*/}
-            {/*    Make sure that everything looks nice and well. You will not have chance to change it after minting.*/}
-            {/*  </div>*/}
-
-            {/*  <button className="btn-action btn-big" type="submit">*/}
-            {/*    <SVG bolt/> Mint on {settingsState.appConfiguration.NETWORK_NAME}*/}
-            {/*  </button>*/}
-            {/*</fieldset>*/}
           </>
         </form>
-      </div>}
+      </div>
     </>
   );
 }

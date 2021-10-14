@@ -76,6 +76,11 @@ body::after {
   background-size: cover;
 }
 
+body.dark::after {
+  opacity: .9;
+  background: url(./assets/img/bg-dark.jpg);
+}
+
 img,
 picture {
    max-width: initial;
@@ -257,7 +262,7 @@ input[type="submit"] {
   border-radius: var(--std-border-radius);
   box-sizing: border-box;
   /*min-height: 2rem;*/
-  padding: 0rem .6rem;
+  padding: 1rem;
   color: var(--l-text-color);
   text-transform: uppercase;
   font-weight: 500;
@@ -266,6 +271,14 @@ input[type="submit"] {
   transition: box-shadow .1s ease-in;
   display: inline-flex;
   align-items: center;
+}
+
+button:disabled,
+input[type="reset"]:disabled,
+input[type="button"]:disabled,
+input[type="submit"]:disabled {
+  opacity: .5;
+  cursor: not-allowed;
 }
 
 input[type="file"] {
@@ -288,12 +301,24 @@ button:active {
   box-shadow: inset rgba(212,199,141,0.2) 0px 0.25rem 0.75rem 0px;
 }
 
+.btn-no-border {
+  border-color: transparent;
+}
+
+button.btn-regular,
 button.btn-primary {
   text-align: center;
   padding: 1rem;
   width: auto;
   background-image: linear-gradient(321deg, rgba(252,240,181,1) 0%, rgba(235,219,141,1) 100%);
   border: none;
+}
+
+button.btn-regular {
+  background-image: none;
+  background-color: #fff;
+  border: 1px solid var(--std-border-color);
+  background-color: #fff;
 }
 
 button.btn-big {
@@ -321,7 +346,7 @@ button.btn-big .icon svg path:nth-child(2) {
 }
 
 button.btn-action .icon svg path:nth-child(2) {
-  fill: #bfa524;
+  fill: rgb(68, 68, 68);
 }
 
 .btn-action {
@@ -367,6 +392,7 @@ a {
 
 .Page-wrapper.main .AlertMessage,
 .Page-wrapper.main .light-background-with-padding,
+.Page-wrapper.main .Loader,
 .Page-wrapper.main h1:first-of-type {
   margin-left: var(--desktop-menu-width);
 }
@@ -710,6 +736,7 @@ a {
   box-shadow: none;
   border-width: 2px;
   width: 100%;
+  max-width: none;
 }
 
 .markdown a {

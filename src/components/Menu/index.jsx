@@ -3,6 +3,7 @@ import { Link, NavLink } from "react-router-dom";
 import SettingsContext from '../../SettingsContext';
 import SVG from '../../SVG';
 import './index.css';
+import {toggleTheme} from "../../lib/utils";
 
 function moveHighlight(topValue) {
   document.querySelector('.Menu-primary-highlight').style.top = `${topValue}px`;
@@ -63,10 +64,10 @@ function Menu() {
         <a href="https://t.me/memoslive" target="_blank">
           <SVG telegram/>
         </a>
-        {/*<button onClick={() => setSettingsState((prevSettingsState) => {*/}
-        {/*  localStorage.setItem('isDarkTheme', !settingsState.appConfiguration.isDarkTheme);*/}
-        {/*  return {...prevSettingsState, isDarkTheme: !settingsState.appConfiguration.isDarkTheme };*/}
-        {/*})}>*/}
+        <a href="https://www.instagram.com/memos.live/" target="_blank">
+          <SVG instagram/>
+        </a>
+        {/*<button onClick={toggleTheme}>*/}
         {/*  <SVG bulb/>*/}
         {/*</button>*/}
       </div>

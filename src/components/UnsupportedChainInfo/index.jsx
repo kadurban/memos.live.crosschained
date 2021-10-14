@@ -14,7 +14,6 @@ export default function UnsupportedChainInfo(props) {
   return (
     <div className="UnsupportedChainInfo">
       <h1>Change network in Metamask</h1>
-      {/*<AlertMessage text="Switch your wallet to one of the following supported networks:">*/}
       <AlertMessage>
         <h2>Supported networks:</h2>
         <div style={{fontSize: '18px', display: 'flex'}}>
