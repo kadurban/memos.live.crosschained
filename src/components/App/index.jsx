@@ -6,8 +6,8 @@ import AboutPage from '../../pages/AboutPage';
 import SearchPage from '../../pages/SearchPage';
 import ProfilePage from '../../pages/ProfilePage';
 import MyCollectionPage from '../../pages/MyCollectionPage';
-import Loader from '../../components/Loader';
 import UnsupportedChainInfo from '../../components/UnsupportedChainInfo';
+import Loader from '../../components/Loader';
 import SettingsContext from '../../SettingsContext';
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import ErrorBoundary from '../ErrorBoundary';
@@ -22,6 +22,7 @@ import 'swiper/swiper-bundle.css';
 import './index.css';
 import MyNFTs from "../MyNFTs";
 import {applyTheme} from "../../lib/utils";
+import {MoralisProvider} from "react-moralis";
 
 window.Moralis = Moralis;
 window.soundsLoaded = {};
@@ -69,31 +70,35 @@ function App() {
 
   return (
     <ErrorBoundary>
-      <Router>
-        {appLoaded ? (
-          <div className="App-main-content ">
-            <TopBar/>
-            <div className="App-primary-content">
-              <div className="App-primary-content-inner">
-                <div className="App-primary-content-left">
-                  <Menu/>
-                </div>
-                <div className="App-primary-content-right">
-                  <Switch>
-                    <Route path="/wizard" render={props => <WizardPage {...props} />} />
-                    <Route path="/my" render={props => <MyCollectionPage {...props} />} />
-                    <Route path="/profile" render={props => <ProfilePage {...props} />} />
-                    <Route path="/about" render={props => <AboutPage {...props} />} />
-                    <Route path="/" render={props => <MainPage {...props} />} />
-                  </Switch>
+      {settingsState.appConfiguration && settingsState.appConfiguration.MINT_CONTRACT_ADDRESS ? (
+        <MoralisProvider appId={settingsState.appConfiguration.MORALIS_APP_ID} serverUrl={settingsState.appConfiguration.MORALIS_SERVER_URL}>
+          <Router>
+            {appLoaded ? (
+              <div className="App-main-content ">
+                <TopBar/>
+                <div className="App-primary-content">
+                  <div className="App-primary-content-inner">
+                    <div className="App-primary-content-left">
+                      <Menu/>
+                    </div>
+                    <div className="App-primary-content-right">
+                      <Switch>
+                        <Route path="/wizard" render={props => <WizardPage {...props} />} />
+                        <Route path="/my" render={props => <MyCollectionPage {...props} />} />
+                        <Route path="/profile" render={props => <ProfilePage {...props} />} />
+                        <Route path="/about" render={props => <AboutPage {...props} />} />
+                        <Route path="/" render={props => <MainPage {...props} />} />
+                      </Switch>
+                    </div>
+                  </div>
                 </div>
               </div>
-            </div>
-          </div>
-        ) : (
-          <Loader isOverlay text="Loading..."/>
-        )}
-      </Router>
+            ) : (
+              <Loader isOverlay text="Loading..."/>
+            )}
+          </Router>
+        </MoralisProvider>
+      ) : <UnsupportedChainInfo/>}
     </ErrorBoundary>
   );
 }

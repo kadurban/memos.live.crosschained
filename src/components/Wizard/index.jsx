@@ -22,7 +22,6 @@ const soundsArray = ['effect1', 'effect2', 'effect3', 'effect4', 'effect5', 'eff
 const formConfig = {
   name: {
     required: 'Field is required',
-    maxLength: { value: 100, message: 'Max length is 100' },
   },
   eventDate: {
     required: 'Field is required',
@@ -191,22 +190,37 @@ function Wizard() {
     document.body.style.overflow = 'hidden';
 
     console.log('===> Saving marketplace image');
-    const imageDataBase64 = data.image[0].toDataURL();
-    const savedCardFrontImage = new Moralis.File(`${uuid()}.${data.image[0].name.split('.').pop()}`, { base64: imageDataBase64 });
-    const savedImage = new Moralis.File(`${uuid()}.${data.image[0].name.split('.').pop()}`, data.image[0]);
-    await savedImage.saveIPFS();
-    const saveiImageUrl = savedImage.ipfs();
+    // console.log(data.image[0]);
+    // console.log('===');
+    // console.log(CardPreviewBeforeMintGenerated)
+    // console.log(CardPreviewBeforeMintGenerated.current.querySelector('canvas'))
+    const imageDataBase64 = CardPreviewBeforeMintGenerated.current.querySelector('canvas').toDataURL();
+    // const imageDataBase64 = data.image[0].toDataURL();
+
+    const previewOnCardImage = new Moralis.File(`${uuid()}.${data.image[0].name.split('.').pop()}`, data.image[0]);
+    await previewOnCardImage.saveIPFS();
+    const previewOnCardImageUrk = previewOnCardImage.ipfs();
+
+    const savedMarcetplacesCoveImage = new Moralis.File(`${uuid()}.${data.image[0].name.split('.').pop()}`, { base64: imageDataBase64 });
+    await savedMarcetplacesCoveImage.saveIPFS();
+    const savedMarcetplacesCoveImageUrl = savedMarcetplacesCoveImage.ipfs();
 
     let metaData = {
-      image: saveiImageUrl,
+      image: savedMarcetplacesCoveImageUrl,
       // image_data: svgCode, // TODO: Put svg here
       external_url: 'https://memos.live/',
       description: data.description,
       name: data.name,
       attributes: [],
-      background_color: '',
+      // background_color: '',
       // animation_url: saveiImageUrl,
     };
+
+    metaData.attributes.push({
+      key: 'File',
+      value: previewOnCardImageUrk,
+      trait_type: 'Image'
+    });
 
     // date to attribute
     if (moment(data.eventDate, 'YYYY-MM-DD HH:mm:ss').isValid()) {
@@ -328,11 +342,20 @@ function Wizard() {
                   maxLength={75}
                   {...register("name", {...formConfig.name})}
                   placeholder="e.g.: Bitcoin was Launched"
-                  value={previewName}
-                  onChange={(e) => setPreviewName(e.target.value)}
+                  // value={previewName}
+                  // onChange={(e) => setPreviewName(e.target.value)}
                   onBlur={renderCanvas}
                 />
                 {errors.name && <ValidationMessage message={errors.name.message}/>}
+
+                {/*<TextareaAutosize*/}
+                {/*  cacheMeasurements*/}
+                {/*  {...register("description", {...formConfig.description})}*/}
+                {/*  placeholder="e.g.: Bitcoin is a cryptocurrency invented in 2008 by an unknown person or group of people..."*/}
+                {/*  defaultValue=""*/}
+                {/*/>*/}
+                {/*{errors.description && <ValidationMessage message={errors.description.message}/>}*/}
+
               </div>
 
               <div className="Form-group">
@@ -343,8 +366,8 @@ function Wizard() {
                 <input
                   type="date"
                   {...register("eventDate", {...formConfig.eventDate})}
-                  value={previewDate}
-                  onChange={(e) => setPreviewDate(e.target.value)}
+                  // value={previewDate}
+                  // onChange={(e) => setPreviewDate(e.target.value)}
                   onBlur={renderCanvas}
                 />
                 {errors.eventDate && <ValidationMessage message={errors.eventDate.message}/>}
@@ -393,32 +416,32 @@ function Wizard() {
                 {errors.description && <ValidationMessage message={errors.description.message}/>}
               </div>
 
-              <div className="Form-group">
-                <label className="Form-label">
-                  Royalty % <SVG hintIcon dataHint="Your fees for secondary sales. Small values are prefered." />
-                </label>
-                <div className="Form-royalty-picker">
-                  <button type="button" className={`btn-regular ${royalty === 3 ? 'active' : ''}`} onClick={() => setRoyalty(3)}>
-                    3%
-                  </button>
-                  <button type="button" className={`btn-regular ${royalty === 5 ? 'active' : ''}`} onClick={() => setRoyalty(5)}>
-                    5%
-                  </button>
-                  <button type="button" className={`btn-regular ${royalty === 7 ? 'active' : ''}`} onClick={() => setRoyalty(7)}>
-                    7%
-                  </button>
-                  <input
-                    style={{ width: '20px' }}
-                    type="number"
-                    min={0} max={99}
-                    value={royalty}
-                    {...register("royalty", {...formConfig.royalty})}
-                    onChange={(e) => {
-                      setRoyalty(parseInt(e.target.value > 99 ? 99 : e.target.value < 0 ? 0 : e.target.value, 10));
-                    }}
-                  />
-                </div>
-              </div>
+              {/*<div className="Form-group">*/}
+              {/*  <label className="Form-label">*/}
+              {/*    Royalty % <SVG hintIcon dataHint="Your fees for secondary sales. Small values are prefered." />*/}
+              {/*  </label>*/}
+              {/*  <div className="Form-royalty-picker">*/}
+              {/*    <button type="button" className={`btn-regular ${royalty === 3 ? 'active' : ''}`} onClick={() => setRoyalty(3)}>*/}
+              {/*      3%*/}
+              {/*    </button>*/}
+              {/*    <button type="button" className={`btn-regular ${royalty === 5 ? 'active' : ''}`} onClick={() => setRoyalty(5)}>*/}
+              {/*      5%*/}
+              {/*    </button>*/}
+              {/*    <button type="button" className={`btn-regular ${royalty === 7 ? 'active' : ''}`} onClick={() => setRoyalty(7)}>*/}
+              {/*      7%*/}
+              {/*    </button>*/}
+              {/*    <input*/}
+              {/*      style={{ width: '20px' }}*/}
+              {/*      type="number"*/}
+              {/*      min={0} max={99}*/}
+              {/*      value={royalty}*/}
+              {/*      {...register("royalty", {...formConfig.royalty})}*/}
+              {/*      onChange={(e) => {*/}
+              {/*        setRoyalty(parseInt(e.target.value > 99 ? 99 : e.target.value < 0 ? 0 : e.target.value, 10));*/}
+              {/*      }}*/}
+              {/*    />*/}
+              {/*  </div>*/}
+              {/*</div>*/}
             </fieldset>
 
             <fieldset style={{ maxWidth: '260px'}}>

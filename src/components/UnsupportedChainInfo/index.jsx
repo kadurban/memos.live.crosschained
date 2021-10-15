@@ -13,7 +13,7 @@ async function changeNetwork(id) {
 export default function UnsupportedChainInfo(props) {
   return (
     <div className="UnsupportedChainInfo">
-      <h1>Change network in Metamask</h1>
+      <h1 style={{marginTop: '5rem'}}>Please connect to supported chain </h1>
       <AlertMessage>
         <h2>Supported networks:</h2>
         <div style={{fontSize: '18px', display: 'flex'}}>

@@ -21,9 +21,9 @@ const EXTENSIONS = {
 
 function getConfig(chainId) {
   const rinkebySystemName = 'rinkeby';
-  const rinkebyContractAddress = '0xE4716B9207939a876700DF6860946Cffb922AFDc';
+  const rinkebyContractAddress = '0x1735AEd35c5EE5cf4f790eB2cCF35Fdfa043c4b0';
   const mumbaiSystemName = 'mumbai';
-  const mumbaiContractAddress = '0x554B11dD7A704d679B381A8A48842D907F883981';
+  const mumbaiContractAddress = '0xcdF40aE4A32aE569b08b128015aD066b166c07C2';
 
   const AVAILABLE_NETWORKS = [{
     NETWORK_NAME: rinkebySystemName,
