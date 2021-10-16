@@ -29,9 +29,6 @@ const formConfig = {
   description: {
     required: 'Field is required',
   },
-  royalty: {
-    required: 'Field is required',
-  },
   image: {
     required: 'Field is required',
   }
@@ -68,6 +65,7 @@ function Wizard() {
   const [image, setImageFile] = useState(null);
   const [previewName, setPreviewName] = useState('');
   const [previewDate, setPreviewDate] = useState('');
+  const [description, setDescription] = useState('');
   const [previewTime, setPreviewTime] = useState('');
   const [previewImage, setPreviewImage] = useState(null);
   const [fileTypesAttached, setFileTypesAttached] = useState({});
@@ -222,6 +220,12 @@ function Wizard() {
       trait_type: 'Image'
     });
 
+    metaData.attributes.push({
+      key: 'Royalty',
+      value: 3,
+      trait_type: 'Royalty'
+    });
+
     // date to attribute
     if (moment(data.eventDate, 'YYYY-MM-DD HH:mm:ss').isValid()) {
       metaData.attributes.push({
@@ -316,7 +320,7 @@ function Wizard() {
     <>
       {isUploading && <Loader isUploader/>}
 
-      <div className="light-background-with-padding" style={{ maxWidth: 'none', display: 'inline-block' }}>
+      <div className="light-background-with-padding" style={{maxWidth: 'none', display: 'inline-block'}}>
         {!settingsState.user && (
           <AlertMessage
             text="You need to login to be able to create new"
@@ -332,7 +336,7 @@ function Wizard() {
           onSubmit={handleSubmit(onFormSubmit)}
         >
           <>
-            <fieldset style={{ maxWidth: '260px'}}>
+            <fieldset style={{maxWidth: '260px'}}>
               <legend>General info</legend>
 
               <div className="Form-group">
@@ -340,21 +344,20 @@ function Wizard() {
                 <input
                   type="text"
                   maxLength={75}
-                  {...register("name", {...formConfig.name})}
+                  {...register("name", {...formConfig.name, ...{
+                    // value: '111',
+                    // onChange: () => alert(1)
+                  }})}
                   placeholder="e.g.: Bitcoin was Launched"
+                  // onBlur={renderCanvas}
                   // value={previewName}
-                  // onChange={(e) => setPreviewName(e.target.value)}
-                  onBlur={renderCanvas}
+                  onChange={(e) => setPreviewName(e.target.value)}
+                  onBlur={(e) => {
+                    setPreviewName(e.target.value);
+                    renderCanvas();
+                  }}
                 />
                 {errors.name && <ValidationMessage message={errors.name.message}/>}
-
-                {/*<TextareaAutosize*/}
-                {/*  cacheMeasurements*/}
-                {/*  {...register("description", {...formConfig.description})}*/}
-                {/*  placeholder="e.g.: Bitcoin is a cryptocurrency invented in 2008 by an unknown person or group of people..."*/}
-                {/*  defaultValue=""*/}
-                {/*/>*/}
-                {/*{errors.description && <ValidationMessage message={errors.description.message}/>}*/}
 
               </div>
 
@@ -365,9 +368,9 @@ function Wizard() {
                 </label>
                 <input
                   type="date"
-                  {...register("eventDate", {...formConfig.eventDate})}
-                  // value={previewDate}
-                  // onChange={(e) => setPreviewDate(e.target.value)}
+                  {...register("eventDate", {...formConfig.eventDate}, {
+                    onChange: (e) => setPreviewDate(e.target.value)
+                  })}
                   onBlur={renderCanvas}
                 />
                 {errors.eventDate && <ValidationMessage message={errors.eventDate.message}/>}
@@ -409,9 +412,10 @@ function Wizard() {
                 </label>
                 <TextareaAutosize
                   cacheMeasurements
-                  {...register("description", {...formConfig.description})}
+                  {...register("description", {...formConfig.description}, {
+                    onChange: (e) => setDescription(e.target.value)
+                  })}
                   placeholder="e.g.: Bitcoin is a cryptocurrency invented in 2008 by an unknown person or group of people..."
-                  defaultValue=""
                 />
                 {errors.description && <ValidationMessage message={errors.description.message}/>}
               </div>
@@ -444,7 +448,7 @@ function Wizard() {
               {/*</div>*/}
             </fieldset>
 
-            <fieldset style={{ maxWidth: '260px'}}>
+            <fieldset style={{maxWidth: '260px'}}>
               <legend>Files</legend>
 
               <div className="Form-group">
@@ -481,7 +485,8 @@ function Wizard() {
               <div className="Form-group">
                 <label className="Form-label">
                   Extra files:
-                  <SVG hintIcon dataHint={`Invalid or unsupported files will not be attached. Supported are: ${[...UPLOADER_SUPPORTED_EXTENSIONS].join(', ')}. Max 50mb.`}/>
+                  <SVG hintIcon
+                       dataHint={`Invalid or unsupported files will not be attached. Supported are: ${[...UPLOADER_SUPPORTED_EXTENSIONS].join(', ')}. Max 50mb.`}/>
                 </label>
                 <div className="Form-group-files-list-wrapper">
                   {attachedFiles.map(({file, uuid, valid}) => (
