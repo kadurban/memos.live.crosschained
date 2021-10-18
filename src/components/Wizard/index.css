@@ -134,6 +134,11 @@
     top: -4px;
     z-index: 0;
     border-radius: 0 0 var(--std-border-radius) var(--std-border-radius);
+    display: none;
+}
+
+:invalid + .Form-validation-message {
+    display: block;
 }
 
 .Form-file-preview {

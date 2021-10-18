@@ -19,21 +19,6 @@ import logoLight from "../../assets/img/logo-light.png";
 
 const soundsArray = ['effect1', 'effect2', 'effect3', 'effect4', 'effect5', 'effect6', 'effect7', 'effect8'];
 
-const formConfig = {
-  name: {
-    required: 'Field is required',
-  },
-  eventDate: {
-    required: 'Field is required',
-  },
-  description: {
-    required: 'Field is required',
-  },
-  image: {
-    required: 'Field is required',
-  }
-}
-
 const ValidationMessage = ({ message }) => (
   <div className="Form-validation-message">
     {message}
@@ -127,6 +112,8 @@ function Wizard() {
         }
 
         setImageFile(image);
+        console.log('+++')
+        console.log(CardPreviewImage)
         CardPreviewImage.current.width = resizedWidth;
         CardPreviewImage.current.height = resizedHeight;
         if (resizedWidth >= resizedHeight) {
@@ -333,7 +320,7 @@ function Wizard() {
         <form
           className="Form"
           autoComplete="off"
-          onSubmit={handleSubmit(onFormSubmit)}
+          onSubmit={onFormSubmit}
         >
           <>
             <fieldset style={{maxWidth: '260px'}}>
@@ -342,22 +329,20 @@ function Wizard() {
               <div className="Form-group">
                 <label className="Form-label">Name</label>
                 <input
+                  name='name'
                   type="text"
+                  required
                   maxLength={75}
-                  {...register("name", {...formConfig.name, ...{
-                    // value: '111',
-                    // onChange: () => alert(1)
-                  }})}
                   placeholder="e.g.: Bitcoin was Launched"
-                  // onBlur={renderCanvas}
-                  // value={previewName}
+                  value={previewName}
                   onChange={(e) => setPreviewName(e.target.value)}
-                  onBlur={(e) => {
-                    setPreviewName(e.target.value);
-                    renderCanvas();
-                  }}
+                  onBlur={renderCanvas}
+                  // onBlur={(e) => {
+                  //   setPreviewName(e.target.value);
+                  //   renderCanvas();
+                  // }}
                 />
-                {errors.name && <ValidationMessage message={errors.name.message}/>}
+                <ValidationMessage message="Required field"/>
 
               </div>
 
@@ -368,12 +353,16 @@ function Wizard() {
                 </label>
                 <input
                   type="date"
-                  {...register("eventDate", {...formConfig.eventDate}, {
-                    onChange: (e) => setPreviewDate(e.target.value)
-                  })}
-                  onBlur={renderCanvas}
+                  name="eventDate"
+                  required
+                  value={previewDate}
+                  onChange={(e) => setPreviewDate(e.target.value)}
+                  onBlur={(e) => {
+                    setPreviewDate(e.target.value);
+                    renderCanvas();
+                  }}
                 />
-                {errors.eventDate && <ValidationMessage message={errors.eventDate.message}/>}
+                <ValidationMessage message="Required field"/>
               </div>
 
               <div className="Form-group Form-group-set-time">
@@ -401,7 +390,7 @@ function Wizard() {
                         renderCanvas();
                       }}
                     />
-                    {errors.previewTime && <ValidationMessage message={errors.previewTime.message}/>}
+                    <ValidationMessage message="Required field"/>
                   </div>
                 )}
               </div>
@@ -412,12 +401,17 @@ function Wizard() {
                 </label>
                 <TextareaAutosize
                   cacheMeasurements
-                  {...register("description", {...formConfig.description}, {
-                    onChange: (e) => setDescription(e.target.value)
-                  })}
+                  required
                   placeholder="e.g.: Bitcoin is a cryptocurrency invented in 2008 by an unknown person or group of people..."
+                  name="description"
+                  value={description}
+                  onChange={(e) => setDescription(e.target.value)}
+                  onBlur={(e) => {
+                    setDescription(e.target.value);
+                    renderCanvas();
+                  }}
                 />
-                {errors.description && <ValidationMessage message={errors.description.message}/>}
+                <ValidationMessage message="Required field"/>
               </div>
 
               {/*<div className="Form-group">*/}
@@ -438,11 +432,9 @@ function Wizard() {
               {/*      style={{ width: '20px' }}*/}
               {/*      type="number"*/}
               {/*      min={0} max={99}*/}
+              {/*      name="royalty"*/}
               {/*      value={royalty}*/}
-              {/*      {...register("royalty", {...formConfig.royalty})}*/}
-              {/*      onChange={(e) => {*/}
-              {/*        setRoyalty(parseInt(e.target.value > 99 ? 99 : e.target.value < 0 ? 0 : e.target.value, 10));*/}
-              {/*      }}*/}
+              {/*      onChange={(e) => setRoyalty(parseInt(e.target.value > 99 ? 99 : e.target.value < 0 ? 0 : e.target.value, 10))}*/}
               {/*    />*/}
               {/*  </div>*/}
               {/*</div>*/}
@@ -467,11 +459,14 @@ function Wizard() {
                 <div className="Form-group-file-wrapper">
                   <input
                     accept={IMAGE_EXTENSIONS.map(ext => `.${ext}`)}
+                    required
                     type="file"
-                    {...register("image", {...formConfig.image})}
+                    name="image"
+                    value={image || ''}
                     onChange={handleImageChange}
                     style={{display: !image ? 'block' : 'none'}}
                   />
+                  <ValidationMessage message="Required field"/>
                   {!image && <>
                     <button className="btn-big" type="button">
                       <SVG previewImage/>
@@ -479,7 +474,6 @@ function Wizard() {
                     </button>
                   </>}
                 </div>
-                {errors.image && <ValidationMessage message={errors.image.message}/>}
               </div>
 
               <div className="Form-group">
