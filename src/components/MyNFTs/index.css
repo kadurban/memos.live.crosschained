@@ -8,8 +8,8 @@
   /*margin-left: calc((var(--std-padding) + 322px) * -1);*/
   /*padding-left: calc(var(--std-padding) + 322px);*/
   padding-bottom: calc(var(--std-padding) * 3);
-  padding-top: calc(var(--std-padding) * 2);
-  margin-top: calc(var(--std-padding) * -2);
+  padding-top: 70px;
+  margin-top: -70px;
 }
 
 .NftList-cards-holder::-webkit-scrollbar {

@@ -4,9 +4,9 @@ import AlertMessage from '../components/AlertMessage';
 function AboutPage(props) {
   return (
     <div className="Page-wrapper">
-      <h1>
-        About memos.live
-      </h1>
+      {/*<h1>*/}
+      {/*  About memos.live*/}
+      {/*</h1>*/}
 
       <div className="light-background-with-padding bigger-padding markdown">
         <div>

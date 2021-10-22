@@ -85,11 +85,12 @@ function Card(props) {
       const metadataStr = await getContentByUrl(props.tokenUri);
       const metadata = JSON.parse(metadataStr);
       const cardData = constructDataForCardView(metadata);
+      const cardFrontImage = cardData.images[0];
       setState({
         ...state,
         cardData: {
           ...cardData,
-          image: metadata.image,
+          image: cardFrontImage,
           // image_data: metadata.image_data && metadata.image_data.substr(0, 4) === '<svg' ? metadata.image_data : null,
           name: metadata.name,
           description: metadata.description,
@@ -105,8 +106,6 @@ function Card(props) {
 
   const isValidDate = moment(state.cardData.eventDate, "YYYY-MM-DD HH:mm:ss").isValid();
   const exactTime = state.cardData.eventDate.split(' ').length === 2;
-
-  console.log(state.cardData)
 
   let totalActionTypesCount = 0;
   if (state.cardData.description.length > 0) totalActionTypesCount++;
@@ -134,11 +133,11 @@ function Card(props) {
       <div className="Card-holder">
         <div className={`Card ${(state.rotated && 'Card-rotated') || ''} ${props.appearsAnimation ? props.appearsAnimation: ''}`}>
           <button
-            tabIndex={state.rotated ? -1 : 0}
+            tabIndex="1"
             className="Card-front"
             onClick={() => setState(() => {
-              playSound('cardFlip1');
-              return { ...state, rotated: true };
+              playSound(state.rotated ? 'cardFlip2' : 'cardFlip1');
+              return { ...state, rotated: !state.rotated };
             })}
             // onMouseMove={(e) => moveLight(e)}
           >
@@ -284,16 +283,16 @@ function Card(props) {
 
             </div>
 
-            <button
-              tabIndex={state.rotated ? 0 : -1}
-              className="Card-back-action-button flip-back"
-              onClick={() => setState(() => {
-                playSound('cardFlip2');
-                return { ...state, rotated: false };
-              })}
-            >
-              <SVG flipBack/>
-            </button>
+            {/*<button*/}
+            {/*  tabIndex={state.rotated ? 0 : -1}*/}
+            {/*  className="Card-back-action-button flip-back"*/}
+            {/*  onClick={() => setState(() => {*/}
+            {/*    playSound('cardFlip2');*/}
+            {/*    return { ...state, rotated: false };*/}
+            {/*  })}*/}
+            {/*>*/}
+            {/*  <SVG flipBack/>*/}
+            {/*</button>*/}
             {/*<div className={`Card-back-info ${totalActionTypesCount === 0 ? 'larger' : ''}`}>*/}
             {/*<div>*/}
             {/*  <Element specs={props.specs} index={0}/>*/}

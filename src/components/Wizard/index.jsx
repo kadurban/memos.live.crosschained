@@ -9,7 +9,7 @@ import AlertMessage from '../AlertMessage';
 import Card from '../Card';
 import Loader from '../Loader';
 import SVG from "../../SVG";
-import { playSound, randomInteger, debounce } from "../../lib/utils";
+import {playSound, randomInteger, debounce, sleep} from "../../lib/utils";
 import TextareaAutosize from 'react-textarea-autosize';
 import html2canvas from 'html2canvas';
 import Moralis from "moralis";
@@ -38,7 +38,7 @@ const FilePreview = ({ file, valid, children }) => (
 
 function Wizard() {
   const [isUploading, setUploadStatusInProgress] = useState(false);
-  const { register, handleSubmit, formState: { errors }, watch } = useForm();
+  const { register, formState: { errors }, watch } = useForm();
   const CardPreviewBeforeMint = useRef(null);
   const CardPreviewBeforeMintGenerated = useRef(null);
   const CardPreviewImage = useRef(null);
@@ -47,14 +47,14 @@ function Wizard() {
   const [tokenURI, setTokenURI] = useState(null);
   const [metaDataState, setMetaData] = useState(null);
   const [attachedFiles, setAttachedFiles] = useState([]);
-  const [image, setImageFile] = useState(null);
+  const [imageFile, setImageFile] = useState(null);
   const [previewName, setPreviewName] = useState('');
   const [previewDate, setPreviewDate] = useState('');
   const [description, setDescription] = useState('');
   const [previewTime, setPreviewTime] = useState('');
   const [previewImage, setPreviewImage] = useState(null);
-  const [fileTypesAttached, setFileTypesAttached] = useState({});
-  const [royalty, setRoyalty] = useState(3);
+  const [attachedFileTypes, setAttachedFileTypes] = useState([]);
+  // const [royalty, setRoyalty] = useState(3);
   const isValidDate = moment(previewDate, "YYYY-MM-DD HH:mm:ss").isValid();
   const exactTime = previewDate.length > 0 && previewTime.length > 0;
 
@@ -72,7 +72,7 @@ function Wizard() {
         html2canvas(CardPreviewBeforeMint.current, {
           allowTaint: true,
           useCORS: true,
-          watch: 600,
+          width: 600,
           height: 600
         }).then(function(canvas) {
           if (CardPreviewBeforeMintGenerated.current) {
@@ -89,10 +89,10 @@ function Wizard() {
   const specifyTime = watch('specifyTime');
 
   const handleImageChange = (event) => {
-    const image = event.target.files[0];
-    const extension = image.name.split('.').pop().toLowerCase();
+    const attachedImageFile = event.target.files[0];
+    const extension = attachedImageFile.name.split('.').pop().toLowerCase();
 
-    if (image && IMAGE_EXTENSIONS.includes(extension) && image.size <= settingsState.appConfiguration.MAX_FILE_SIZE) {
+    if (attachedImageFile && (IMAGE_EXTENSIONS.includes(extension) || ANIMATION_EXTENSIONS.includes(extension)) && attachedImageFile.size <= settingsState.appConfiguration.MAX_FILE_SIZE) {
       const reader = new FileReader();
       reader.onloadend = async function (data) {
         const jImage = await jimp.read(this.result);
@@ -111,9 +111,9 @@ function Wizard() {
           resizedHeight = jImage.bitmap.height;
         }
 
-        setImageFile(image);
-        console.log('+++')
-        console.log(CardPreviewImage)
+        setImageFile(event.target.files[0]);
+        // setImageFile(attachedImageFile);
+        setPreviewImage(URL.createObjectURL(attachedImageFile));
         CardPreviewImage.current.width = resizedWidth;
         CardPreviewImage.current.height = resizedHeight;
         if (resizedWidth >= resizedHeight) {
@@ -125,7 +125,7 @@ function Wizard() {
         }
         CardPreviewImage.current.src = await resizedImage.getBase64Async(jimp.MIME_PNG);
       }
-      reader.readAsArrayBuffer(image);
+      reader.readAsArrayBuffer(attachedImageFile);
       setTimeout(renderCanvas, 500);
     } else {
       alert(`Please select a correct file type for preview. Supported: ${IMAGE_EXTENSIONS.join(', ')}. Max 20mb.`);
@@ -154,39 +154,37 @@ function Wizard() {
     });
 
     const resultFilesList = [...attachedFiles, ...newFiles];
-    const fileTypes = resultFilesList.reduce((acc, file) => (
-      {...acc, fileType: file.trait_type}
-    ), {});
-    console.log('===');
-    console.log(fileTypes);
-    // setFileTypesAttached();
+
+    const fileTypesArr = resultFilesList.reduce((acc, file) => ([...acc, file.trait_type]), []);
+    const fileTypes = [...new Set(fileTypesArr)];
+    setAttachedFileTypes(fileTypes);
 
     setAttachedFiles(resultFilesList);
+    renderCanvas();
   }
 
-  const onFormSubmit = async (data) => {
+  const onFormSubmit = async (e) => {
+    e.preventDefault();
     if (!window.confirm('Is everything ready and you want to mint new NFT?')) return false;
 
-    console.log('Form data:');
-    console.log(data);
+    let data = {};
+    for (const [key, value] of new FormData(e.target)) {
+      data[key] = value;
+    }
+    console.log('Form data:', data);
 
     console.log('===> Uploading files to IPFS');
     setUploadStatusInProgress(true);
     document.body.style.overflow = 'hidden';
 
     console.log('===> Saving marketplace image');
-    // console.log(data.image[0]);
-    // console.log('===');
-    // console.log(CardPreviewBeforeMintGenerated)
-    // console.log(CardPreviewBeforeMintGenerated.current.querySelector('canvas'))
     const imageDataBase64 = CardPreviewBeforeMintGenerated.current.querySelector('canvas').toDataURL();
-    // const imageDataBase64 = data.image[0].toDataURL();
+    const previewOnCardImage = new Moralis.File(`${uuid()}.${data.image.name.split('.').pop()}`, data.image);
 
-    const previewOnCardImage = new Moralis.File(`${uuid()}.${data.image[0].name.split('.').pop()}`, data.image[0]);
     await previewOnCardImage.saveIPFS();
     const previewOnCardImageUrk = previewOnCardImage.ipfs();
 
-    const savedMarcetplacesCoveImage = new Moralis.File(`${uuid()}.${data.image[0].name.split('.').pop()}`, { base64: imageDataBase64 });
+    const savedMarcetplacesCoveImage = new Moralis.File(`${uuid()}.${data.image.name.split('.').pop()}`, { base64: imageDataBase64 });
     await savedMarcetplacesCoveImage.saveIPFS();
     const savedMarcetplacesCoveImageUrl = savedMarcetplacesCoveImage.ipfs();
 
@@ -194,7 +192,7 @@ function Wizard() {
       image: savedMarcetplacesCoveImageUrl,
       // image_data: svgCode, // TODO: Put svg here
       external_url: 'https://memos.live/',
-      description: data.description,
+      description: `[View full-featured version here](https://memos.live/${data.description}`,
       name: data.name,
       attributes: [],
       // background_color: '',
@@ -207,11 +205,11 @@ function Wizard() {
       trait_type: 'Image'
     });
 
-    metaData.attributes.push({
-      key: 'Royalty',
-      value: 3,
-      trait_type: 'Royalty'
-    });
+    // metaData.attributes.push({
+    //   key: 'Royalty',
+    //   value: 3,
+    //   trait_type: 'Royalty'
+    // });
 
     // date to attribute
     if (moment(data.eventDate, 'YYYY-MM-DD HH:mm:ss').isValid()) {
@@ -239,6 +237,12 @@ function Wizard() {
       }
     }
 
+    metaData.attributes.push({
+      key: 'Version',
+      value: settingsState.appConfiguration.NFT_VERSION,
+      trait_type: 'Version number'
+    });
+
     const metaDataStringified = JSON.stringify(metaData);
     const tokenMetadataFile = new Moralis.File("metadata.json", { base64: btoa(metaDataStringified) });
     await tokenMetadataFile.saveIPFS();
@@ -256,8 +260,8 @@ function Wizard() {
     setUploadStatusInProgress(false);
     document.body.style.overflow = 'auto';
 
-    // await mintToken(tokenURI);
-    // window.location.reload();
+    await mintToken(tokenURI);
+    window.location.reload();
   }
 
   const mintToken = async (tokenURI) => {
@@ -337,10 +341,6 @@ function Wizard() {
                   value={previewName}
                   onChange={(e) => setPreviewName(e.target.value)}
                   onBlur={renderCanvas}
-                  // onBlur={(e) => {
-                  //   setPreviewName(e.target.value);
-                  //   renderCanvas();
-                  // }}
                 />
                 <ValidationMessage message="Required field"/>
 
@@ -413,39 +413,14 @@ function Wizard() {
                 />
                 <ValidationMessage message="Required field"/>
               </div>
-
-              {/*<div className="Form-group">*/}
-              {/*  <label className="Form-label">*/}
-              {/*    Royalty % <SVG hintIcon dataHint="Your fees for secondary sales. Small values are prefered." />*/}
-              {/*  </label>*/}
-              {/*  <div className="Form-royalty-picker">*/}
-              {/*    <button type="button" className={`btn-regular ${royalty === 3 ? 'active' : ''}`} onClick={() => setRoyalty(3)}>*/}
-              {/*      3%*/}
-              {/*    </button>*/}
-              {/*    <button type="button" className={`btn-regular ${royalty === 5 ? 'active' : ''}`} onClick={() => setRoyalty(5)}>*/}
-              {/*      5%*/}
-              {/*    </button>*/}
-              {/*    <button type="button" className={`btn-regular ${royalty === 7 ? 'active' : ''}`} onClick={() => setRoyalty(7)}>*/}
-              {/*      7%*/}
-              {/*    </button>*/}
-              {/*    <input*/}
-              {/*      style={{ width: '20px' }}*/}
-              {/*      type="number"*/}
-              {/*      min={0} max={99}*/}
-              {/*      name="royalty"*/}
-              {/*      value={royalty}*/}
-              {/*      onChange={(e) => setRoyalty(parseInt(e.target.value > 99 ? 99 : e.target.value < 0 ? 0 : e.target.value, 10))}*/}
-              {/*    />*/}
-              {/*  </div>*/}
-              {/*</div>*/}
             </fieldset>
 
             <fieldset style={{maxWidth: '260px'}}>
               <legend>Files</legend>
 
               <div className="Form-group">
-                {image && (
-                  <FilePreview file={image} valid={true}>
+                {imageFile && (
+                  <FilePreview file={imageFile} valid={true}>
                     <button onClick={() => {
                       setImageFile(null);
                       setPreviewImage(null);
@@ -458,20 +433,20 @@ function Wizard() {
                 )}
                 <div className="Form-group-file-wrapper">
                   <input
-                    accept={IMAGE_EXTENSIONS.map(ext => `.${ext}`)}
+                    accept={[...IMAGE_EXTENSIONS.map(ext => `.${ext}`), ...ANIMATION_EXTENSIONS.map(ext => `.${ext}`)]}
                     required
                     type="file"
                     name="image"
-                    value={image || ''}
+                    defaultValue={imageFile}
                     onChange={handleImageChange}
-                    style={{display: !image ? 'block' : 'none'}}
+                    style={{display: !imageFile ? 'block' : 'none'}}
                   />
-                  <ValidationMessage message="Required field"/>
-                  {!image && <>
+                  {!imageFile && <>
                     <button className="btn-big" type="button">
                       <SVG previewImage/>
                       Add preview image
                     </button>
+                    <ValidationMessage message="Required field"/>
                   </>}
                 </div>
               </div>
@@ -489,6 +464,10 @@ function Wizard() {
                         onClick={() => {
                           const filtered = attachedFiles.filter(f => f.uuid !== uuid);
                           setAttachedFiles([...filtered]);
+                          const fileTypesArr = filtered.reduce((acc, file) => ([...acc, file.trait_type]), []);
+                          const fileTypes = [...new Set(fileTypesArr)];
+                          setAttachedFileTypes(fileTypes);
+                          renderCanvas();
                         }}
                         type="button"
                       >
@@ -540,22 +519,23 @@ function Wizard() {
                   <div className="layer-21">
                     <img src={logoLight} alt="memos.live"/>memos.live - Memorable Interactive NFTs
                   </div>
-                  <div className="layer-icon">
-                    <SVG video/>
+
+                  {['Picture', 'Text', 'Video'].map((item, index) => (
+                    <div className="layer-icon" style={{display: attachedFileTypes.includes(item) ? 'block' : 'none'}} key={index}>
+                      {item === 'Picture' && <SVG image/>}
+                      {item === 'Video' && <SVG video/>}
+                      {item === 'Text' && <SVG feather/>}
+                    </div>
+                  ))}
+                  <div className="layer-icon" style={{display: 'none'}}>
+                    <SVG audio/>
                   </div>
-                  <div className="layer-icon">
-                    <SVG sound/>
-                  </div>
-                  <div className="layer-icon">
-                    <SVG image/>
-                  </div>
-                  <div className="layer-icon">
-                    <SVG feather/>
-                  </div>
-                  <div className="layer-ray layer-icon1-ray"/>
-                  <div className="layer-ray layer-icon2-ray"/>
-                  <div className="layer-ray layer-icon3-ray"/>
-                  <div className="layer-ray layer-icon4-ray"/>
+
+                  {['Picture', 'Text', 'Video'].map((item, index) => (
+                      <div className={`layer-ray layer-icon${index + 1}-ray`} style={{display: attachedFileTypes.includes(item) ? 'block' : 'none'}} key={index}/>
+                  ))}
+                  <div className="layer-ray layer-icon4-ray" style={{display: 'none'}}/>
+
                   <div className="layer-11">
                     <div className="layer-11-inner">
                       <div className="date">

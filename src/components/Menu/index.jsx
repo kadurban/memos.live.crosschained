@@ -55,17 +55,17 @@ function Menu() {
       </div>
 
       <div className="Menu-bottom">
-        <a href="https://discord.gg/RA7JPyuySj" target="_blank">
-          <SVG discord/>
-        </a>
         <a href="https://twitter.com/LiveMemos" target="_blank">
           <SVG twitter/>
         </a>
-        <a href="https://t.me/memoslive" target="_blank">
-          <SVG telegram/>
+        <a href="https://discord.gg/RA7JPyuySj" target="_blank">
+          <SVG discord/>
         </a>
         <a href="https://www.instagram.com/memos.live/" target="_blank">
           <SVG instagram/>
+        </a>
+        <a href="https://t.me/memoslive" target="_blank">
+          <SVG telegram/>
         </a>
         {/*<button onClick={toggleTheme}>*/}
         {/*  <SVG bulb/>*/}

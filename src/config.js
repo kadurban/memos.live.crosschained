@@ -34,6 +34,7 @@ function getConfig(chainId) {
   }]
 
   let CONFIG = {
+    NFT_VERSION: '0.1',
     MAX_FILE_SIZE: 50000000,
     EXTENSIONS,
     AVAILABLE_NETWORKS

@@ -22,11 +22,12 @@
   height: 100%;
   overflow: auto;
   padding: var(--std-padding);
+  padding-top: 70px;
   z-index: 1;
   /*display: none;*/
   display: initial;
-  box-shadow: #ffffffbd 9px 0 20px 7px;
-  background-color: rgba(255,255,255, .7);
+  /*box-shadow: #ffffffbd 9px 0 20px 7px;*/
+  background-color: #ffffffb5;
   backdrop-filter: blur(10px);
 }
 
@@ -34,11 +35,18 @@
   position: absolute;
   inset: 0;
   padding: var(--std-padding);
+  padding-top: 70px;
   /*background: rgb(249, 250, 251);*/
 }
 
 .App-primary-content-right h1:first-of-type {
-  padding-top: .5rem;
+  /*padding-top: .5rem;*/
+  margin-top: -70px;
+  z-index: 5;
+  position: relative;
+  height: 70px;
+  line-height: 70px;
+  margin-bottom: 0;
 }
 
 .App-primary-content-right::after {

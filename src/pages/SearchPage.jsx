@@ -18,9 +18,9 @@ function SearchPage() {
 
   return (
     <div className="Page-wrapper">
-      <h1 className="App-page-title">
-        Search by tag
-      </h1>
+      {/*<h1 className="App-page-title">*/}
+      {/*  Search by tag*/}
+      {/*</h1>*/}
       <form className="Form">
         <DebounceInput
           placeholder="e.g.: celebrity"

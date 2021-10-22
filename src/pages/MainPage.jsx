@@ -5,6 +5,7 @@ import SettingsContext from "../SettingsContext";
 import ScrollContainer from 'react-indiana-drag-scroll';
 import UnsupportedChainInfo from "../components/UnsupportedChainInfo";
 import Loader from "../components/Loader";
+import SVG from "../SVG";
 
 function shuffle(array) {
   return array.sort(() => Math.random() - 0.5);
@@ -45,7 +46,10 @@ function MainPage(props) {
 
   return (
     <div className="Page-wrapper main">
-      <h1>Recent</h1>
+      <h1>
+        Recent
+        <SearchForm/>
+      </h1>
 
       {!nftListLoaded && <Loader/>}
 
@@ -56,6 +60,25 @@ function MainPage(props) {
       )}
     </div>
   );
+}
+
+function SearchForm() {
+  const [isSearchOpened, setIsSearchOpened] = useState(false);
+
+  const onSubmit = () => {};
+  const onClick = () => {};
+
+  return (
+      <div className="SearchForm" style={{ display: 'inline-block'}}>
+        {isSearchOpened && <input type="search" placeholder="Type to search..."/>}
+        <div
+          style={{ display: 'inline-block', position: 'relative', top: '5px', left: '1rem', cursor: 'pointer'}}
+          onClick={() => alert('Search is in development and will be here very soon')}
+        >
+          <SVG search/>
+        </div>
+      </div>
+  )
 }
 
 export default MainPage;
