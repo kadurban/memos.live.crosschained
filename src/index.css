@@ -397,6 +397,10 @@ a {
   margin-left: var(--desktop-menu-width);
 }
 
+.Page-wrapper.main h1:first-of-type {
+  width: 40%;
+}
+
 .form-switch {
   display: flex;
   align-items: center;

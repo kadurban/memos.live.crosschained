@@ -5,7 +5,7 @@ import ReactMarkdown from 'react-markdown';
 import { Howl } from 'howler';
 import Loader from '../Loader';
 import SettingsContext from '../../SettingsContext';
-import SVG from '../../SVG';
+import SVG from '../SVG';
 import { getContentByUrl, playSound } from '../../lib/utils';
 import logoLight from '../../assets/img/logo-light.png';
 import logoDark from '../../assets/img/logo-dark.png';

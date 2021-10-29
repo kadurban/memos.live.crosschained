@@ -6,7 +6,7 @@ import { login } from "../LoginSection";
 import { getSpecsFromHash } from "../../lib/utils";
 import Loader from "../Loader";
 import './index.css';
-import SVG from "../../SVG";
+import SVG from "../SVG";
 import {NavLink} from "react-router-dom";
 import ScrollContainer from "react-indiana-drag-scroll";
 

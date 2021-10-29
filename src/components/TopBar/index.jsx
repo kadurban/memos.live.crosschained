@@ -2,7 +2,7 @@ import React, { useEffect, useState, useContext } from 'react';
 import LoginSection from '../LoginSection';
 import logoLight from '../../assets/img/logo-light.png';
 import './index.css';
-import SVG from '../../SVG';
+import SVG from '../SVG';
 import SettingsContext from "../../SettingsContext";
 
 function TopBar() {

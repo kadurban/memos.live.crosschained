@@ -8,7 +8,7 @@ import { login } from "../LoginSection";
 import AlertMessage from '../AlertMessage';
 import Card from '../Card';
 import Loader from '../Loader';
-import SVG from "../../SVG";
+import SVG from "../SVG";
 import {playSound, randomInteger, debounce, sleep} from "../../lib/utils";
 import TextareaAutosize from 'react-textarea-autosize';
 import html2canvas from 'html2canvas';
@@ -138,9 +138,8 @@ function Wizard() {
 
       let fileType = null;
       if (TEXT_EXTENSIONS.includes(extension)) fileType = 'Text';
-      if (IMAGE_EXTENSIONS.includes(extension)) fileType = 'Picture';
+      if (IMAGE_EXTENSIONS.includes(extension) || ANIMATION_EXTENSIONS.includes(extension)) fileType = 'Picture';
       if (VIDEO_EXTENSIONS.includes(extension)) fileType = 'Video';
-      if (ANIMATION_EXTENSIONS.includes(extension)) fileType = 'Video';
 
       return {
         file,
@@ -182,41 +181,32 @@ function Wizard() {
     const previewOnCardImage = new Moralis.File(`${uuid()}.${data.image.name.split('.').pop()}`, data.image);
 
     await previewOnCardImage.saveIPFS();
-    const previewOnCardImageUrk = previewOnCardImage.ipfs();
+    const previewOnCardImageUrl = previewOnCardImage.ipfs();
 
-    const savedMarcetplacesCoveImage = new Moralis.File(`${uuid()}.${data.image.name.split('.').pop()}`, { base64: imageDataBase64 });
-    await savedMarcetplacesCoveImage.saveIPFS();
-    const savedMarcetplacesCoveImageUrl = savedMarcetplacesCoveImage.ipfs();
+    const savedMarcetplacesCoverImage = new Moralis.File(`${uuid()}.${data.image.name.split('.').pop()}`, { base64: imageDataBase64 });
+    await savedMarcetplacesCoverImage.saveIPFS();
+    const savedMarcetplacesCoverImageUrl = savedMarcetplacesCoverImage.ipfs();
 
     let metaData = {
-      image: savedMarcetplacesCoveImageUrl,
+      image: savedMarcetplacesCoverImageUrl,
       // image_data: svgCode, // TODO: Put svg here
       external_url: 'https://memos.live/',
-      description: `[View full-featured version here](https://memos.live/${data.description}`,
+      description: data.description,
       name: data.name,
-      attributes: [],
-      // background_color: '',
-      // animation_url: saveiImageUrl,
+      attributes: []
     };
 
     metaData.attributes.push({
       key: 'File',
-      value: previewOnCardImageUrk,
-      trait_type: 'Image'
+      trait_type: 'Picture',
+      value: previewOnCardImageUrl
     });
-
-    // metaData.attributes.push({
-    //   key: 'Royalty',
-    //   value: 3,
-    //   trait_type: 'Royalty'
-    // });
 
     // date to attribute
     if (moment(data.eventDate, 'YYYY-MM-DD HH:mm:ss').isValid()) {
       metaData.attributes.push({
         key: 'Date',
-        value: data.exactTime ? `${data.eventDate} ${data.exactTime}` : data.eventDate,
-        trait_type: 'Date'
+        value: data.exactTime ? `${data.eventDate} ${data.exactTime}` : data.eventDate
       });
     }
 
@@ -237,12 +227,6 @@ function Wizard() {
       }
     }
 
-    metaData.attributes.push({
-      key: 'Version',
-      value: settingsState.appConfiguration.NFT_VERSION,
-      trait_type: 'Version number'
-    });
-
     const metaDataStringified = JSON.stringify(metaData);
     const tokenMetadataFile = new Moralis.File("metadata.json", { base64: btoa(metaDataStringified) });
     await tokenMetadataFile.saveIPFS();
@@ -260,26 +244,21 @@ function Wizard() {
     setUploadStatusInProgress(false);
     document.body.style.overflow = 'auto';
 
-    await mintToken(tokenURI);
+    await createToken(tokenURI);
     window.location.reload();
   }
 
-  const mintToken = async (tokenURI) => {
+  const createToken = async (tokenURI) => {
     const web3 = new Moralis.Web3(window.ethereum);
 
-    tokenURI = 'ipfs/' + tokenURI.split('ipfs/')[1];
-
     const encodedFunction = web3.eth.abi.encodeFunctionCall({
-      name: 'mint',
+      name: 'createToken',
       type: 'function',
       inputs: [{
-        type: 'address',
-        name: 'recipient'
-      }, {
         type: 'string',
-        name: 'metadata'
+        name: 'tokenURI'
       }]
-    }, [window.ethereum.selectedAddress, tokenURI]);
+    }, [tokenURI]);
 
     const txParams = {
       to: settingsState.appConfiguration.MINT_CONTRACT_ADDRESS,
@@ -301,7 +280,7 @@ function Wizard() {
         <AlertMessage text="You can play with your newly created card and check if everything looking good. And if so then you only need to sign a transaction to put your NFT to the blockchain."/>
 
         <div className="Wizard-full-preview">
-          <Card tokenUri={tokenURI}/>
+          <Card tokenUri={tokenURI} onChain={settingsState.appConfiguration.NETWORK_NAME}/>
         </div>
       </>
     )

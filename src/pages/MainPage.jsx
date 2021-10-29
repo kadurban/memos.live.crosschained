@@ -5,7 +5,8 @@ import SettingsContext from "../SettingsContext";
 import ScrollContainer from 'react-indiana-drag-scroll';
 import UnsupportedChainInfo from "../components/UnsupportedChainInfo";
 import Loader from "../components/Loader";
-import SVG from "../SVG";
+import { getContentByUrl } from "../lib/utils";
+import SVG from "../components/SVG";
 
 function shuffle(array) {
   return array.sort(() => Math.random() - 0.5);
@@ -17,30 +18,33 @@ function MainPage(props) {
   const [ nftList, setNftList ] = useState([]);
   const scrollableElementRef = useRef(null);
 
-  async function getNFTOwners() {
+  async function getCollectionsCrosschain() {
     const { AVAILABLE_NETWORKS } = settingsState.appConfiguration;
     let retrievedNfts = [];
 
-    for (const availableNetwork of AVAILABLE_NETWORKS) {
-      const NFTs = await window.Moralis.Web3API.token.getNFTOwners({
-        chain: availableNetwork.NETWORK_NAME,
-        address: availableNetwork.MINT_CONTRACT_ADDRESS,
-      });
-      if (NFTs.result) {
-        for (const nft of NFTs.result) {
-          nft.onChain = availableNetwork.NETWORK_NAME
+    for (const network of AVAILABLE_NETWORKS) {
+      try {
+        const NFTs = await window.Moralis.Web3API.token.getNFTOwners({
+          chain: network.NETWORK_NAME,
+          address: network.MINT_CONTRACT_ADDRESS,
+        });
+        console.log('===')
+        console.log(NFTs)
+        if (NFTs.result) {
+          for (const nft of NFTs.result) {
+            nft.onChain = network.NETWORK_NAME
+          }
+          retrievedNfts = [...retrievedNfts, ...NFTs.result]
         }
-        retrievedNfts = [...retrievedNfts, ...NFTs.result]
-      }
+      } catch (e) {}
     }
-
     console.log('Recent NFTs:');
     console.log(retrievedNfts);
     return shuffle(retrievedNfts);
   }
 
   useEffect(async () => {
-    setNftList(await getNFTOwners(settingsState));
+    setNftList(await getCollectionsCrosschain(settingsState));
     setNftListLoadedStatus(true);
   }, []);
 
@@ -55,7 +59,11 @@ function MainPage(props) {
 
       {nftListLoaded && nftList.length > 0 && (
         <ScrollContainer className="NftList-cards-holder" ref={scrollableElementRef}>
-          {nftList.map((nft, i) => <Card onChain={nft.onChain} tokenUri={nft.token_uri} key={nft.token_uri + i}/>)}*/}
+          {nftList.map((nft, i) => {
+            if (nft.token_uri) {
+              return <Card onChain={nft.onChain} tokenUri={nft.token_uri} key={i}/>;
+            }
+          })}
         </ScrollContainer>
       )}
     </div>

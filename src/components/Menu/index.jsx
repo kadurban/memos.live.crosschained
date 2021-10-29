@@ -1,7 +1,7 @@
 import React, {useContext, useEffect} from 'react';
 import { Link, NavLink } from "react-router-dom";
 import SettingsContext from '../../SettingsContext';
-import SVG from '../../SVG';
+import SVG from '../SVG';
 import './index.css';
 import {toggleTheme} from "../../lib/utils";
 

@@ -11,7 +11,6 @@
 
   color: var(--l-text-color);
   cursor: pointer;
-  /*min-height: 28rem;*/
   margin-right: 5rem;
   perspective: 1200px;
   position: relative;
@@ -21,30 +20,16 @@
   height: var(--card-height);
   width: var(--card-width);
   user-select: none;
-  /*max-width: 340px;*/
   transition: transform .2s ease-out;
 }
 
 .Card .Card-chain {
   position: absolute;
   z-index: -2;
-  top: calc(50% - 25px);
-  /*opacity: .2;*/
-  transform: scale(1.5);
+  bottom: 10%;
+  /*transform: scale(1.5);*/
   left: calc(50% - 25px);
 }
-
-/*.Card .Card-chain.eth {*/
-/*  top: -40px;*/
-/*  right: -13px;*/
-/*  opacity: .6;*/
-/*}*/
-
-/*.Card .Card-chain.polygon {*/
-/*  top: -38px;*/
-/*  right: -29px;*/
-/*  opacity: .8;*/
-/*}*/
 
 .Card:active:not(.Card-rotated) {
  transform: scale(.97);
@@ -55,13 +40,8 @@
   background-size: 160% !important;
 }
 
-/*.Card.Card-rotated:active {*/
-/*  transform: scale(.97);*/
-/*}*/
-
 .Card.Card-inactive {
   pointer-events: none !important;
-  /*margin: auto auto var(--std-padding);*/
 }
 
 .Card-front,
@@ -153,8 +133,6 @@
   margin: 0;
   line-height: 1.6rem;
   font-weight: 500;
-  /*height: 5rem;*/
-  /*display: flex;*/
   align-items: center;
   justify-content: center;
   text-shadow: 1px 1px 0 #ffffff6e;
@@ -169,13 +147,10 @@
 }
 
 .Card-preview {
-  /*margin: auto;*/
   overflow: hidden;
   border-radius: 1000px;
   box-shadow: inset 0 0 70px #fff, inset 0 0 10px #fff;
   border: 1px solid #fff;
-  /*position: relative;*/
-
   width: var(--card-preview-side);
   height: var(--card-preview-side);
 }
@@ -189,12 +164,9 @@
   position: absolute;
   z-index: -2;
   width: 100%;
-  /*height: 100%;*/
 }
 
 .Card-preview > div svg {
-  /*max-width: 100%;*/
-  /*max-height: 100%;*/
   transform: scale(.9);
   border-radius: 100%;
   overflow: hidden;
@@ -202,16 +174,16 @@
 }
 
 .Card-preview.Card-preview-loading {
-  /*animation-duration: 3s;*/
-  /*animation-fill-mode: forwards;*/
-  /*animation-iteration-count: infinite;*/
-  /*animation-timing-function: linear;*/
-  /*animation-name: placeholderAnimate;*/
+  animation-duration: 3s;
+  animation-fill-mode: forwards;
+  animation-iteration-count: infinite;
+  animation-timing-function: linear;
+  animation-name: placeholderAnimate;
   background: #f6f7f8;
   background: linear-gradient(-65deg,
   rgba(255,255,255,0) 0%,
   rgba(255,255,255,0) 40%,
-  rgba(239,226,132,.4) 50%,
+  rgba(255, 255, 255, 0.4) 50%,
   rgba(255,255,255,0) 60%,
   rgba(255,255,255,0) 100%
   );
@@ -224,13 +196,20 @@
   background: linear-gradient(-65deg,
   rgba(255,255,255,0) 0%,
   rgba(255,255,255,0) 40%,
-  rgba(167,153,91,.4) 50%,
+  rgba(255, 255, 255, 0.4) 50%,
   rgba(255,255,255,0) 60%,
   rgba(255,255,255,0) 100%
   );
   background-size: 500%;
   background-position: 100% 0;
   background-repeat: no-repeat;
+}
+
+@keyframes placeholderAnimate {
+  0%{ background-position: 100% 0; }
+  20%{ background-position: 100% 0; }
+  50%{ background-position: 0 0; }
+  100%{ background-position: 0 0; }
 }
 
 .Card-preview video,
@@ -263,7 +242,6 @@
 }
 
 .Card-date-ago {
-  /*margin: 0 0 calc(var(--std-margin) / 2);*/
   font-weight: 300;
   font-size: 0.8rem;
   white-space: nowrap;
@@ -285,12 +263,6 @@
 }
 
 .Card-back-actions {
-  /*flex: auto;*/
-  /*display: flex;*/
-  /*flex-direction: row;*/
-  /*flex-wrap: wrap;*/
-  /*align-content: center;*/
-  /*justify-content: space-around;*/
   width: 100%;
   height: 100%;
   position: relative;
@@ -299,139 +271,78 @@
 .Card-back-actions .Card-back-action-button {
   position: absolute;
   display: block;
-}
-
-.Card-back-actions.count-1 .Card-back-action-button:nth-of-type(1) {
-  top: 75px;
-  left: calc(50% - 30px);
-}
-
-.Card-back-actions.count-2 .Card-back-action-button:nth-of-type(1) {
-  top: 195px;
-  left: 5%;
-}
-.Card-back-actions.count-2 .Card-back-action-button:nth-of-type(2) {
-  top: 195px;
-  right: 5%;
-}
-
-.Card-back-actions.count-3 .Card-back-action-button:nth-of-type(1) {
-  top: 195px;
-  left: 5%;
-}
-.Card-back-actions.count-3 .Card-back-action-button:nth-of-type(2) {
-  top: 195px;
-  right: 5%;
-}
-.Card-back-actions.count-3 .Card-back-action-button:nth-of-type(3) {
-  top: 195px;
-  right: 5%;
-}
-
-/*.Card-back-actions.count-2 .Card-back-action-button:nth-of-type(1) {*/
-/*  top: -150px;*/
-/*}*/
-
-/*.Card-back-actions.count-2 .Card-back-action-button:nth-of-type(2) {*/
-/*  top: -150px;*/
-/*}*/
-
-
-
-
-
-/*.Card-back-actions.count-0 {*/
-/*  display: none;*/
-/*}*/
-
-/*.Card-back-actions.count-1 button {*/
-/*  transform: scale(2.4);*/
-/*}*/
-
-/*.Card-back-actions.count-2 {*/
-/*  flex-direction: column;*/
-/*  justify-content: space-evenly;*/
-/*  padding: 3rem 0;*/
-/*}*/
-
-/*.Card-back-actions.count-2 button {*/
-/*  margin: 0 2rem;*/
-/*  transform: scale(1.8);*/
-/*}*/
-
-/*.Card-back-actions.count-3 {*/
-/*  flex-direction: row;*/
-/*  display: flex;*/
-/*  justify-content: space-evenly;*/
-/*  position: relative;*/
-/*  top: 1rem;*/
-/*}*/
-
-/*.Card-back-actions.count-3 button {*/
-/*  margin: 2rem;*/
-/*  transform: scale(1.6);*/
-/*}*/
-
-/*.Card-back-actions.count-4 {*/
-/*  flex-direction: row;*/
-/*  flex-wrap: wrap;*/
-/*  align-content: space-around;*/
-/*  justify-content: space-between;*/
-/*  padding: 6rem 3rem;*/
-/*  transform: rotateZ(45deg);*/
-/*}*/
-
-/*.Card-back-actions.count-4 button {*/
-/*  margin: 0 20px;*/
-/*  transform: scale(1.5) rotateZ(-45deg);*/
-/*}*/
-
-
-/*.Card-back-actions.count-5 {*/
-/*  flex-direction: row;*/
-/*  flex-wrap: wrap;*/
-/*  align-content: space-around;*/
-/*  justify-content: space-evenly;*/
-/*  padding: 7rem 1rem;*/
-/*  position: relative;*/
-/*  top: 2rem;*/
-/*}*/
-
-/*.Card-back-actions.count-5 button {*/
-/*  margin: 0 10px;*/
-/*  padding: 0;*/
-/*  transform: scale(1.3);*/
-/*}*/
-
-/*.Card-back-actions.count-5 button:nth-child(2) {*/
-/*  position: relative;*/
-/*  top: -5rem;*/
-/*}*/
-
-.Card-back-info.larger {
-  height: auto;
-}
-
-.Card-back-info.larger .Card-back-action-button {
-  transform: scale(4);
-  box-shadow: none;
-}
-
-.Card-back-action-button {
+  /*border: none;*/
+  /*box-shadow: 0 0 20px #cabf90;*/
   flex-direction: row;
   flex-wrap: nowrap;
   justify-content: space-evenly;
   align-content: flex-end;
-  /*margin: 37px 20px;*/
-  width: var(--card-id-side);
-  height: var(--card-id-side);
   overflow: hidden;
   border-radius: 100%;
-  box-shadow: inset rgba(212,199,141, 0) 0px 0 0.75rem 0px;
-  position: relative;
-  background-color: #fff;
-  border: 1px solid #decb79a8;
+  background-color: transparent;
+  /*border: 1px solid #decb79a8;*/
+  padding: 10px;
 }
+
+
+/* ===== 1 =========================================================*/
+.Card-back-actions.count-1 .Card-back-action-button:nth-of-type(1) {
+  left: calc(50% - 36px);
+  top: calc(50% - 38px);
+}
+
+
+/* ===== 2 =========================================================*/
+.Card-back-actions.count-2 .Card-back-action-button:nth-of-type(1) {
+  left: calc(50% - 36px);
+  top: calc(50% - 38px);
+}
+
+.Card-back-actions.count-2 .Card-back-action-button:nth-of-type(2) {
+  left: calc(50% - 36px);
+  top: 10%;
+}
+
+
+/* ===== 3 =========================================================*/
+.Card-back-actions.count-3 .Card-back-action-button:nth-of-type(1) {
+  left: calc(50% - 36px);
+  top: 45%;
+}
+
+.Card-back-actions.count-3 .Card-back-action-button:nth-of-type(2) {
+  left: 15%;
+  top: 15%;
+}
+
+.Card-back-actions.count-3 .Card-back-action-button:nth-of-type(3) {
+  right: 15%;
+  top: 15%;
+}
+
+
+/* ===== 3 =========================================================*/
+.Card-back-actions.count-4 .Card-back-action-button:nth-of-type(1) {
+  left: 15%;
+  top: 45%;
+}
+
+.Card-back-actions.count-4 .Card-back-action-button:nth-of-type(2) {
+  left: 15%;
+  top: 15%;
+}
+
+.Card-back-actions.count-4 .Card-back-action-button:nth-of-type(3) {
+  right: 15%;
+  top: 15%;
+}
+
+.Card-back-actions.count-4 .Card-back-action-button:nth-of-type(4) {
+  right: 15%;
+  top: 45%;
+}
+
+
 
 .Card-back-action-button:hover {
   box-shadow: none;
@@ -441,25 +352,23 @@
   box-shadow: inset rgba(212,199,141, .7) 0px 0 0.75rem 0px;
 }
 
-.Card-back-action-button.flip-back {
-  position: absolute;
-  background-color: transparent;
-  box-shadow: none;
-  bottom: 0;
-  transform: scale(.8);
-}
-
 .Card-back-action-button .icon {
   margin: 0;
+  height: 50px;
 }
 
 .Card-back-action-button svg {
-  width: 40px;
-  height: 40px;
+  width: 50px;
+  height: 50px;
+  top: 2px;
+  position: relative;
 }
 
 .Card-back-action-button svg path:nth-child(2) {
-  fill: rgb(222,203,121) !important;
+  fill: #bcb184 !important;
+  /*fill: transparent !important;*/
+  /*stroke: #bcb184;*/
+  /*stroke-width: 1px;*/
 }
 
 .Card-back-info {

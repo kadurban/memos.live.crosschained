@@ -43,7 +43,19 @@ export function copyToClipboard(addr, domElForFeedback) {
   setTimeout(() => domElForFeedback.current.classList.remove('run-feedback'), 800);
 }
 
+function isValidURL(str) {
+  var pattern = new RegExp('^(https?:\\/\\/)?'+ // protocol
+      '((([a-z\\d]([a-z\\d-]*[a-z\\d])*)\\.)+[a-z]{2,}|'+ // domain name
+      '((\\d{1,3}\\.){3}\\d{1,3}))'+ // OR ip (v4) address
+      '(\\:\\d+)?(\\/[-a-z\\d%_.~+]*)*'+ // port and path
+      '(\\?[;&a-z\\d%_.~+=-]*)?'+ // query string
+      '(\\#[-a-z\\d_]*)?$','i'); // fragment locator
+  return !!pattern.test(str);
+}
+
 export async function getContentByUrl(url) {
+  if (!isValidURL(url)) return null;
+
   return new Promise((resolve, reject) => {
     const xhr = new XMLHttpRequest();
     xhr.onreadystatechange = function () {
@@ -51,9 +63,12 @@ export async function getContentByUrl(url) {
         resolve(xhr.responseText);
       }
     }
+    xhr.onerror = () => {
+      resolve(null);
+    }
     xhr.open('GET', url);
     xhr.send();
-  })
+  });
 }
 
 export async function postContent({ url, data }) {
