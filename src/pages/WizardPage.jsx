@@ -1,5 +1,6 @@
 import React from 'react';
 import Wizard from '../components/Wizard'
+import {  } from '/node_modulesethereum-boilerplate';
 
 function WizardPage(props) {
   return (

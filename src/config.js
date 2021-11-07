@@ -21,10 +21,13 @@ const EXTENSIONS = {
 
 function getConfig(chainId) {
   const rinkebySystemName = 'rinkeby';
-  const rinkebyContractAddress = '0x51f444244D7D73ad2bB4dE8ffA7f40a391959E58';
+  const rinkebyContractAddress = '0x688c8D54dd3cC27a13627DF5F0683C39c2e5A7A3';
 
   const mumbaiSystemName = 'mumbai';
   const mumbaiContractAddress = '0x684b6559E1CCec6E51ac34b95a984d5eC62bb5Ef';
+
+  const bscTestnetSystemName = 'bsc testnet';
+  const bscTestnetContractAddress = '0x021C643724fe02a130cb4bA3e551af13991C760D';
 
   let CONFIG = {
     MAX_FILE_SIZE: 50000000,
@@ -33,10 +36,13 @@ function getConfig(chainId) {
       NETWORK_NAME: rinkebySystemName,
       MINT_CONTRACT_ADDRESS: rinkebyContractAddress
     }, {
+      NETWORK_NAME: bscTestnetSystemName,
+      MINT_CONTRACT_ADDRESS: bscTestnetContractAddress
+    }/*, {
       NETWORK_NAME: mumbaiSystemName,
       MINT_CONTRACT_ADDRESS: mumbaiContractAddress
-    }],
-    FUTURE_NETWORKS: ['solana', 'bsc', 'polygon', 'avalanche']
+    }*/],
+    FUTURE_NETWORKS: ['mumbai', 'solana', 'polygon', 'avalanche']
   };
 
   // TESTNETS
@@ -48,14 +54,22 @@ function getConfig(chainId) {
       MINT_CONTRACT_ADDRESS: rinkebyContractAddress,
     }
   }
-  if (chainId === 80001) { // mumbai
+  if (chainId === 97) { // bsc testnet
     CONFIG = {
       ...CONFIG,
       IS_MAINNET: false,
-      NETWORK_NAME: mumbaiSystemName,
-      MINT_CONTRACT_ADDRESS: mumbaiContractAddress
+      NETWORK_NAME: bscTestnetSystemName,
+      MINT_CONTRACT_ADDRESS: bscTestnetContractAddress
     }
   }
+  // if (chainId === 80001) { // mumbai
+  //   CONFIG = {
+  //     ...CONFIG,
+  //     IS_MAINNET: false,
+  //     NETWORK_NAME: mumbaiSystemName,
+  //     MINT_CONTRACT_ADDRESS: mumbaiContractAddress
+  //   }
+  // }
 
   // MAINNETS
   if (chainId === 1) { // ethereum

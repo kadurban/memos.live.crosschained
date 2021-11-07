@@ -38,8 +38,10 @@ function App() {
       if (!web3) chainId = 1;
       const appConfiguration = getConfig(chainId);
 
-      Moralis.initialize(appConfiguration.MORALIS_APP_ID);
-      Moralis.serverURL = appConfiguration.MORALIS_SERVER_URL;
+      Moralis.start({
+        serverUrl: appConfiguration.MORALIS_SERVER_URL,
+        appId: appConfiguration.MORALIS_APP_ID,
+      })
       const user = Moralis.User.current();
       setSettingsState((prevSettingsState) => ({
         ...prevSettingsState,

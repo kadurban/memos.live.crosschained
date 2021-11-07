@@ -285,7 +285,7 @@
 
 @keyframes viewer-appear {
   0% {
-    transform: scale(0);
+    transform: scale(.8);
     opacity: 0;
   }
   100% {
@@ -300,7 +300,7 @@
     opacity: 1;
   }
   100% {
-    transform: scale(0);
+    transform: scale(.8);
     opacity: 0;
   }
 }

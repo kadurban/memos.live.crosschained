@@ -35,7 +35,7 @@ export default function UnsupportedChainInfo(props) {
         <h2 style={{ marginBottom: '1rem' }}>Networks that soon will be supported:</h2>
         <div>
           {FUTURE_NETWORKS.map(network => (
-            <span style={{ marginRight: '1rem' }}>
+            <span key={network} style={{ marginRight: '1rem' }}>
               <ChainIcon key={network} width="30px" height="30px" chain={network}/>
             </span>
           ))}

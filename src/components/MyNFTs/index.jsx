@@ -3,7 +3,6 @@ import SettingsContext from "../../SettingsContext";
 import Card from "../Card";
 import AlertMessage from "../AlertMessage";
 import { login } from "../LoginSection";
-import { getSpecsFromHash } from "../../lib/utils";
 import Loader from "../Loader";
 import './index.css';
 import SVG from "../SVG";

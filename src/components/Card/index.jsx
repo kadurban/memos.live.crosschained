@@ -177,7 +177,7 @@ function Card(props) {
             })}
           >
             <div className={`Card-back-actions count-${totalActionTypesCount}`}>
-              <CardIcon onChain={props.onChain}/>
+              <div className="Card-chain"><ChainIcon chain={props.onChain} width="50px" height="50px"/></div>
               {state.cardData.images && state.cardData.images.length > 0 && (
                 <button
                   tabIndex={state.rotated ? 0 : -1}
@@ -286,15 +286,15 @@ function Card(props) {
   );
 }
 
-export function CardIcon({onChain}) {
-  return <>
-    {(onChain === 'rinkeby' || onChain === 'ethereum') && (
-      <div className="Card-chain eth"><ChainIcon chain={onChain} width="50px" height="50px"/></div>
-    )}
-    {(onChain === 'polygon' || onChain === 'mumbai') && (
-      <div className="Card-chain eth"><ChainIcon chain={onChain} width="50px" height="50px"/></div>
-    )}
-  </>
-}
+// export function CardIcon({onChain}) {
+//   return <>
+//     {(onChain === 'rinkeby' || onChain === 'ethereum') && (
+//       <div className="Card-chain eth"><ChainIcon chain={onChain} width="50px" height="50px"/></div>
+//     )}
+//     {(onChain === 'polygon' || onChain === 'mumbai') && (
+//       <div className="Card-chain mum"><ChainIcon chain={onChain} width="50px" height="50px"/></div>
+//     )}
+//   </>
+// }
 
 export default Card;

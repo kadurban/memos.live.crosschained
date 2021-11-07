@@ -48,9 +48,9 @@ function LoginSection() {
   }, []);
 
   return (
-    <div>
+    <div className="LoginSection">
       {!settingsState.user && (
-        <button onClick={() => login(setSettingsState)}>
+        <button className="login" onClick={() => login(setSettingsState)}>
           <SVG wallet/> Connect Wallet
         </button>
       )}

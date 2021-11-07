@@ -37,7 +37,7 @@ function ChainIcon({chain, width = '16px', height = '16px'}) {
           </g>
         </svg>
       )}
-      {(chain === 'bsc') && (
+      {(chain === 'bsc' || chain === 'bsc testnet') && (
         <svg width={width} height={height} fill="#f3ba2f" viewBox="0 0 2500.01 2500">
           <g id="Layer_2" data-name="Layer 2">
             <g id="Layer_1-2" data-name="Layer 1">

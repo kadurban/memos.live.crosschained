@@ -28,8 +28,6 @@ function MainPage(props) {
           chain: network.NETWORK_NAME,
           address: network.MINT_CONTRACT_ADDRESS,
         });
-        console.log('===')
-        console.log(NFTs)
         if (NFTs.result) {
           for (const nft of NFTs.result) {
             nft.onChain = network.NETWORK_NAME

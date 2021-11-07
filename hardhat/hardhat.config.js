@@ -20,12 +20,18 @@ global.task("accounts", "Prints the list of accounts", async (taskArgs, hre) => 
 module.exports = {
   solidity: "0.8.4",
   networks: {
+    polygon: {
+      url: "https://speedy-nodes-nyc.moralis.io/1fc3bfd25dc2f80f13d3363e/polygon/mainnet",
+      accounts: [ key ],
+      gasPrice: 8000000000
+    },
     mumbai: {
-      url: url,
-      accounts: [ key ]
+      url: "https://speedy-nodes-nyc.moralis.io/1fc3bfd25dc2f80f13d3363e/polygon/mumbai",
+      accounts: [ key ],
+      gasPrice: 8000000000
     },
     rinkeby: {
-      url: url,
+      url: "https://speedy-nodes-nyc.moralis.io/1fc3bfd25dc2f80f13d3363e/eth/rinkeby",
       accounts: [ key ]
     }
   }

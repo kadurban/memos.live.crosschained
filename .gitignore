@@ -6,6 +6,7 @@ src_old
 /hardhat/cache
 /hardhat/node_modules
 /hardhat/secret.json
+/hardhat/hardhat.config.js
 
 # testing
 /coverage
