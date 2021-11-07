@@ -7,6 +7,7 @@ src_old
 /hardhat/node_modules
 /hardhat/secret.json
 /hardhat/hardhat.config.js
+/hardhat/@openzeppelin
 
 # testing
 /coverage
