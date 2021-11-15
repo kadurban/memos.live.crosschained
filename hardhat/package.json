@@ -9,8 +9,6 @@
     "hardhat": "^2.6.1"
   },
   "dependencies": {
-    "@openzeppelin/contracts": "^4.3.1",
-    "jimp": "^0.16.1",
-    "moralis": "0.0.59"
+    "@openzeppelin/contracts": "file:@openzeppelin/contracts"
   }
 }
