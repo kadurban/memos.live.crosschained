@@ -16,9 +16,10 @@ contract MemosLiveCommunityPool {
         return address(this).balance;
     }
 
-    function distribute() public {
+    function transferFundsToDistributorContract(address payable receiver) payable external {
         require(contractCreator == msg.sender, 'No no...');
 
-
+        uint256 amount = msg.value;
+        receiver.transfer(amount);
     }
 }

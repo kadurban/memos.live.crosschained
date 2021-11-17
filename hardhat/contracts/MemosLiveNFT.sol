@@ -25,17 +25,19 @@ contract MemosLiveNFT is ERC721URIStorage {
         string memory nft_ticker,
         ERC20 utility_token_address,
         uint256 initial_cost,
-        uint256 cost_step
-    ) ERC721("memos.live - Community-driven memorable NFT collection", "MEMOSLIVE_TEST") {
+        uint256 cost_step,
+        address community_pool
+    ) ERC721(nft_name, nft_ticker) {
         contractCreator = msg.sender;
         utilityTokenContract = ERC20(utility_token_address);
         initialCost = initial_cost;
         costStep = cost_step;
+        setCommunityPool(community_pool);
     }
 
-    function setCommunityPoolAddress(address pool_address) public returns (address) {
+    function setCommunityPool(address community_pool) public returns (address) {
         require(contractCreator == msg.sender, 'No no...');
-        communityPoolContract = pool_address;
+        communityPoolContract = community_pool;
         return communityPoolContract;
     }
 
@@ -46,7 +48,6 @@ contract MemosLiveNFT is ERC721URIStorage {
     }
 
     function createToken(string memory tokenURI) public returns (uint) {
-        // uint256 currentTokenId = _tokenIds.current();
         uint256 currentNFTCost = getCurrentCost();
 
         require(

@@ -18,11 +18,12 @@ async function main() {
 
   const nftContract = await hre.ethers.getContractFactory("MemosLiveNFT");
   const nftContractDaployed = await nftContract.deploy(
-    "memos.live - Community-driven memorable NFT collection", // utility name
-    "MEMOSLIVE_TEST", // utility ticker
+    "memos.live - Community-driven memorable NFT collection", // Collection name
+    "MEMOSLIVE_TEST", // Collection ticker
     utilityContractAddress,
     "1000000000000000000", // initial_cost => 1 * 1000000000000000000 ===> 10^18 ===> 1
-    "1000000000000000" // cost_step => 5 * 1000000000000000 ===> 10^15 ===> 0,005
+    "1000000000000000", // cost_step => 5 * 1000000000000000 ===> 10^15 ===> 0,005
+    communityPoolAddress
   );
   const nftAddress = nftContractDaployed.address;
 
