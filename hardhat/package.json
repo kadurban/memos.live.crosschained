@@ -9,6 +9,7 @@
     "hardhat": "^2.6.1"
   },
   "dependencies": {
-    "@openzeppelin/contracts": "file:@openzeppelin/contracts"
+    "@openzeppelin/contracts": "file:@openzeppelin/contracts",
+    "@openzeppelin/test-helpers": "^0.5.15"
   }
 }

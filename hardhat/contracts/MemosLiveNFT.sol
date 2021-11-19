@@ -52,10 +52,10 @@ contract MemosLiveNFT is ERC721URIStorage {
 
         require(
             utilityTokenContract.balanceOf(msg.sender) > currentNFTCost,
-            "You need to have a utility tokens on your balance for minting,"
+            "You need to have enough utility tokens on your balance for minting,"
         );
 
-        utilityTokenContract.transfer(communityPoolContract, currentNFTCost);
+        utilityTokenContract.transferFrom(msg.sender, communityPoolContract, currentNFTCost);
 
         _tokenIds.increment();
         uint256 newTokenId = _tokenIds.current();
