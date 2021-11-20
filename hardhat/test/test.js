@@ -3,15 +3,9 @@ const { BN, expectEvent, expectRevert } = require('@openzeppelin/test-helpers');
 const { ethers } = require("hardhat");
 
 let utilityContract;
-let communityPoolContract;
 let nftContract;
 
 let costStep = "10000000000000000";
-
-let utilityContractBalance;
-let communityPoolContractBalance;
-let contractCreatorUtilityBalance;
-let user1UtilityBalance;
 
 describe('memos.live economy tests', function () {
   describe('Contracts deployment', () => {
@@ -20,12 +14,9 @@ describe('memos.live economy tests', function () {
       utilityContract = await utilityContract.deploy('Memos Live Utility', 'MLU_TEST');
       await utilityContract.deployed();
     });
-    it('Deploys Community Pool contract', async () => {
-      communityPoolContract = await ethers.getContractFactory('MemosLiveCommunityPool');
-      communityPoolContract = await communityPoolContract.deploy(utilityContract.address);
-      await communityPoolContract.deployed();
-    });
     it('Deploys NFT contract', async () => {
+      const [,,,,,communityPoolAccount] = await ethers.getSigners();
+
       nftContract = await ethers.getContractFactory('MemosLiveNFT');
       nftContract = await nftContract.deploy(
         'memos.live NFT',
@@ -33,7 +24,7 @@ describe('memos.live economy tests', function () {
         utilityContract.address,
         "1000000000000000000",
         costStep,
-        communityPoolContract.address
+        communityPoolAccount.address
       );
       await nftContract.deployed();
     });
@@ -62,34 +53,30 @@ describe('memos.live economy tests', function () {
         const [
           contractCreator
         ] = await ethers.getSigners();
-        await nftContract.connect(contractCreator).createToken('ipfs://ipfs/QmV2ovxsaA7rCtL1nyrnckioGbQxVdBDs5ZmWVkQrFpJSg');
+        await nftContract.createToken('ipfs://ipfs/QmV2ovxsaA7rCtL1nyrnckioGbQxVdBDs5ZmWVkQrFpJSg');
     });
 
 
     it('Checks that balances of community pool and contract creator are changed after minting of 1 NFT', async () => {
-      const [
-        contractCreator
-      ] = await ethers.getSigners();
+      const [ contractCreator,,,,,communityPoolAccount ] = await ethers.getSigners();
 
-      communityPoolContractBalance = await utilityContract.balanceOf(communityPoolContract.address);
-      contractCreatorUtilityBalance = await utilityContract.balanceOf(contractCreator.address);
+      let contractCreatorUtilityBalance = await utilityContract.balanceOf(contractCreator.address);
+      let communityPoolContractBalance = await utilityContract.balanceOf(communityPoolAccount.address);
 
-      expect(toReadableBalance(communityPoolContractBalance._hex)).to.equal(1);
       expect(toReadableBalance(contractCreatorUtilityBalance._hex)).to.equal(9999);
+      expect(toReadableBalance(communityPoolContractBalance._hex)).to.equal(1);
     });
 
 
     it('Mint 3 more NFT by contract creator and ensure correct current NFT cost, contract creator balance and community pool size', async () => {
-      const [
-        contractCreator
-      ] = await ethers.getSigners();
+      const [ contractCreator,,,,,communityPoolAccount ] = await ethers.getSigners();
       await nftContract.connect(contractCreator).createToken('ipfs://ipfs/QmV2ovxsaA7rCtL1nyrnckioGbQxVdBDs5ZmWVkQrFpJSg');
       await nftContract.connect(contractCreator).createToken('ipfs://ipfs/QmV2ovxsaA7rCtL1nyrnckioGbQxVdBDs5ZmWVkQrFpJSg');
       await nftContract.connect(contractCreator).createToken('ipfs://ipfs/QmV2ovxsaA7rCtL1nyrnckioGbQxVdBDs5ZmWVkQrFpJSg');
 
       const currentNftCost = await nftContract.getCurrentCost();
-      communityPoolContractBalance = await utilityContract.balanceOf(communityPoolContract.address);
-      contractCreatorUtilityBalance = await utilityContract.balanceOf(contractCreator.address);
+      let communityPoolContractBalance = await utilityContract.balanceOf(communityPoolAccount.address);
+      let contractCreatorUtilityBalance = await utilityContract.balanceOf(contractCreator.address);
 
       expect(toReadableBalance(currentNftCost._hex)).to.equal(1.04);
       expect(toReadableBalance(communityPoolContractBalance._hex)).to.equal(4.06);
@@ -109,14 +96,7 @@ describe('memos.live economy tests', function () {
 
 
     it('Checks that user1 cant mint token because ha dont have ecought MLU (and not approved)', async () => {
-      const [
-        contractCreator,
-        user1
-      ] = await ethers.getSigners();
-
-      // await expectRevert.unspecified(
-      //   nftContract.balanceOf(user1.address)
-      // );
+      const [ , user1 ] = await ethers.getSigners();
 
       await expectRevert.unspecified(
         nftContract.connect(user1).createToken('ipfs://ipfs/QmV2ovxsaA7rCtL1nyrnckioGbQxVdBDs5ZmWVkQrFpJSg')
@@ -124,109 +104,40 @@ describe('memos.live economy tests', function () {
     });
 
 
-    it('Mint 1000 NFTs and ensure correct current NFT cost, contract creator balance and community pool size', async () => {
-      const [
-        contractCreator,
-        user1
-      ] = await ethers.getSigners();
+    it('Mint more NFTs and ensure correct current NFT cost, contract creator balance and community pool size', async () => {
+      const [ contractCreator,,,,, communityPoolAccount ] = await ethers.getSigners();
 
       const testApprovalValue = BigInt(50000 * 1000000000000000000);
       await utilityContract.approve(nftContract.address, testApprovalValue);
 
-      for (let i = 0; i < 1000; i++) {
+      for (let i = 0; i < 10; i++) {
         await nftContract.connect(contractCreator).createToken('ipfs://ipfs/QmV2ovxsaA7rCtL1nyrnckioGbQxVdBDs5ZmWVkQrFpJSg');
       }
 
       const currentCost = await nftContract.getCurrentCost();
+      let communityPoolContractBalance = await utilityContract.balanceOf(communityPoolAccount.address);
+      let contractCreatorUtilityBalance = await utilityContract.balanceOf(contractCreator.address);
 
-      communityPoolContractBalance = await utilityContract.balanceOf(communityPoolContract.address);
-      contractCreatorUtilityBalance = await utilityContract.balanceOf(contractCreator.address);
-
-      console.log(toReadableBalance(communityPoolContractBalance._hex))
-      console.log(toReadableBalance(contractCreatorUtilityBalance._hex))
+      expect(toReadableBalance(communityPoolContractBalance._hex)).to.equal(14.91);
+      expect(toReadableBalance(contractCreatorUtilityBalance._hex)).to.equal(9985.09);
+      expect(toReadableBalance(currentCost._hex)).to.equal(1.14);
     });
 
 
-    // it('Ensure that it is not possible to mint NFT if there is not enough MLU tokens', async () => {
-    //   const [
-    //     contractCreator,
-    //     user1
-    //   ] = await ethers.getSigners();
-    //
-    //   utilityContractBalance = BigInt(await utilityContract.balanceOf(utilityContract.address));
-    //   communityPoolContractBalance = BigInt(await utilityContract.balanceOf(communityPoolContract.address));
-    //   contractCreatorUtilityBalance = BigInt(await utilityContract.balanceOf(contractCreator.address));
-    //   user1UtilityBalance = BigInt(await utilityContract.balanceOf(user1.address));
-    //
-    //   console.log('utilityContractBalance        ', utilityContractBalance)
-    //   console.log('communityPoolContractBalance  ', communityPoolContractBalance)
-    //   console.log('contractCreatorUtilityBalance ', contractCreatorUtilityBalance)
-    //   console.log('user1UtilityBalance           ', user1UtilityBalance)
-    //
-    //   await utilityContract.approve(nftContract.address, BigInt(5 * 1000000000000000000));
-    //   await nftContract.connect(contractCreator).createToken('ipfs://ipfs/QmV2ovxsaA7rCtL1nyrnckioGbQxVdBDs5ZmWVkQrFpJSg');
-    //   await nftContract.connect(contractCreator).createToken('ipfs://ipfs/QmV2ovxsaA7rCtL1nyrnckioGbQxVdBDs5ZmWVkQrFpJSg');
-    //   await nftContract.connect(contractCreator).createToken('ipfs://ipfs/QmV2ovxsaA7rCtL1nyrnckioGbQxVdBDs5ZmWVkQrFpJSg');
-    //
-    //
-    //
-    //   utilityContractBalance = BigInt(await utilityContract.balanceOf(utilityContract.address));
-    //   communityPoolContractBalance = BigInt(await utilityContract.balanceOf(communityPoolContract.address));
-    //   contractCreatorUtilityBalance = BigInt(await utilityContract.balanceOf(contractCreator.address));
-    //   user1UtilityBalance = BigInt(await utilityContract.balanceOf(user1.address));
-    //
-    //   console.log('utilityContractBalance        ', utilityContractBalance)
-    //   console.log('communityPoolContractBalance  ', communityPoolContractBalance)
-    //   console.log('contractCreatorUtilityBalance ', contractCreatorUtilityBalance)
-    //   console.log('user1UtilityBalance           ', user1UtilityBalance)
-    //
-    // });
+    it('Checks that community pool address can be changed by "contract creator" only', async () => {
+      const [ contractCreator, user1,,,, communityPoolAccount, communityPool2Account ] = await ethers.getSigners();
 
+      let currentPoolAddress = await nftContract.getCommunityPoolAddress();
+      await expectRevert.unspecified(
+        nftContract.connect(user1).setCommunityPoolAddress(communityPool2Account.address)
+      );
+      expect(currentPoolAddress).to.equal(communityPoolAccount.address);
 
-
-
-
-
-
-
-
-    // it('Check that balance increasing after single NFT creation', async () => {
-    //
-    // });
-
-
-    // it('Should distribute all MLU tokens to the NFT holders according quantity of NFTs on balance', async () => {
-    //
-    // });
-
-
-    //   it('Checks that community pool address can be changed by "contract creator" only', async () => {
-    //
-    //   });
-
-
-    //   it('Should not allow to mint NFT if not enough MLU tokens to pay', async () => {
-    //
-    //   });
-
-
-    //   it('Should pay "current cost" in MLU token and mint an NFT and check if it really minted', async () => {
-    //
-    //   });
-
-
-    //   it('Should increase "current cost" after single NFT creation', async () => {
-    //
-    //   });
-
-
-    //   it('Mint 1000 MEMOS tokens and ensure current cost is correct', async () => {
-    //
-    //   });
-
-
-    //   it('Checks that NFT is successfully burned by owner', async () => {});
-    //   it('Check that setCommunityPool is only can be called by "contract creator" and not anyone else', async () => {});
+      await nftContract.connect(contractCreator).setCommunityPoolAddress(communityPool2Account.address);
+      currentPoolAddress = await nftContract.getCommunityPoolAddress();
+      expect(currentPoolAddress).to.not.equal(communityPoolAccount.address);
+      expect(currentPoolAddress).to.equal(communityPool2Account.address);
+    });
   });
 })
 

@@ -11,10 +11,10 @@ contract MemosLiveNFT is ERC721URIStorage {
     using Counters for Counters.Counter;
     Counters.Counter private _tokenIds;
 
-    // event CardMinted(address indexed);
+    event NFTMinted(uint256 tokenId);
 
     address private contractCreator;
-    address public communityPoolContract;
+    address public communityPoolAddress;
 
     ERC20 private utilityTokenContract;
     uint256 private initialCost;
@@ -26,19 +26,23 @@ contract MemosLiveNFT is ERC721URIStorage {
         ERC20 utility_token_address,
         uint256 initial_cost,
         uint256 cost_step,
-        address community_pool
+        address community_pool_address
     ) ERC721(nft_name, nft_ticker) {
         contractCreator = msg.sender;
         utilityTokenContract = ERC20(utility_token_address);
         initialCost = initial_cost;
         costStep = cost_step;
-        setCommunityPool(community_pool);
+        setCommunityPoolAddress(community_pool_address);
     }
 
-    function setCommunityPool(address community_pool) public returns (address) {
+    function setCommunityPoolAddress(address new_community_pool_address) public returns (address) {
         require(contractCreator == msg.sender, 'No no...');
-        communityPoolContract = community_pool;
-        return communityPoolContract;
+        communityPoolAddress = new_community_pool_address;
+        return communityPoolAddress;
+    }
+
+    function getCommunityPoolAddress() public view returns (address) {
+        return communityPoolAddress;
     }
 
     function getCurrentCost() public view returns (uint) {
@@ -55,7 +59,7 @@ contract MemosLiveNFT is ERC721URIStorage {
             "You need to have enough utility tokens on your balance for minting,"
         );
 
-        utilityTokenContract.transferFrom(msg.sender, communityPoolContract, currentNFTCost);
+        utilityTokenContract.transferFrom(msg.sender, communityPoolAddress, currentNFTCost);
 
         _tokenIds.increment();
         uint256 newTokenId = _tokenIds.current();
@@ -63,7 +67,7 @@ contract MemosLiveNFT is ERC721URIStorage {
         _mint(msg.sender, newTokenId);
         _setTokenURI(newTokenId, tokenURI);
 
-        // emit CardMinted(newTokenId);
+         emit NFTMinted(newTokenId);
 
         return newTokenId;
     }
