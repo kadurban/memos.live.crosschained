@@ -130,3 +130,7 @@ export function balanceHumanReadable(stringValue) {
   const zeros = 1000000000000000000n;
   return Number(window.BigInt(stringValue) * 100n / zeros) / 100;
 }
+
+export function numberToBigInt(numberValue) {
+  return window.BigInt(numberValue) * 1000000000000000000n;
+}

@@ -141,6 +141,7 @@ describe('memos.live economy tests', function () {
   });
 
   // is it possible to spend tokens by someone else but not owner
+  // ensure that noone can mint new utility, even contract creator
 })
 
 function toReadableBalance(hex) {

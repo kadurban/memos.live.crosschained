@@ -4,7 +4,7 @@ import { balanceHumanReadable } from '../../lib/utils';
 import {toast} from "react-toastify";
 import SVG from "../SVG";
 import {ChainIcon} from "../ChainIcon";
-import {NavLink} from "react-router-dom";
+// import {NavLink} from "react-router-dom";
 import Jazzicon, {jsNumberForAddress} from "react-jazzicon";
 import './index.css';
 
@@ -17,21 +17,24 @@ export async function login(setSettingsState, cb) {
   setSettingsState((prevSettingsState) => ({ ...prevSettingsState, user }));
   toast.info('Wallet connected');
   if (cb) cb();
+  window.location.reload();
 }
 
 export async function getUtilityBalance(settingsState, setSettingsState) {
-  const balances = await window.Moralis.Web3API.account.getTokenBalances({
-    chain: settingsState.appConfiguration.NETWORK_NAME,
-    address: settingsState.user.attributes.ethAddress
-  });
-  const utilityBalance = balances.find(token => {
-    const patt = new RegExp(settingsState.appConfiguration.UTILITY_CONTRACT_ADDRESS, 'i');
-    return patt.test(token.token_address);
-  });
-  setSettingsState((prevSettingsState) => ({
-    ...prevSettingsState,
-    utilityBalance
-  }));
+  if (settingsState.user) {
+    const balances = await window.Moralis.Web3API.account.getTokenBalances({
+      chain: settingsState.appConfiguration.NETWORK_NAME,
+      address: settingsState.user.attributes.ethAddress
+    });
+    const utilityBalance = balances.find(token => {
+      const patt = new RegExp(settingsState.appConfiguration.UTILITY_CONTRACT_ADDRESS, 'i');
+      return patt.test(token.token_address);
+    });
+    setSettingsState((prevSettingsState) => ({
+      ...prevSettingsState,
+      utilityBalance
+    }));
+  }
 }
 
 function LoginSection() {
@@ -91,9 +94,11 @@ function LoginSection() {
             <Jazzicon diameter={40} seed={jsNumberForAddress(settingsState.user.attributes.ethAddress)}/>
           </button>
           <div className="Dropdown-content" ref={dropdownContent}>
-            {settingsState.utilityBalance && <div className="mlu-balance">
-              {settingsState.utilityBalance.symbol} balance: <b>{balanceHumanReadable(settingsState.utilityBalance.balance)}</b>
-            </div>}
+            {settingsState.utilityBalance && (
+              <div className="mlu-balance">
+                {settingsState.utilityBalance.symbol} balance: <b>{balanceHumanReadable(settingsState.utilityBalance.balance)}</b>
+              </div>
+            )}
             <button onClick={() => logout()}>
               Logout
             </button>

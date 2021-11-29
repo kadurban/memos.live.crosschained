@@ -9,7 +9,9 @@ import AlertMessage from '../AlertMessage';
 import Card from '../Card';
 import Loader from '../Loader';
 import SVG from "../SVG";
-import {playSound, randomInteger, balanceHumanReadable} from "../../lib/utils";
+import Modal from "../Modal";
+import Portal from "../../Portal";
+import {playSound, randomInteger, balanceHumanReadable, numberToBigInt} from "../../lib/utils";
 import TextareaAutosize from 'react-textarea-autosize';
 import html2canvas from 'html2canvas';
 import Moralis from "moralis";
@@ -262,20 +264,23 @@ function Wizard() {
       settingsState.appConfiguration.MINT_CONTRACT_ADDRESS
     );
     const result = await nftContract.methods.getCurrentCost().call();
-    setCurrentNftCost(balanceHumanReadable(result));
+    setCurrentNftCost(result);
   }
 
   const getAllowance = async () => {
-    const web3 = new Moralis.Web3(window.ethereum);
-    const utilityContract = new web3.eth.Contract(
-      window.utilityContractAbi,
-      settingsState.appConfiguration.UTILITY_CONTRACT_ADDRESS
-    );
-    const result = await utilityContract.methods.allowance(
-      settingsState.user.attributes.ethAddress,
-      settingsState.appConfiguration.MINT_CONTRACT_ADDRESS
-    ).call();
-    setCurrentAllowance(balanceHumanReadable(result));
+    if (settingsState.user) {
+      const web3 = new Moralis.Web3(window.ethereum);
+      const utilityContract = new web3.eth.Contract(
+        window.utilityContractAbi,
+        settingsState.appConfiguration.UTILITY_CONTRACT_ADDRESS
+      );
+      const result = await utilityContract.methods.allowance(
+        settingsState.user.attributes.ethAddress,
+        settingsState.appConfiguration.MINT_CONTRACT_ADDRESS
+      ).call();
+
+      setCurrentAllowance(result);
+    }
   }
 
   const createToken = async (tokenURI) => {
@@ -505,35 +510,59 @@ function Wizard() {
               <div>
                 MLU tokens approved for smart contract:
                 <br/>
-                <b>{currentAllowance} MLU</b>
+                <b>{balanceHumanReadable(currentAllowance)} MLU</b>
               </div>
 
               <br/>
 
-              {currentAllowance >= currentNftCost ? (
-                <button className="btn-action btn-big" type="submit" disabled={!settingsState.user}>
+              <>
+                <button
+                  className=""
+                  type="button"
+                  onClick={() => setApprovalInputShown(true)}
+                  disabled={!settingsState.utilityBalance}
+                >
+                  Allow smart contract to use your MLU tokens
+                </button>
+
+                <br/>
+                <br/>
+
+                <button
+                  className="btn-action btn-big"
+                  type="submit"
+                  disabled={!settingsState.user || !settingsState.utilityBalance}
+                >
                   <SVG bolt/> Mint on {settingsState.appConfiguration.NETWORK_NAME}
                 </button>
-              ) : (
-                !approvalInputShown ? (
-                  <button className="btn-action btn-big" type="button" onClick={() => setApprovalInputShown(true)}>
-                    Allow smart contract to use your MLU tokens
-                  </button>
-                ) : (
-                  <div>
-                    <input
-                      name='name'
-                      type="text"
-                      required
-                      maxLength={75}
-                      placeholder="e.g.: Bitcoin was Launched"
-                      value={previewName}
-                      onChange={(e) => setPreviewName(e.target.value)}
-                      onBlur={renderCanvas}
+
+                <br/>
+
+                <button
+                  className="btn-action"
+                  type="button"
+                  onClick={() => alert('Join discord to get MLU tokens.')}
+                >
+                  Buy MLU tokens <br/>(own it to be able to mint)
+                </button>
+              </>
+
+              <Portal>
+                {approvalInputShown && (
+                  <Modal
+                    show={approvalInputShown}
+                    onCancel={() => setApprovalInputShown(false)}
+                  >
+                    <ApprovalForm
+                      currentNftCost={currentNftCost}
+                      settingsState={settingsState}
+                      setApprovalInputShown={setApprovalInputShown}
+                      getAllowance={getAllowance}
+                      getCurrentNftCost={getCurrentNftCost}
                     />
-                  </div>
-                )
-              )}
+                  </Modal>
+                )}
+              </Portal>
             </fieldset>
 `
             <fieldset>
@@ -606,6 +635,53 @@ function Wizard() {
         </form>
       </div>
     </>
+  );
+}
+
+function ApprovalForm(props) {
+  const [approvalTxPending, setApprovalTxPending] = useState(false);
+  const [utilityBalanceValue, setUtilityBalanceValue] = useState(balanceHumanReadable(props.settingsState.utilityBalance.balance));
+
+  const sendApprovalTx = async () => {
+    setApprovalTxPending(true);
+    const web3 = new Moralis.Web3(window.ethereum);
+    const utilityContract = new web3.eth.Contract(
+      window.utilityContractAbi,
+      props.settingsState.appConfiguration.UTILITY_CONTRACT_ADDRESS
+    );
+
+    await utilityContract.methods.approve(
+      props.settingsState.appConfiguration.MINT_CONTRACT_ADDRESS,
+      numberToBigInt(utilityBalanceValue)
+    ).send({
+      from: props.settingsState.user.attributes.ethAddress
+    });
+
+    setApprovalTxPending(false);
+    props.setApprovalInputShown(false);
+    props.getAllowance();
+    props.getCurrentNftCost();
+  }
+
+  return (
+    <div className="Form">
+      {approvalTxPending && <Loader isOverlay text="Approval in progress..."/>}
+      <label>
+        MLU amount to approve:
+      </label>
+      <input
+        type="number"
+        min={props.currentNftCost}
+        max={balanceHumanReadable(props.settingsState.utilityBalance.balance)}
+        value={utilityBalanceValue}
+        onChange={(e) => setUtilityBalanceValue(e.target.value)}
+        step="0.001"
+      />
+      <br/>
+      <button type="button" className="btn-action btn-big" onClick={() => sendApprovalTx()}>
+        Confirm
+      </button>
+    </div>
   );
 }
 
