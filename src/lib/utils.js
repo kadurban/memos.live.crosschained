@@ -125,3 +125,8 @@ export function applyTheme() {
   const isDarkTheme = localStorage.getItem('isDarkTheme');
   document.body.classList[isDarkTheme ? 'add' : 'remove']('dark');
 }
+
+export function balanceHumanReadable(stringValue) {
+  const zeros = 1000000000000000000n;
+  return Number(window.BigInt(stringValue) * 100n / zeros) / 100;
+}

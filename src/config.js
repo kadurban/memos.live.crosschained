@@ -21,29 +21,39 @@ const EXTENSIONS = {
 
 function getConfig(chainId) {
   const rinkebySystemName = 'rinkeby';
-  const rinkebyContractAddress = '0x688c8D54dd3cC27a13627DF5F0683C39c2e5A7A3';
+  const rinkebyNftContractAddress = '0xf1ea15BbF4E86BF2dbc9727b30Cb75799a69E013';
+  const rinkebyUtilityContractAddress = '0xB5fAbac4C4134c28D44420848F9f39292Bb7658B';
 
   const mumbaiSystemName = 'mumbai';
-  const mumbaiContractAddress = '0x684b6559E1CCec6E51ac34b95a984d5eC62bb5Ef';
+  const mumbaiContractAddress = '0xf1ea15BbF4E86BF2dbc9727b30Cb75799a69E013';
+  const mumbaiUtilityContractAddress = '0xB5fAbac4C4134c28D44420848F9f39292Bb7658B';
 
   const bscTestnetSystemName = 'bsc testnet';
-  const bscTestnetContractAddress = '0x021C643724fe02a130cb4bA3e551af13991C760D';
+  const bscTestnetContractAddress = '0xf1ea15BbF4E86BF2dbc9727b30Cb75799a69E013';
+  const bscUtilityContractAddress = '0xB5fAbac4C4134c28D44420848F9f39292Bb7658B';
 
   let CONFIG = {
     MAX_FILE_SIZE: 50000000,
     EXTENSIONS,
-    AVAILABLE_NETWORKS: [{
-      NETWORK_NAME: rinkebySystemName,
-      MINT_CONTRACT_ADDRESS: rinkebyContractAddress
-    }, {
-      NETWORK_NAME: bscTestnetSystemName,
-      MINT_CONTRACT_ADDRESS: bscTestnetContractAddress
-    }/*, {
-      NETWORK_NAME: mumbaiSystemName,
-      MINT_CONTRACT_ADDRESS: mumbaiContractAddress
-    }*/],
-    FUTURE_NETWORKS: ['mumbai', 'solana', 'polygon', 'avalanche']
+    AVAILABLE_NETWORKS: [],
+    FUTURE_NETWORKS: ['solana', 'polygon', 'avalanche']
   };
+
+  if (/http:\/\/localhost:3000/.test(window.location.href) || /test.memos.live/.test(window.location.href)) {
+    CONFIG.AVAILABLE_NETWORKS = [...CONFIG.AVAILABLE_NETWORKS, {
+      NETWORK_NAME: bscTestnetSystemName,
+      UTILITY_CONTRACT_ADDRESS: bscUtilityContractAddress,
+      MINT_CONTRACT_ADDRESS: bscTestnetContractAddress
+    }, {
+      NETWORK_NAME: mumbaiSystemName,
+      UTILITY_CONTRACT_ADDRESS: mumbaiUtilityContractAddress,
+      MINT_CONTRACT_ADDRESS: mumbaiContractAddress
+    }, {
+      NETWORK_NAME: rinkebySystemName,
+      UTILITY_CONTRACT_ADDRESS: rinkebyUtilityContractAddress,
+      MINT_CONTRACT_ADDRESS: rinkebyNftContractAddress
+    }]
+  }
 
   // TESTNETS
   if (chainId === 4) { // rinkeby
@@ -51,7 +61,8 @@ function getConfig(chainId) {
       ...CONFIG,
       IS_MAINNET: false,
       NETWORK_NAME: rinkebySystemName,
-      MINT_CONTRACT_ADDRESS: rinkebyContractAddress,
+      UTILITY_CONTRACT_ADDRESS: rinkebyUtilityContractAddress,
+      MINT_CONTRACT_ADDRESS: rinkebyNftContractAddress,
     }
   }
   if (chainId === 97) { // bsc testnet
@@ -59,17 +70,19 @@ function getConfig(chainId) {
       ...CONFIG,
       IS_MAINNET: false,
       NETWORK_NAME: bscTestnetSystemName,
+      UTILITY_CONTRACT_ADDRESS: bscUtilityContractAddress,
       MINT_CONTRACT_ADDRESS: bscTestnetContractAddress
     }
   }
-  // if (chainId === 80001) { // mumbai
-  //   CONFIG = {
-  //     ...CONFIG,
-  //     IS_MAINNET: false,
-  //     NETWORK_NAME: mumbaiSystemName,
-  //     MINT_CONTRACT_ADDRESS: mumbaiContractAddress
-  //   }
-  // }
+  if (chainId === 80001) { // mumbai
+    CONFIG = {
+      ...CONFIG,
+      IS_MAINNET: false,
+      NETWORK_NAME: mumbaiSystemName,
+      UTILITY_CONTRACT_ADDRESS: mumbaiUtilityContractAddress,
+      MINT_CONTRACT_ADDRESS: mumbaiContractAddress
+    }
+  }
 
   // MAINNETS
   if (chainId === 1) { // ethereum

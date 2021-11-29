@@ -1,39 +1,25 @@
 const hre = require("hardhat");
 
 async function main() {
-  // Hardhat always runs the compile task when running scripts with its command
-  // line interface.
-  //
-  // If this script is run directly using `node` you may want to call compile
-  // manually to make sure everything is compiled
-  // await hre.run('compile');
-
   const utilityContract = await hre.ethers.getContractFactory("MemosLiveUtility");
   const utilityContractDaployed = await utilityContract.deploy("Memos Live Utility", "MLU_TEST");
   const utilityContractAddress = utilityContractDaployed.address;
 
-  const communityPoolContract = await hre.ethers.getContractFactory("MemosLiveCommunityPool");
-  const communityPoolContractDaployed = await communityPoolContract.deploy(utilityContractAddress);
-  const communityPoolAddress = communityPoolContractDaployed.address;
-
   const nftContract = await hre.ethers.getContractFactory("MemosLiveNFT");
   const nftContractDaployed = await nftContract.deploy(
-    "memos.live - Community-driven memorable NFT collection", // Collection name
-    "MEMOSLIVE_TEST", // Collection ticker
+    'memos.live - Community-driven memorable NFT collection', // Collection name
+    'MEMOSLIVE_TEST', // Collection ticker
     utilityContractAddress,
-    "1000000000000000000", // initial_cost => 1 * 1000000000000000000 ===> 10^18 ===> 1
-    "1000000000000000", // cost_step => 5 * 1000000000000000 ===> 10^15 ===> 0,005
-    communityPoolAddress
+    '1000000000000000000', // initial_cost => 1 * 1000000000000000000 ===> 10^18 ===> 1
+    '1000000000000000', // cost_step => 5 * 1000000000000000 ===> 10^15 ===> 0,005
+    '0x61c86C86B3a81F722aFa91F969A441B38C9eA7fE'
   );
   const nftAddress = nftContractDaployed.address;
 
   await utilityContractDaployed.deployed();
-  await communityPoolContractDaployed.deployed();
   await nftContractDaployed.deployed();
 
-  console.log("                                TESTNET");
   console.log(`const utilityContractAddress = '${utilityContractAddress}';`);
-  console.log(`const communityPoolAddress =   '${communityPoolAddress}';`);
   console.log(`const nftAddress =             '${nftAddress}';`);
 }
 

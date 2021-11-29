@@ -73,6 +73,10 @@
   padding-bottom: .4rem;
 }
 
+.Dropdown-content .mlu-balance {
+  white-space: nowrap;
+}
+
 
 
 

@@ -9,7 +9,7 @@ import AlertMessage from '../AlertMessage';
 import Card from '../Card';
 import Loader from '../Loader';
 import SVG from "../SVG";
-import {playSound, randomInteger, debounce, sleep} from "../../lib/utils";
+import {playSound, randomInteger, balanceHumanReadable} from "../../lib/utils";
 import TextareaAutosize from 'react-textarea-autosize';
 import html2canvas from 'html2canvas';
 import Moralis from "moralis";
@@ -54,7 +54,10 @@ function Wizard() {
   const [previewTime, setPreviewTime] = useState('');
   const [previewImage, setPreviewImage] = useState(null);
   const [attachedFileTypes, setAttachedFileTypes] = useState([]);
-  // const [royalty, setRoyalty] = useState(3);
+  const [currentNftCost, setCurrentNftCost] = useState('');
+  const [currentAllowance, setCurrentAllowance] = useState('');
+  const [approvalInputShown, setApprovalInputShown] = useState(false);
+
   const isValidDate = moment(previewDate, "YYYY-MM-DD HH:mm:ss").isValid();
   const exactTime = previewDate.length > 0 && previewTime.length > 0;
 
@@ -84,7 +87,11 @@ function Wizard() {
     }
   };
 
-  useEffect(renderCanvas, []);
+  useEffect(() => {
+    renderCanvas();
+    getCurrentNftCost();
+    getAllowance();
+  }, []);
 
   const specifyTime = watch('specifyTime');
 
@@ -245,25 +252,46 @@ function Wizard() {
     document.body.style.overflow = 'auto';
 
     await createToken(tokenURI);
-    window.location.reload();
+    // window.location.reload();
+  }
+
+  const getCurrentNftCost = async () => {
+    const web3 = new Moralis.Web3(window.ethereum);
+    const nftContract = new web3.eth.Contract(
+      window.nftContractAbi,
+      settingsState.appConfiguration.MINT_CONTRACT_ADDRESS
+    );
+    const result = await nftContract.methods.getCurrentCost().call();
+    setCurrentNftCost(balanceHumanReadable(result));
+  }
+
+  const getAllowance = async () => {
+    const web3 = new Moralis.Web3(window.ethereum);
+    const utilityContract = new web3.eth.Contract(
+      window.utilityContractAbi,
+      settingsState.appConfiguration.UTILITY_CONTRACT_ADDRESS
+    );
+    const result = await utilityContract.methods.allowance(
+      settingsState.user.attributes.ethAddress,
+      settingsState.appConfiguration.MINT_CONTRACT_ADDRESS
+    ).call();
+    setCurrentAllowance(balanceHumanReadable(result));
   }
 
   const createToken = async (tokenURI) => {
     const web3 = new Moralis.Web3(window.ethereum);
 
-    const encodedFunction = web3.eth.abi.encodeFunctionCall({
-      name: 'createToken',
-      type: 'function',
-      inputs: [{
-        type: 'string',
-        name: 'tokenURI'
-      }]
-    }, [tokenURI]);
-
     const txParams = {
       to: settingsState.appConfiguration.MINT_CONTRACT_ADDRESS,
       from: window.ethereum.selectedAddress,
-      data: encodedFunction
+      data: web3.eth.abi.encodeFunctionCall({
+        name: 'createToken',
+        type: 'function',
+        inputs: [{
+          type: 'string',
+          name: 'tokenURI'
+        }]
+      }, [tokenURI])
     };
 
     return await window.ethereum.request({
@@ -307,7 +335,7 @@ function Wizard() {
         >
           <>
             <fieldset style={{maxWidth: '260px'}}>
-              <legend>General info</legend>
+              <legend>Card data</legend>
 
               <div className="Form-group">
                 <label className="Form-label">Name</label>
@@ -322,80 +350,7 @@ function Wizard() {
                   onBlur={renderCanvas}
                 />
                 <ValidationMessage message="Required field"/>
-
               </div>
-
-              <div className="Form-group">
-                <label className="Form-label">
-                  Date <SVG hintIcon
-                            dataHint="You can specify the date and time which is your new NFT will be associated."/>
-                </label>
-                <input
-                  type="date"
-                  name="eventDate"
-                  required
-                  value={previewDate}
-                  onChange={(e) => setPreviewDate(e.target.value)}
-                  onBlur={(e) => {
-                    setPreviewDate(e.target.value);
-                    renderCanvas();
-                  }}
-                />
-                <ValidationMessage message="Required field"/>
-              </div>
-
-              <div className="Form-group Form-group-set-time">
-                <div className="Form-group-set-time-switch">
-
-                  <label className="form-switch" htmlFor="specifyTime">
-                    <input
-                      className="switch"
-                      type="checkbox"
-                      id="specifyTime"
-                      {...register("specifyTime")}
-                    />{' '}
-                    <i/>
-                    Exact time
-                  </label>
-                </div>
-                {specifyTime && (
-                  <div className="Form-group-set-time-input">
-                    <input
-                      type="time"
-                      {...register("previewTime")}
-                      value={previewTime}
-                      onChange={(e) => {
-                        setPreviewTime(e.target.value);
-                        renderCanvas();
-                      }}
-                    />
-                    <ValidationMessage message="Required field"/>
-                  </div>
-                )}
-              </div>
-
-              <div className="Form-group">
-                <label className="Form-label">
-                  Description <small style={{marginLeft: '.2rem', color: '#afafaf'}}>(text or markdown)</small>
-                </label>
-                <TextareaAutosize
-                  cacheMeasurements
-                  required
-                  placeholder="e.g.: Bitcoin is a cryptocurrency invented in 2008 by an unknown person or group of people..."
-                  name="description"
-                  value={description}
-                  onChange={(e) => setDescription(e.target.value)}
-                  onBlur={(e) => {
-                    setDescription(e.target.value);
-                    renderCanvas();
-                  }}
-                />
-                <ValidationMessage message="Required field"/>
-              </div>
-            </fieldset>
-
-            <fieldset style={{maxWidth: '260px'}}>
-              <legend>Files</legend>
 
               <div className="Form-group">
                 {imageFile && (
@@ -428,6 +383,72 @@ function Wizard() {
                     <ValidationMessage message="Required field"/>
                   </>}
                 </div>
+              </div>
+
+              <div className="Form-group">
+                <label className="Form-label">
+                  Description <small style={{marginLeft: '.2rem', color: '#afafaf'}}>(text or markdown)</small>
+                </label>
+                <TextareaAutosize
+                  cacheMeasurements
+                  required
+                  placeholder="e.g.: Bitcoin is a cryptocurrency invented in 2008 by an unknown person or group of people..."
+                  name="description"
+                  value={description}
+                  onChange={(e) => setDescription(e.target.value)}
+                  onBlur={(e) => {
+                    setDescription(e.target.value);
+                    renderCanvas();
+                  }}
+                />
+                <ValidationMessage message="Required field"/>
+              </div>
+
+              <div className="Form-group">
+                <label className="Form-label">
+                  Date <SVG hintIcon
+                            dataHint="You can specify the date and time which is your new NFT will be associated."/>
+                </label>
+                <input
+                  type="date"
+                  name="eventDate"
+                  value={previewDate}
+                  onChange={(e) => setPreviewDate(e.target.value)}
+                  onBlur={(e) => {
+                    setPreviewDate(e.target.value);
+                    renderCanvas();
+                  }}
+                />
+              </div>
+
+              <div className="Form-group Form-group-set-time">
+                <div className="Form-group-set-time-switch">
+
+                  <label className="form-switch" htmlFor="specifyTime">
+                    <input
+                      className="switch"
+                      type="checkbox"
+                      id="specifyTime"
+                      {...register("specifyTime")}
+                    />{' '}
+                    <i/>
+                    Exact time
+                  </label>
+                </div>
+                {specifyTime && (
+                  <div className="Form-group-set-time-input">
+                    <input
+                      type="time"
+                      {...register("previewTime")}
+                      value={previewTime}
+                      onChange={(e) => {
+                        setPreviewTime(e.target.value);
+                        renderCanvas();
+                      }}
+                    />
+                    <ValidationMessage message="Required field"/>
+                  </div>
+                )}
               </div>
 
               <div className="Form-group">
@@ -468,22 +489,53 @@ function Wizard() {
                   </button>
                 </div>
               </div>
-
-              <div className="important-note">
-                IMPORTANT!
-                <br/>
-                This is an exact view of the NFT at major marketplaces like OpenSea or Rarible.
-                <br/>
-                Make sure that everything looks nice and well. You will not have chance to change it after minting.
-                <br/>
-                If it looks weird than try to use latest version of your broser.
-              </div>
-
-              <button className="btn-action btn-big" type="submit" disabled={!settingsState.user}>
-                <SVG bolt/> Mint on {settingsState.appConfiguration.NETWORK_NAME}
-              </button>
             </fieldset>
 
+            <fieldset style={{maxWidth: '260px'}}>
+              <legend>Minting Info</legend>
+
+              <div>
+                Current cost for minting:
+                <br/>
+                <b>{currentNftCost} MLU</b>
+              </div>
+
+              <br/>
+
+              <div>
+                MLU tokens approved for smart contract:
+                <br/>
+                <b>{currentAllowance} MLU</b>
+              </div>
+
+              <br/>
+
+              {currentAllowance >= currentNftCost ? (
+                <button className="btn-action btn-big" type="submit" disabled={!settingsState.user}>
+                  <SVG bolt/> Mint on {settingsState.appConfiguration.NETWORK_NAME}
+                </button>
+              ) : (
+                !approvalInputShown ? (
+                  <button className="btn-action btn-big" type="button" onClick={() => setApprovalInputShown(true)}>
+                    Allow smart contract to use your MLU tokens
+                  </button>
+                ) : (
+                  <div>
+                    <input
+                      name='name'
+                      type="text"
+                      required
+                      maxLength={75}
+                      placeholder="e.g.: Bitcoin was Launched"
+                      value={previewName}
+                      onChange={(e) => setPreviewName(e.target.value)}
+                      onBlur={renderCanvas}
+                    />
+                  </div>
+                )
+              )}
+            </fieldset>
+`
             <fieldset>
               <legend>Cover for Major Marketplaces</legend>
 
@@ -496,7 +548,7 @@ function Wizard() {
                   <div className="layer-10"/>
                   <div className="layer-20"/>
                   <div className="layer-21">
-                    <img src={logoLight} alt="memos.live"/>memos.live - Memorable Interactive NFTs
+                    <img src={logoLight} alt="memos.live"/>memos.live - Community-driven Collection. The more cards from the collection you own, the more you earn at the time of creating each next card
                   </div>
 
                   {['Picture', 'Text', 'Video'].map((item, index) => (
@@ -536,6 +588,19 @@ function Wizard() {
                   </div>
                 </div>
               </div>
+
+              <br/>
+
+              <div className="important-note">
+                IMPORTANT!
+                <br/>
+                This is an exact view of the NFT at major marketplaces like OpenSea or Rarible.
+                <br/>
+                Make sure that everything looks nice and well. You will not have chance to change it after minting.
+                <br/>
+                If it looks weird (buggy) than try to use latest version of your broser.
+              </div>
+
             </fieldset>
           </>
         </form>

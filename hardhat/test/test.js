@@ -63,7 +63,7 @@ describe('memos.live economy tests', function () {
       let contractCreatorUtilityBalance = await utilityContract.balanceOf(contractCreator.address);
       let communityPoolContractBalance = await utilityContract.balanceOf(communityPoolAccount.address);
 
-      expect(toReadableBalance(contractCreatorUtilityBalance._hex)).to.equal(9999);
+      expect(toReadableBalance(contractCreatorUtilityBalance._hex)).to.equal(111110);
       expect(toReadableBalance(communityPoolContractBalance._hex)).to.equal(1);
     });
 
@@ -80,7 +80,7 @@ describe('memos.live economy tests', function () {
 
       expect(toReadableBalance(currentNftCost._hex)).to.equal(1.04);
       expect(toReadableBalance(communityPoolContractBalance._hex)).to.equal(4.06);
-      expect(toReadableBalance(contractCreatorUtilityBalance._hex)).to.equal(9995.94);
+      expect(toReadableBalance(contractCreatorUtilityBalance._hex)).to.equal(111106.94);
     });
 
 
@@ -119,7 +119,7 @@ describe('memos.live economy tests', function () {
       let contractCreatorUtilityBalance = await utilityContract.balanceOf(contractCreator.address);
 
       expect(toReadableBalance(communityPoolContractBalance._hex)).to.equal(14.91);
-      expect(toReadableBalance(contractCreatorUtilityBalance._hex)).to.equal(9985.09);
+      expect(toReadableBalance(contractCreatorUtilityBalance._hex)).to.equal(111096.09);
       expect(toReadableBalance(currentCost._hex)).to.equal(1.14);
     });
 
@@ -139,6 +139,8 @@ describe('memos.live economy tests', function () {
       expect(currentPoolAddress).to.equal(communityPool2Account.address);
     });
   });
+
+  // is it possible to spend tokens by someone else but not owner
 })
 
 function toReadableBalance(hex) {

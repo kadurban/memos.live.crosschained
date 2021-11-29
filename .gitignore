@@ -5,8 +5,10 @@ src_old
 /hardhat/artifacts
 /hardhat/cache
 /hardhat/node_modules
-/hardhat/secret.json
-/hardhat/hardhat.config.js
+/hardhat/secret-testnets.json
+/hardhat/secret-testnets.json
+/hardhat/secret-mainnets.json
+/hardhat/hardhat.testnets.config.js
 /hardhat/@openzeppelin
 
 # testing
