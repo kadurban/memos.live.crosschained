@@ -11,7 +11,7 @@ import Loader from '../Loader';
 import SVG from "../SVG";
 import Modal from "../Modal";
 import Portal from "../../Portal";
-import {playSound, randomInteger, balanceHumanReadable, numberToBigInt} from "../../lib/utils";
+import {playSound, randomInteger, fromWei, toWei} from "../../lib/utils";
 import TextareaAutosize from 'react-textarea-autosize';
 import html2canvas from 'html2canvas';
 import Moralis from "moralis";
@@ -173,6 +173,10 @@ function Wizard() {
 
   const onFormSubmit = async (e) => {
     e.preventDefault();
+    if (Number(currentNftCost) > Number(currentAllowance)) {
+      window.alert(`Not enough MLU tokens allowed. Approve more tokens (at least ${currentNftCost} MLU) to be used by smart contract`);
+      return false;
+    }
     if (!window.confirm('Is everything ready and you want to mint new NFT?')) return false;
 
     let data = {};
@@ -264,7 +268,7 @@ function Wizard() {
       settingsState.appConfiguration.MINT_CONTRACT_ADDRESS
     );
     const result = await nftContract.methods.getCurrentCost().call();
-    setCurrentNftCost(result);
+    setCurrentNftCost(fromWei(result));
   }
 
   const getAllowance = async () => {
@@ -278,8 +282,7 @@ function Wizard() {
         settingsState.user.attributes.ethAddress,
         settingsState.appConfiguration.MINT_CONTRACT_ADDRESS
       ).call();
-
-      setCurrentAllowance(result);
+      setCurrentAllowance(fromWei(result));
     }
   }
 
@@ -299,10 +302,14 @@ function Wizard() {
       }, [tokenURI])
     };
 
-    return await window.ethereum.request({
+    await window.ethereum.request({
       method: 'eth_sendTransaction',
       params: [txParams]
     });
+    toast.info("Card was succesfully minted. You will be able to see it in your collection in several minutes");
+    setTimeout(() => {
+      window.location.reload();
+    }, 2000);
   };
 
   if (tokenURI) {
@@ -500,7 +507,7 @@ function Wizard() {
               <legend>Minting Info</legend>
 
               <div>
-                Current cost for minting:
+                Current cost of card minting:
                 <br/>
                 <b>{currentNftCost} MLU</b>
               </div>
@@ -510,7 +517,7 @@ function Wizard() {
               <div>
                 MLU tokens approved for smart contract:
                 <br/>
-                <b>{balanceHumanReadable(currentAllowance)} MLU</b>
+                <b>{currentAllowance} MLU</b>
               </div>
 
               <br/>
@@ -539,7 +546,7 @@ function Wizard() {
                 <br/>
 
                 <button
-                  className="btn-action"
+                  className="btn-big"
                   type="button"
                   onClick={() => alert('Join discord to get MLU tokens.')}
                 >
@@ -554,8 +561,8 @@ function Wizard() {
                     onCancel={() => setApprovalInputShown(false)}
                   >
                     <ApprovalForm
-                      currentNftCost={currentNftCost}
                       settingsState={settingsState}
+                      currentNftCost={currentNftCost}
                       setApprovalInputShown={setApprovalInputShown}
                       getAllowance={getAllowance}
                       getCurrentNftCost={getCurrentNftCost}
@@ -640,7 +647,7 @@ function Wizard() {
 
 function ApprovalForm(props) {
   const [approvalTxPending, setApprovalTxPending] = useState(false);
-  const [utilityBalanceValue, setUtilityBalanceValue] = useState(balanceHumanReadable(props.settingsState.utilityBalance.balance));
+  const [utilityApproveValue, setUtilityApproveValue] = useState(fromWei(props.settingsState.utilityBalance.balance));
 
   const sendApprovalTx = async () => {
     setApprovalTxPending(true);
@@ -652,7 +659,7 @@ function ApprovalForm(props) {
 
     await utilityContract.methods.approve(
       props.settingsState.appConfiguration.MINT_CONTRACT_ADDRESS,
-      numberToBigInt(utilityBalanceValue)
+      toWei(utilityApproveValue)
     ).send({
       from: props.settingsState.user.attributes.ethAddress
     });
@@ -672,9 +679,9 @@ function ApprovalForm(props) {
       <input
         type="number"
         min={props.currentNftCost}
-        max={balanceHumanReadable(props.settingsState.utilityBalance.balance)}
-        value={utilityBalanceValue}
-        onChange={(e) => setUtilityBalanceValue(e.target.value)}
+        max={fromWei(props.settingsState.utilityBalance.balance)}
+        value={utilityApproveValue}
+        onChange={(e) => setUtilityApproveValue(e.target.value)}
         step="0.001"
       />
       <br/>

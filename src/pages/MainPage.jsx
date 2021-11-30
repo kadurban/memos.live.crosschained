@@ -38,6 +38,8 @@ function MainPage(props) {
     }
     console.log('Recent NFTs:');
     console.log(retrievedNfts);
+    console.log('===')
+    console.log(retrievedNfts)
     return shuffle(retrievedNfts);
   }
 

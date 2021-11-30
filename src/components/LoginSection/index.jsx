@@ -1,6 +1,6 @@
 import React, {useContext, useEffect, useRef} from 'react';
 import SettingsContext from '../../SettingsContext';
-import { balanceHumanReadable } from '../../lib/utils';
+import { fromWei, toWei } from '../../lib/utils';
 import {toast} from "react-toastify";
 import SVG from "../SVG";
 import {ChainIcon} from "../ChainIcon";
@@ -96,7 +96,7 @@ function LoginSection() {
           <div className="Dropdown-content" ref={dropdownContent}>
             {settingsState.utilityBalance && (
               <div className="mlu-balance">
-                {settingsState.utilityBalance.symbol} balance: <b>{balanceHumanReadable(settingsState.utilityBalance.balance)}</b>
+                {settingsState.utilityBalance.symbol} balance: <b>{fromWei(settingsState.utilityBalance.balance)}</b>
               </div>
             )}
             <button onClick={() => logout()}>

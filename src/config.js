@@ -36,11 +36,11 @@ function getConfig(chainId) {
     MAX_FILE_SIZE: 50000000,
     EXTENSIONS,
     AVAILABLE_NETWORKS: [],
-    FUTURE_NETWORKS: ['solana', 'polygon', 'avalanche']
+    FUTURE_NETWORKS: ['avalanche', 'solana', 'polygon']
   };
 
   if (/http:\/\/localhost:3000/.test(window.location.href) || /test.memos.live/.test(window.location.href)) {
-    CONFIG.AVAILABLE_NETWORKS = [...CONFIG.AVAILABLE_NETWORKS, {
+    CONFIG.AVAILABLE_NETWORKS = [...CONFIG.AVAILABLE_NETWORKS, /*{
       NETWORK_NAME: bscTestnetSystemName,
       UTILITY_CONTRACT_ADDRESS: bscUtilityContractAddress,
       MINT_CONTRACT_ADDRESS: bscTestnetContractAddress
@@ -48,7 +48,7 @@ function getConfig(chainId) {
       NETWORK_NAME: mumbaiSystemName,
       UTILITY_CONTRACT_ADDRESS: mumbaiUtilityContractAddress,
       MINT_CONTRACT_ADDRESS: mumbaiContractAddress
-    }, {
+    }, */{
       NETWORK_NAME: rinkebySystemName,
       UTILITY_CONTRACT_ADDRESS: rinkebyUtilityContractAddress,
       MINT_CONTRACT_ADDRESS: rinkebyNftContractAddress

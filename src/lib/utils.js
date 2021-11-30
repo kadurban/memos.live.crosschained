@@ -1,4 +1,5 @@
 import { Howl } from 'howler';
+import Moralis from "moralis";
 
 const cardFlip1Sound = new Howl({ src: ['https://memoslive-assets.s3-ap-southeast-1.amazonaws.com/cardFlip1.mp3'], volume: 0.5 });
 const cardFlip2Sound = new Howl({ src: [`https://memoslive-assets.s3-ap-southeast-1.amazonaws.com/cardFlip2.mp3`], volume: 0.5 });
@@ -126,11 +127,21 @@ export function applyTheme() {
   document.body.classList[isDarkTheme ? 'add' : 'remove']('dark');
 }
 
-export function balanceHumanReadable(stringValue) {
-  const zeros = 1000000000000000000n;
-  return Number(window.BigInt(stringValue) * 100n / zeros) / 100;
+export function toWei(string) {
+  const web3 = new Moralis.Web3(window.ethereum);
+  return web3.utils.toWei(string, 'ether');
 }
 
-export function numberToBigInt(numberValue) {
-  return window.BigInt(numberValue) * 1000000000000000000n;
+export function fromWei(string) {
+  const web3 = new Moralis.Web3(window.ethereum);
+  return web3.utils.fromWei(string, 'ether');
 }
+
+// export function balanceHumanReadable(stringValue) {
+//   const zeros = 1000000000000000000n;
+//   return Number(window.BigInt(stringValue) * 100n / zeros) / 100;
+// }
+//
+// export function numberToBigInt(numberValue) {
+//   return window.BigInt(numberValue) * 1000000000000000000n;
+// }
