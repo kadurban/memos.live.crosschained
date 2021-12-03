@@ -10,7 +10,7 @@ import Loader from '../../components/Loader';
 import SettingsContext from '../../SettingsContext';
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import ErrorBoundary from '../ErrorBoundary';
-import {getConfig} from "../../config";
+import { getConfig } from "../../config";
 import TopBar from '../TopBar'
 import Menu from '../Menu'
 import 'swiper/swiper-bundle.css';
@@ -34,7 +34,10 @@ function App() {
       const web3 = window.ethereum && window.ethereum.on ? new Moralis.Web3(window.ethereum) : null;
       let chainId = null
 
+      alert('=====')
+      alert(await web3.eth.net.getId())
       if (web3) chainId = await web3.eth.net.getId();
+
       if (!web3) chainId = 1;
       const appConfiguration = getConfig(chainId);
 
