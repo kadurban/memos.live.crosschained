@@ -39,7 +39,6 @@ function getConfig(chainId) {
     FUTURE_NETWORKS: ['avalanche', 'solana', 'polygon']
   };
 
-  alert(/192.168.1.5/.test(window.location.href))
   if (/192.168.1.5/.test(window.location.href) || /http:\/\/localhost:3000/.test(window.location.href) || /test.memos.live/.test(window.location.href)) {
     CONFIG.AVAILABLE_NETWORKS = [...CONFIG.AVAILABLE_NETWORKS, /*{
       NETWORK_NAME: rinkebySystemName,
