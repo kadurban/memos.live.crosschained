@@ -5,7 +5,7 @@ const { ethers } = require("hardhat");
 let utilityContract;
 let nftContract;
 
-let costStep = "10000000000000000";
+let costStep = "1000000000000000";
 
 describe('memos.live economy tests', function () {
   describe('Contracts deployment', () => {
@@ -32,9 +32,9 @@ describe('memos.live economy tests', function () {
 
 
   describe('Economy functions', () => {
-    it('Checks that "current cost" for NFT is equals to 1000000000000000000', async () => {
+    it('Checks that "current cost" for NFT is equals to 1.0', async () => {
       const currentCost = await nftContract.getCurrentCost();
-      expect(toReadableBalance(currentCost._hex)).to.equal(1);
+      expect(toReadableBalance(currentCost._hex)).to.equal('1.0');
     });
 
 
@@ -63,8 +63,8 @@ describe('memos.live economy tests', function () {
       let contractCreatorUtilityBalance = await utilityContract.balanceOf(contractCreator.address);
       let communityPoolContractBalance = await utilityContract.balanceOf(communityPoolAccount.address);
 
-      expect(toReadableBalance(contractCreatorUtilityBalance._hex)).to.equal(111110);
-      expect(toReadableBalance(communityPoolContractBalance._hex)).to.equal(1);
+      expect(toReadableBalance(contractCreatorUtilityBalance._hex)).to.equal('1111110.0');
+      expect(toReadableBalance(communityPoolContractBalance._hex)).to.equal('1.0');
     });
 
 
@@ -78,9 +78,9 @@ describe('memos.live economy tests', function () {
       let communityPoolContractBalance = await utilityContract.balanceOf(communityPoolAccount.address);
       let contractCreatorUtilityBalance = await utilityContract.balanceOf(contractCreator.address);
 
-      expect(toReadableBalance(currentNftCost._hex)).to.equal(1.04);
-      expect(toReadableBalance(communityPoolContractBalance._hex)).to.equal(4.06);
-      expect(toReadableBalance(contractCreatorUtilityBalance._hex)).to.equal(111106.94);
+      expect(toReadableBalance(currentNftCost._hex)).to.equal('1.004');
+      expect(toReadableBalance(communityPoolContractBalance._hex)).to.equal('4.006');
+      expect(toReadableBalance(contractCreatorUtilityBalance._hex)).to.equal('1111106.994');
     });
 
 
@@ -118,10 +118,70 @@ describe('memos.live economy tests', function () {
       let communityPoolContractBalance = await utilityContract.balanceOf(communityPoolAccount.address);
       let contractCreatorUtilityBalance = await utilityContract.balanceOf(contractCreator.address);
 
-      expect(toReadableBalance(communityPoolContractBalance._hex)).to.equal(14.91);
-      expect(toReadableBalance(contractCreatorUtilityBalance._hex)).to.equal(111096.09);
-      expect(toReadableBalance(currentCost._hex)).to.equal(1.14);
+      expect(toReadableBalance(communityPoolContractBalance._hex)).to.equal('14.091');
+      expect(toReadableBalance(contractCreatorUtilityBalance._hex)).to.equal('1111096.909');
+      expect(toReadableBalance(currentCost._hex)).to.equal('1.014');
     });
+
+    // it('-----------------------------', async () => {
+    //   const [ contractCreator,,,,, communityPoolAccount ] = await ethers.getSigners();
+    //
+    //   const testApprovalValue = BigInt(50000 * 1000000000000000000);
+    //   await utilityContract.approve(nftContract.address, testApprovalValue);
+    //
+    //   for (let i = 0; i < 200; i++) {
+    //     await nftContract.connect(contractCreator).createToken('ipfs://ipfs/QmV2ovxsaA7rCtL1nyrnckioGbQxVdBDs5ZmWVkQrFpJSg');
+    //   }
+    // });
+    // it('-----------------------------', async () => {
+    //   const [ contractCreator,,,,, communityPoolAccount ] = await ethers.getSigners();
+    //
+    //   const testApprovalValue = BigInt(50000 * 1000000000000000000);
+    //   await utilityContract.approve(nftContract.address, testApprovalValue);
+    //
+    //   for (let i = 0; i < 200; i++) {
+    //     await nftContract.connect(contractCreator).createToken('ipfs://ipfs/QmV2ovxsaA7rCtL1nyrnckioGbQxVdBDs5ZmWVkQrFpJSg');
+    //   }
+    // });
+    // it('-----------------------------', async () => {
+    //   const [ contractCreator,,,,, communityPoolAccount ] = await ethers.getSigners();
+    //
+    //   const testApprovalValue = BigInt(50000 * 1000000000000000000);
+    //   await utilityContract.approve(nftContract.address, testApprovalValue);
+    //
+    //   for (let i = 0; i < 200; i++) {
+    //     await nftContract.connect(contractCreator).createToken('ipfs://ipfs/QmV2ovxsaA7rCtL1nyrnckioGbQxVdBDs5ZmWVkQrFpJSg');
+    //   }
+    // });
+    // it('-----------------------------', async () => {
+    //   const [ contractCreator,,,,, communityPoolAccount ] = await ethers.getSigners();
+    //
+    //   const testApprovalValue = BigInt(50000 * 1000000000000000000);
+    //   await utilityContract.approve(nftContract.address, testApprovalValue);
+    //
+    //   for (let i = 0; i < 200; i++) {
+    //     await nftContract.connect(contractCreator).createToken('ipfs://ipfs/QmV2ovxsaA7rCtL1nyrnckioGbQxVdBDs5ZmWVkQrFpJSg');
+    //   }
+    // });
+    // it('-----------------------------', async () => {
+    //   const [ contractCreator,,,,, communityPoolAccount ] = await ethers.getSigners();
+    //
+    //   const testApprovalValue = BigInt(50000 * 1000000000000000000);
+    //   await utilityContract.approve(nftContract.address, testApprovalValue);
+    //
+    //   for (let i = 0; i < 186; i++) {
+    //     await nftContract.connect(contractCreator).createToken('ipfs://ipfs/QmV2ovxsaA7rCtL1nyrnckioGbQxVdBDs5ZmWVkQrFpJSg');
+    //   }
+    //
+    //   const currentCost = await nftContract.getCurrentCost();
+    //   let communityPoolContractBalance = await utilityContract.balanceOf(communityPoolAccount.address);
+    //   let contractCreatorUtilityBalance = await utilityContract.balanceOf(contractCreator.address);
+    //
+    //   console.log('=============')
+    //   console.log(toReadableBalance(currentCost._hex))
+    //   console.log(toReadableBalance(communityPoolContractBalance._hex))
+    //   console.log(toReadableBalance(contractCreatorUtilityBalance._hex))
+    // });
 
 
     it('Checks that community pool address can be changed by "contract creator" only', async () => {
@@ -145,6 +205,7 @@ describe('memos.live economy tests', function () {
 })
 
 function toReadableBalance(hex) {
-  const zeros = 1000000000000000000n;
-  return Number(BigInt(hex) * 100n / zeros) / 100;
+  // const zeros = 1000000000000000000n;
+  // return Number(BigInt(hex) * 100n / zeros) / 100;
+  return ethers.utils.formatUnits(BigInt(hex).toString(), 'ether')
 }

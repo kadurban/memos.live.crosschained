@@ -29,17 +29,17 @@ export default function UnsupportedChainInfo(props) {
             </div>
           ))}
         </div>
-        <br/>
-        <br/>
-        <br/>
-        <h2 style={{ marginBottom: '1rem' }}>Networks that soon will be supported:</h2>
-        <div>
-          {FUTURE_NETWORKS.map(network => (
-            <span key={network} style={{ marginRight: '1rem' }}>
-              <ChainIcon key={network} width="30px" height="30px" chain={network}/>
-            </span>
-          ))}
-        </div>
+        {/*<br/>*/}
+        {/*<br/>*/}
+        {/*<br/>*/}
+        {/*<h2 style={{ marginBottom: '1rem' }}>Networks that soon will be supported:</h2>*/}
+        {/*<div>*/}
+        {/*  {FUTURE_NETWORKS.map(network => (*/}
+        {/*    <span key={network} style={{ marginRight: '1rem' }}>*/}
+        {/*      <ChainIcon key={network} width="30px" height="30px" chain={network}/>*/}
+        {/*    </span>*/}
+        {/*  ))}*/}
+        {/*</div>*/}
         <br/>
       </AlertMessage>
     </div>

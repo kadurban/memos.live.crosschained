@@ -20,17 +20,17 @@ const EXTENSIONS = {
 };
 
 function getConfig(chainId) {
-  const rinkebySystemName = 'rinkeby';
-  const rinkebyNftContractAddress = '0xf1ea15BbF4E86BF2dbc9727b30Cb75799a69E013';
-  const rinkebyUtilityContractAddress = '0xB5fAbac4C4134c28D44420848F9f39292Bb7658B';
+  // const rinkebySystemName = 'rinkeby';
+  // const rinkebyUtilityContractAddress = '0x003b6644e9FEaD67790221A39f3EB7C7c1EEbaAA';
+  // const rinkebyNftContractAddress = '0xe8d875f77262161Bc822578cc95C21Bbba33D4A3';
+
+  const fujiSystemName = '0x43113';
+  const fujiUtilityContractAddress = '0x94D4431FFF6486361579922e0C34Be96CA914F39';
+  const fujiNftContractAddress = '0xC9391fB990B6E305b802425D067E1C3156274881';
 
   const mumbaiSystemName = 'mumbai';
-  const mumbaiContractAddress = '0xf1ea15BbF4E86BF2dbc9727b30Cb75799a69E013';
-  const mumbaiUtilityContractAddress = '0xB5fAbac4C4134c28D44420848F9f39292Bb7658B';
-
-  const bscTestnetSystemName = 'bsc testnet';
-  const bscTestnetContractAddress = '0xf1ea15BbF4E86BF2dbc9727b30Cb75799a69E013';
-  const bscUtilityContractAddress = '0xB5fAbac4C4134c28D44420848F9f39292Bb7658B';
+  const mumbaiUtilityContractAddress = '0xa9600001331DF60B1B10fAe1684e1b37BeF98b66';
+  const mumbaiNftContractAddress = '0x576eB2cA9524049c5C94c29F03Ae432121bD46ec';
 
   let CONFIG = {
     MAX_FILE_SIZE: 50000000,
@@ -39,80 +39,81 @@ function getConfig(chainId) {
     FUTURE_NETWORKS: ['avalanche', 'solana', 'polygon']
   };
 
-  if (/http:\/\/localhost:3000/.test(window.location.href) || /test.memos.live/.test(window.location.href)) {
+  alert(/192.168.1.5/.test(window.location.href))
+  if (/192.168.1.5/.test(window.location.href) || /http:\/\/localhost:3000/.test(window.location.href) || /test.memos.live/.test(window.location.href)) {
     CONFIG.AVAILABLE_NETWORKS = [...CONFIG.AVAILABLE_NETWORKS, /*{
-      NETWORK_NAME: bscTestnetSystemName,
-      UTILITY_CONTRACT_ADDRESS: bscUtilityContractAddress,
-      MINT_CONTRACT_ADDRESS: bscTestnetContractAddress
-    }, {
-      NETWORK_NAME: mumbaiSystemName,
-      UTILITY_CONTRACT_ADDRESS: mumbaiUtilityContractAddress,
-      MINT_CONTRACT_ADDRESS: mumbaiContractAddress
-    }, */{
       NETWORK_NAME: rinkebySystemName,
       UTILITY_CONTRACT_ADDRESS: rinkebyUtilityContractAddress,
       MINT_CONTRACT_ADDRESS: rinkebyNftContractAddress
+    }, {
+      NETWORK_NAME: fujiSystemName,
+      UTILITY_CONTRACT_ADDRESS: fujiUtilityContractAddress,
+      MINT_CONTRACT_ADDRESS: fujiNftContractAddress
+    }, */{
+      NETWORK_NAME: mumbaiSystemName,
+      UTILITY_CONTRACT_ADDRESS: mumbaiUtilityContractAddress,
+      MINT_CONTRACT_ADDRESS: mumbaiNftContractAddress
     }]
   }
 
   // TESTNETS
-  if (chainId === 4) { // rinkeby
-    CONFIG = {
-      ...CONFIG,
-      IS_MAINNET: false,
-      NETWORK_NAME: rinkebySystemName,
-      UTILITY_CONTRACT_ADDRESS: rinkebyUtilityContractAddress,
-      MINT_CONTRACT_ADDRESS: rinkebyNftContractAddress,
-    }
-  }
-  if (chainId === 97) { // bsc testnet
-    CONFIG = {
-      ...CONFIG,
-      IS_MAINNET: false,
-      NETWORK_NAME: bscTestnetSystemName,
-      UTILITY_CONTRACT_ADDRESS: bscUtilityContractAddress,
-      MINT_CONTRACT_ADDRESS: bscTestnetContractAddress
-    }
-  }
+  // if (chainId === 4) { // rinkeby
+  //   CONFIG = {
+  //     ...CONFIG,
+  //     IS_MAINNET: false,
+  //     NETWORK_NAME: rinkebySystemName,
+  //     UTILITY_CONTRACT_ADDRESS: rinkebyUtilityContractAddress,
+  //     MINT_CONTRACT_ADDRESS: rinkebyNftContractAddress,
+  //   }
+  // }
+  // if (chainId === 1) { // fuji
+  //   CONFIG = {
+  //     ...CONFIG,
+  //     IS_MAINNET: false,
+  //     NETWORK_NAME: fujiSystemName,
+  //     UTILITY_CONTRACT_ADDRESS: fujiUtilityContractAddress,
+  //     MINT_CONTRACT_ADDRESS: fujiNftContractAddress
+  //   }
+  // }
   if (chainId === 80001) { // mumbai
     CONFIG = {
       ...CONFIG,
       IS_MAINNET: false,
       NETWORK_NAME: mumbaiSystemName,
       UTILITY_CONTRACT_ADDRESS: mumbaiUtilityContractAddress,
-      MINT_CONTRACT_ADDRESS: mumbaiContractAddress
+      MINT_CONTRACT_ADDRESS: mumbaiNftContractAddress
     }
   }
 
   // MAINNETS
-  if (chainId === 1) { // ethereum
-    CONFIG = {
-      ...CONFIG,
-      IS_MAINNET: true,
-      NETWORK_NAME: 'ethereumSystemName',
-      MINT_CONTRACT_ADDRESS: null
-    }
-  }
-  if (chainId === 137) { // polygon
-    CONFIG = {
-      ...CONFIG,
-      IS_MAINNET: true,
-      NETWORK_NAME: 'polygon',
-      MINT_CONTRACT_ADDRESS: null
-    }
-  }
+  // if (chainId === 1) { // ethereum
+  //   CONFIG = {
+  //     ...CONFIG,
+  //     IS_MAINNET: true,
+  //     NETWORK_NAME: 'ethereumSystemName',
+  //     MINT_CONTRACT_ADDRESS: null
+  //   }
+  // }
+  // if (chainId === 137) { // polygon
+  //   CONFIG = {
+  //     ...CONFIG,
+  //     IS_MAINNET: true,
+  //     NETWORK_NAME: 'polygon',
+  //     MINT_CONTRACT_ADDRESS: null
+  //   }
+  // }
 
   if (CONFIG.IS_MAINNET) {
     return {
       ...CONFIG,
-      MORALIS_SERVER_URL: 'https://h5o44mx7eetj.grandmoralis.com:2053/server',
-      MORALIS_APP_ID: 'FNvFOOWbPAhDCJZis6hBetpWO5XnySNepMrw47Ya'
+      MORALIS_SERVER_URL: '',
+      MORALIS_APP_ID: ''
     }
   } else {
     return {
       ...CONFIG,
-      MORALIS_SERVER_URL: 'https://ignyyaf4y67u.usemoralis.com:2053/server',
-      MORALIS_APP_ID: 'f6VsXQZc2RkBRYggsardTgaXf6ase0Bf5sAt9NtR'
+      MORALIS_SERVER_URL: 'https://y5xpun8zyqtc.usemoralis.com:2053/server',
+      MORALIS_APP_ID: 'd1MBBkZMwdoVXYMjZtS0zPj2JfASuuV2FmwZ64Cl'
     }
   }
 }

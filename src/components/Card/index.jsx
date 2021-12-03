@@ -109,7 +109,7 @@ function Card(props) {
   if (state.cardData.audios.length > 0) totalActionTypesCount++;
   if (state.cardData.videos.length > 0) totalActionTypesCount++;
 
-  console.log(`=== Card "${state.cardData.name}" metadata:`, state.cardData);
+  // console.log(`=== Card "${state.cardData.name}" metadata:`/*, state.cardData*/);
 
   return (
     <>

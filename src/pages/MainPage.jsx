@@ -28,8 +28,11 @@ function MainPage(props) {
           chain: network.NETWORK_NAME,
           address: network.MINT_CONTRACT_ADDRESS,
         });
+
         if (NFTs.result) {
           for (const nft of NFTs.result) {
+            console.log('===')
+            console.log(nft)
             nft.onChain = network.NETWORK_NAME
           }
           retrievedNfts = [...retrievedNfts, ...NFTs.result]
@@ -38,8 +41,6 @@ function MainPage(props) {
     }
     console.log('Recent NFTs:');
     console.log(retrievedNfts);
-    console.log('===')
-    console.log(retrievedNfts)
     return shuffle(retrievedNfts);
   }
 

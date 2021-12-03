@@ -271,8 +271,6 @@
 .Card-back-actions .Card-back-action-button {
   position: absolute;
   display: block;
-  /*border: none;*/
-  /*box-shadow: 0 0 20px #cabf90;*/
   flex-direction: row;
   flex-wrap: nowrap;
   justify-content: space-evenly;
@@ -280,7 +278,6 @@
   overflow: hidden;
   border-radius: 100%;
   background-color: transparent;
-  /*border: 1px solid #decb79a8;*/
   padding: 10px;
 }
 

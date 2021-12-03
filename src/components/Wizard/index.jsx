@@ -219,6 +219,7 @@ function Wizard() {
     if (moment(data.eventDate, 'YYYY-MM-DD HH:mm:ss').isValid()) {
       metaData.attributes.push({
         key: 'Date',
+        trait_type: 'Picture',
         value: data.exactTime ? `${data.eventDate} ${data.exactTime}` : data.eventDate
       });
     }
@@ -241,7 +242,8 @@ function Wizard() {
     }
 
     const metaDataStringified = JSON.stringify(metaData);
-    const tokenMetadataFile = new Moralis.File("metadata.json", { base64: btoa(metaDataStringified) });
+    // const tokenMetadataFile = new Moralis.File("metadata.json", { base64: btoa(metaDataStringified) });
+    const tokenMetadataFile = new Moralis.File("metadata.json", { base64: btoa(unescape(encodeURIComponent(metaDataStringified))) });
     await tokenMetadataFile.saveIPFS();
     const tokenURI = tokenMetadataFile.ipfs();
 
