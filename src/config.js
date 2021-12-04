@@ -25,8 +25,8 @@ function getConfig(chainId) {
   const mumbaiNftContractAddress = '0x576eB2cA9524049c5C94c29F03Ae432121bD46ec';
 
   const avalancheSystemName = 'avalanche';
-  const avalancheUtilityContractAddress = '0xa9600001331DF60B1B10fAe1684e1b37BeF98b66';
-  const avalancheNftContractAddress = '0x576eB2cA9524049c5C94c29F03Ae432121bD46ec';
+  const avalancheUtilityContractAddress = '0xDD2cAd4d83Be218FEf16C110AD4f9DA22DdeB82B';
+  const avalancheNftContractAddress = '0x59b96A2b9AdDDE67104dc3EbcD4740c3CA843f41';
 
   let CONFIG = {
     MAX_FILE_SIZE: 50000000,
