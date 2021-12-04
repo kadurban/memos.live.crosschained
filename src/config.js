@@ -71,8 +71,8 @@ function getConfig(chainId) {
   if (CONFIG.IS_MAINNET) {
     return {
       ...CONFIG,
-      MORALIS_SERVER_URL: 'https://sluthrytwo9u.usemoralis.com:2053/server',
-      MORALIS_APP_ID: 'Af2lpGqSuP81zD68XZOR8oN5aS646Bkefn8eMMkI'
+      MORALIS_SERVER_URL: 'https://q1f0z41e8nam.usemoralis.com:2053/server',
+      MORALIS_APP_ID: 'mkyscGJnJsd6qhx8M6OtFSodyKwjpeB0LP3NfWCm'
     }
   } else {
     return {
