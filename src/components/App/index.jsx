@@ -34,8 +34,6 @@ function App() {
       const web3 = window.ethereum && window.ethereum.on ? new Moralis.Web3(window.ethereum) : null;
       let chainId = null
 
-      alert('=====')
-      alert(await web3.eth.net.getId())
       if (web3) chainId = await web3.eth.net.getId();
 
       if (!web3) chainId = 1;
