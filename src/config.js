@@ -76,15 +76,15 @@ function getConfig(chainId) {
     }
   }
 
-  if (chainId === 1) { // avalanche
-    CONFIG = {
-      ...CONFIG,
-      IS_MAINNET: true,
-      NETWORK_NAME: avalancheSystemName,
-      UTILITY_CONTRACT_ADDRESS: avalancheUtilityContractAddress,
-      MINT_CONTRACT_ADDRESS: avalancheNftContractAddress
-    }
-  }
+  // if (chainId === 1) { // avalanche
+  //   CONFIG = {
+  //     ...CONFIG,
+  //     IS_MAINNET: true,
+  //     NETWORK_NAME: avalancheSystemName,
+  //     UTILITY_CONTRACT_ADDRESS: avalancheUtilityContractAddress,
+  //     MINT_CONTRACT_ADDRESS: avalancheNftContractAddress
+  //   }
+  // }
 
   if (CONFIG.IS_MAINNET) {
     return {
