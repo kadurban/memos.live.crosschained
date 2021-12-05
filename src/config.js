@@ -39,11 +39,11 @@ function getConfig(chainId) {
       NETWORK_NAME: polygonSystemName,
       UTILITY_CONTRACT_ADDRESS: polygonUtilityContractAddress,
       MINT_CONTRACT_ADDRESS: polygonNftContractAddress
-    }, {
+    }/*, {
       NETWORK_NAME: avalancheSystemName,
       UTILITY_CONTRACT_ADDRESS: avalancheUtilityContractAddress,
       MINT_CONTRACT_ADDRESS: avalancheNftContractAddress
-    }],
+    }*/],
     FUTURE_NETWORKS: [/*'solana'*/]
   };
 
