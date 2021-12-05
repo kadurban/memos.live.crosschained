@@ -7,7 +7,7 @@ async function main() {
 
   const nftContract = await hre.ethers.getContractFactory("MemosLiveNFT");
   const nftContractDaployed = await nftContract.deploy(
-    'memos.live digital cards', // Collection name
+    'memos.live interactive cards', // Collection name
     'MEMOSLIVE', // Collection ticker
     utilityContractAddress,
     '1000000000000000000', // initial_cost => 1 * 1000000000000000000 ===> 10^18 ===> 1
