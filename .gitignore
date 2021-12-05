@@ -6,8 +6,6 @@ src_old
 /hardhat/cache
 /hardhat/node_modules
 /hardhat/secret.json
-/hardhat/secret.json
-/hardhat/secret-mainnets.json
 /hardhat/hardhat.config.js
 /hardhat/@openzeppelin
 

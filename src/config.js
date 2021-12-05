@@ -24,19 +24,27 @@ function getConfig(chainId) {
   const mumbaiUtilityContractAddress = '0xa9600001331DF60B1B10fAe1684e1b37BeF98b66';
   const mumbaiNftContractAddress = '0x576eB2cA9524049c5C94c29F03Ae432121bD46ec';
 
+  const polygonSystemName = 'polygon';
+  const polygonUtilityContractAddress = '0x50968e0973C1A7EFF5000A2EBFfe1bF09f3e7169';
+  const polygonNftContractAddress = '0x1508d41b315bbA50566c0bFB10a679E218f44C36';
+
   const avalancheSystemName = 'avalanche';
-  const avalancheUtilityContractAddress = '0xDD2cAd4d83Be218FEf16C110AD4f9DA22DdeB82B';
-  const avalancheNftContractAddress = '0x59b96A2b9AdDDE67104dc3EbcD4740c3CA843f41';
+  const avalancheUtilityContractAddress = '0xb94003CDFe2ec1235f8AAd2b905D83181B3EC276';
+  const avalancheNftContractAddress = '0x244566294bb00417f345E68ae5C1d3107a02b01f';
 
   let CONFIG = {
     MAX_FILE_SIZE: 50000000,
     EXTENSIONS,
     AVAILABLE_NETWORKS: [{
+      NETWORK_NAME: polygonSystemName,
+      UTILITY_CONTRACT_ADDRESS: polygonUtilityContractAddress,
+      MINT_CONTRACT_ADDRESS: polygonNftContractAddress
+    }, {
       NETWORK_NAME: avalancheSystemName,
       UTILITY_CONTRACT_ADDRESS: avalancheUtilityContractAddress,
       MINT_CONTRACT_ADDRESS: avalancheNftContractAddress
     }],
-    FUTURE_NETWORKS: ['avalanche', 'solana']
+    FUTURE_NETWORKS: [/*'solana'*/]
   };
 
   if (/192.168.1.5/.test(window.location.href) || /http:\/\/localhost:3000/.test(window.location.href) || /test.memos.live/.test(window.location.href)) {
@@ -58,6 +66,16 @@ function getConfig(chainId) {
   }
 
   // MAINNETS
+  if (chainId === 137) { // polygon
+    CONFIG = {
+      ...CONFIG,
+      IS_MAINNET: true,
+      NETWORK_NAME: polygonSystemName,
+      UTILITY_CONTRACT_ADDRESS: polygonUtilityContractAddress,
+      MINT_CONTRACT_ADDRESS: polygonNftContractAddress
+    }
+  }
+
   if (chainId === 1) { // avalanche
     CONFIG = {
       ...CONFIG,
@@ -71,14 +89,14 @@ function getConfig(chainId) {
   if (CONFIG.IS_MAINNET) {
     return {
       ...CONFIG,
-      MORALIS_SERVER_URL: 'https://q1f0z41e8nam.usemoralis.com:2053/server',
-      MORALIS_APP_ID: 'mkyscGJnJsd6qhx8M6OtFSodyKwjpeB0LP3NfWCm'
+      MORALIS_SERVER_URL: 'https://s1y78pftafiy.usemoralis.com:2053/server',
+      MORALIS_APP_ID: 'B5YAeM54YwgVfhCEb7u1Zd4wye3U1vRLrUMJgPIR'
     }
   } else {
     return {
       ...CONFIG,
-      MORALIS_SERVER_URL: 'https://y5xpun8zyqtc.usemoralis.com:2053/server',
-      MORALIS_APP_ID: 'd1MBBkZMwdoVXYMjZtS0zPj2JfASuuV2FmwZ64Cl'
+      MORALIS_SERVER_URL: 'https://9yqxytt7d1ew.usemoralis.com:2053/server',
+      MORALIS_APP_ID: '9w2T8sfZ5APXJQVVUwVzYep6IiSWCJ63om5Sx1WP'
     }
   }
 }

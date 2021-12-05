@@ -12,7 +12,7 @@ async function main() {
     utilityContractAddress,
     '1000000000000000000', // initial_cost => 1 * 1000000000000000000 ===> 10^18 ===> 1
     '1000000000000000', // cost_step => 5 * 1000000000000000 ===> 10^15 ===> 0,005
-    '0x61c86C86B3a81F722aFa91F969A441B38C9eA7fE' // community pool
+    '0xCc080c4eC62a1AeF1052fA55B4Ea39182f1ee345' // community pool
   );
   const nftAddress = nftContractDaployed.address;
 
