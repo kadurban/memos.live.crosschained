@@ -2,12 +2,12 @@ const hre = require("hardhat");
 
 async function main() {
   const utilityContract = await hre.ethers.getContractFactory("MemosLiveUtility");
-  const utilityContractDaployed = await utilityContract.deploy("Memos Live Utility Token", "MLU");
+  const utilityContractDaployed = await utilityContract.deploy("memos.live Utility", "MLU");
   const utilityContractAddress = utilityContractDaployed.address;
 
   const nftContract = await hre.ethers.getContractFactory("MemosLiveNFT");
   const nftContractDaployed = await nftContract.deploy(
-    'memos.live', // Collection name
+    'memos.live digital cards', // Collection name
     'MEMOSLIVE', // Collection ticker
     utilityContractAddress,
     '1000000000000000000', // initial_cost => 1 * 1000000000000000000 ===> 10^18 ===> 1

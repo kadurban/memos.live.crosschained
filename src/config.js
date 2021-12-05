@@ -25,8 +25,8 @@ function getConfig(chainId) {
   const mumbaiNftContractAddress = '0x576eB2cA9524049c5C94c29F03Ae432121bD46ec';
 
   const polygonSystemName = 'polygon';
-  const polygonUtilityContractAddress = '0x50968e0973C1A7EFF5000A2EBFfe1bF09f3e7169';
-  const polygonNftContractAddress = '0x1508d41b315bbA50566c0bFB10a679E218f44C36';
+  const polygonUtilityContractAddress = '0xc9F394Bddb3EAf1e22d9B1Be5197e86a105e03d5';
+  const polygonNftContractAddress = '0xabf885E5fedF520C543a28af92c597100C1Dc651';
 
   const avalancheSystemName = 'avalanche';
   const avalancheUtilityContractAddress = '0xb94003CDFe2ec1235f8AAd2b905D83181B3EC276';

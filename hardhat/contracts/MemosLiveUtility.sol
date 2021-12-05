@@ -13,7 +13,6 @@ contract MemosLiveUtility is ERC20 {
         string memory token_ticker
     ) ERC20(token_name, token_ticker) {
         contractCreator = msg.sender;
-        _mint(address(this), 87777777 * 10**18);
-        _mint(msg.sender, 1111111 * 10**18); // talented/trusted producers giveaways for marketing and user engagement
+        _mint(msg.sender, 88888888 * 10**18);
     }
 }

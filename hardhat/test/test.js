@@ -63,7 +63,7 @@ describe('memos.live economy tests', function () {
       let contractCreatorUtilityBalance = await utilityContract.balanceOf(contractCreator.address);
       let communityPoolContractBalance = await utilityContract.balanceOf(communityPoolAccount.address);
 
-      expect(toReadableBalance(contractCreatorUtilityBalance._hex)).to.equal('1111110.0');
+      expect(toReadableBalance(contractCreatorUtilityBalance._hex)).to.equal('88888887.0');
       expect(toReadableBalance(communityPoolContractBalance._hex)).to.equal('1.0');
     });
 
@@ -80,7 +80,7 @@ describe('memos.live economy tests', function () {
 
       expect(toReadableBalance(currentNftCost._hex)).to.equal('1.004');
       expect(toReadableBalance(communityPoolContractBalance._hex)).to.equal('4.006');
-      expect(toReadableBalance(contractCreatorUtilityBalance._hex)).to.equal('1111106.994');
+      expect(toReadableBalance(contractCreatorUtilityBalance._hex)).to.equal('88888883.994');
     });
 
 
@@ -119,7 +119,7 @@ describe('memos.live economy tests', function () {
       let contractCreatorUtilityBalance = await utilityContract.balanceOf(contractCreator.address);
 
       expect(toReadableBalance(communityPoolContractBalance._hex)).to.equal('14.091');
-      expect(toReadableBalance(contractCreatorUtilityBalance._hex)).to.equal('1111096.909');
+      expect(toReadableBalance(contractCreatorUtilityBalance._hex)).to.equal('88888873.909');
       expect(toReadableBalance(currentCost._hex)).to.equal('1.014');
     });
 
