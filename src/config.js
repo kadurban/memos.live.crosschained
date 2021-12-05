@@ -44,7 +44,7 @@ function getConfig(chainId) {
       UTILITY_CONTRACT_ADDRESS: avalancheUtilityContractAddress,
       MINT_CONTRACT_ADDRESS: avalancheNftContractAddress
     }*/],
-    FUTURE_NETWORKS: [/*'solana'*/]
+    FUTURE_NETWORKS: ['avalanche', 'solana']
   };
 
   if (/192.168.1.5/.test(window.location.href) || /http:\/\/localhost:3000/.test(window.location.href) || /test.memos.live/.test(window.location.href)) {
