@@ -2,7 +2,7 @@ import React, {useRef, useEffect, useState, useContext} from 'react';
 import { DebounceInput } from 'react-debounce-input';
 import Card from "../components/Card";
 import SettingsContext from "../SettingsContext";
-import ScrollContainer from 'react-indiana-drag-scroll';
+// import ScrollContainer from 'react-indiana-drag-scroll';
 import UnsupportedChainInfo from "../components/UnsupportedChainInfo";
 import Loader from "../components/Loader";
 import { getContentByUrl } from "../lib/utils";
@@ -31,8 +31,6 @@ function MainPage(props) {
 
         if (NFTs.result) {
           for (const nft of NFTs.result) {
-            console.log('===')
-            console.log(nft)
             nft.onChain = network.NETWORK_NAME
           }
           retrievedNfts = [...retrievedNfts, ...NFTs.result]
@@ -59,13 +57,13 @@ function MainPage(props) {
       {!nftListLoaded && <Loader/>}
 
       {nftListLoaded && nftList.length > 0 && (
-        <ScrollContainer className="NftList-cards-holder" ref={scrollableElementRef}>
+        <div className="NftList-cards-holder" /*ref={scrollableElementRef}*/>
           {nftList.map((nft, i) => {
             if (nft.token_uri) {
               return <Card onChain={nft.onChain} tokenUri={nft.token_uri} key={i}/>;
             }
           })}
-        </ScrollContainer>
+        </div>
       )}
     </div>
   );

@@ -85,9 +85,9 @@ function MyNFTs(props) {
           )}
 
           {nftListLoaded && nftList.length > 0 && (
-            <ScrollContainer className="NftList-cards-holder" ref={scrollableElementRef}>
+            <div className="NftList-cards-holder" /*ref={scrollableElementRef}*/>
               {nftList.map((nft, i) => <Card tokenUri={nft.token_uri} key={nft.token_uri + i} onChain={nft.onChain}/>)}
-            </ScrollContainer>
+            </div>
           )}
         </>
       )}

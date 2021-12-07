@@ -177,7 +177,7 @@ function Wizard() {
       window.alert(`Not enough MLU tokens allowed. Approve more tokens (at least ${currentNftCost} MLU) to be used by smart contract`);
       return false;
     }
-    if (!window.confirm('Is everything ready and you want to mint new NFT?')) return false;
+    if (!window.confirm('By creating new card You accepting that NSFW content will be removed from memos.live and funds will not be sent back to the creator.')) return false;
 
     let data = {};
     for (const [key, value] of new FormData(e.target)) {
