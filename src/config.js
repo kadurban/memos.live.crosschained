@@ -36,15 +36,15 @@ function getConfig(chainId) {
     MAX_FILE_SIZE: 50000000,
     EXTENSIONS,
     AVAILABLE_NETWORKS: [{
-      NETWORK_NAME: polygonSystemName,
-      UTILITY_CONTRACT_ADDRESS: polygonUtilityContractAddress,
-      MINT_CONTRACT_ADDRESS: polygonNftContractAddress
-    }/*, {
       NETWORK_NAME: avalancheSystemName,
       UTILITY_CONTRACT_ADDRESS: avalancheUtilityContractAddress,
       MINT_CONTRACT_ADDRESS: avalancheNftContractAddress
-    }*/],
-    FUTURE_NETWORKS: ['avalanche', 'solana']
+    }, {
+      NETWORK_NAME: polygonSystemName,
+      UTILITY_CONTRACT_ADDRESS: polygonUtilityContractAddress,
+      MINT_CONTRACT_ADDRESS: polygonNftContractAddress
+    }],
+    FUTURE_NETWORKS: ['avalanche', 'bsc', 'solana']
   };
 
   if (/192.168.1.5/.test(window.location.href) || /http:\/\/localhost:3000/.test(window.location.href) || /test.memos.live/.test(window.location.href)) {
@@ -76,15 +76,15 @@ function getConfig(chainId) {
     }
   }
 
-  // if (chainId === 1) { // avalanche
-  //   CONFIG = {
-  //     ...CONFIG,
-  //     IS_MAINNET: true,
-  //     NETWORK_NAME: avalancheSystemName,
-  //     UTILITY_CONTRACT_ADDRESS: avalancheUtilityContractAddress,
-  //     MINT_CONTRACT_ADDRESS: avalancheNftContractAddress
-  //   }
-  // }
+  if (chainId === 1) { // avalanche
+    CONFIG = {
+      ...CONFIG,
+      IS_MAINNET: true,
+      NETWORK_NAME: avalancheSystemName,
+      UTILITY_CONTRACT_ADDRESS: '',
+      MINT_CONTRACT_ADDRESS: ''
+    }
+  }
 
   if (CONFIG.IS_MAINNET) {
     return {

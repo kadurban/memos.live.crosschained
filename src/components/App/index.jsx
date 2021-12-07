@@ -65,38 +65,47 @@ function App() {
       <>
         {settingsState.appConfiguration && (
           <>
-            {!settingsState.appConfiguration.MINT_CONTRACT_ADDRESS && <UnsupportedChainInfo/>}
+            <MoralisProvider appId={settingsState.appConfiguration.MORALIS_APP_ID}
+                             serverUrl={settingsState.appConfiguration.MORALIS_SERVER_URL}>
+              <Router>
+                {appLoaded ? (
+                  <div className="App-main-content ">
+                    <TopBar/>
+                    <div className="App-primary-content">
+                      <div className="App-primary-content-inner">
+                        <div className="App-primary-content-left">
+                          <Menu/>
+                        </div>
+                        {/*!settingsState.appConfiguration.MINT_CONTRACT_ADDRESS && <UnsupportedChainInfo/>*/}
+                        <div className="App-primary-content-right">
+                          <Switch>
 
-            {settingsState.appConfiguration.MINT_CONTRACT_ADDRESS && (
-              <MoralisProvider appId={settingsState.appConfiguration.MORALIS_APP_ID}
-                               serverUrl={settingsState.appConfiguration.MORALIS_SERVER_URL}>
-                <Router>
-                  {appLoaded ? (
-                    <div className="App-main-content ">
-                      <TopBar/>
-                      <div className="App-primary-content">
-                        <div className="App-primary-content-inner">
-                          <div className="App-primary-content-left">
-                            <Menu/>
-                          </div>
-                          <div className="App-primary-content-right">
-                            <Switch>
-                              <Route path="/wizard" render={props => <WizardPage {...props} />}/>
-                              <Route path="/my" render={props => <MyCollectionPage {...props} />}/>
-                              <Route path="/profile" render={props => <ProfilePage {...props} />}/>
-                              <Route path="/about" render={props => <AboutPage {...props} />}/>
-                              <Route path="/" render={props => <MainPage {...props} />}/>
-                            </Switch>
-                          </div>
+                            <Route path="/wizard" render={props => {
+                              return (settingsState.appConfiguration.MINT_CONTRACT_ADDRESS && <WizardPage {...props} />) || <UnsupportedChainInfo/>;
+                            }}/>
+
+                            <Route path="/my" render={props => {
+                              return (settingsState.appConfiguration.MINT_CONTRACT_ADDRESS && <MyCollectionPage {...props} />) || <UnsupportedChainInfo/>
+                            }}/>
+
+                            <Route path="/profile" render={props => {
+                              return (settingsState.appConfiguration.MINT_CONTRACT_ADDRESS && <ProfilePage {...props} />) || <UnsupportedChainInfo/>
+                            }}/>
+
+                            <Route path="/about" render={props => <AboutPage {...props} />}/>
+
+                            <Route path="/" render={props => <MainPage {...props} />}/>
+
+                          </Switch>
                         </div>
                       </div>
                     </div>
-                  ) : (
-                    <Loader isOverlay text="Loading..."/>
-                  )}
-                </Router>
-              </MoralisProvider>
-            )}
+                  </div>
+                ) : (
+                  <Loader isOverlay text="Loading..."/>
+                )}
+              </Router>
+            </MoralisProvider>
           </>
         )}
       </>

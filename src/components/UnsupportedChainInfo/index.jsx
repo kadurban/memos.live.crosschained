@@ -10,7 +10,7 @@ export default function UnsupportedChainInfo(props) {
   const { AVAILABLE_NETWORKS, FUTURE_NETWORKS } = settingsState.appConfiguration;
 
   return (
-    <div className="UnsupportedChainInfo">
+    <div className="Page-wrapper UnsupportedChainInfo">
       <br/>
       <br/>
       <br/>
