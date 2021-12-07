@@ -586,7 +586,7 @@ function Wizard() {
                   <div className="layer-10"/>
                   <div className="layer-20"/>
                   <div className="layer-21">
-                    <img src={logoLight} alt="memos.live"/>memos.live - Community-driven Collection. The more cards from the collection you own, the more you earn at the time of creating each next card
+                    <img src={logoLight} alt="memos.live"/>memos.live - Community-driven collectible multimedia cards with collect and earn tokenomic built-in
                   </div>
 
                   {['Picture', 'Text', 'Video'].map((item, index) => (
