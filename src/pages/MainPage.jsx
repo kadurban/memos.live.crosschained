@@ -5,7 +5,7 @@ import SettingsContext from "../SettingsContext";
 // import ScrollContainer from 'react-indiana-drag-scroll';
 import UnsupportedChainInfo from "../components/UnsupportedChainInfo";
 import Loader from "../components/Loader";
-import { getContentByUrl } from "../lib/utils";
+import { uniq } from "../lib/utils";
 import SVG from "../components/SVG";
 
 function shuffle(array) {
@@ -33,7 +33,8 @@ function MainPage(props) {
           for (const nft of NFTs.result) {
             nft.onChain = network.NETWORK_NAME
           }
-          retrievedNfts = [...retrievedNfts, ...NFTs.result]
+          const uniqueNFTs = uniq(NFTs.result, 'token_id'); // Moralix API bug workarounf
+          retrievedNfts = [...retrievedNfts, ...uniqueNFTs]
         }
       } catch (e) {}
     }

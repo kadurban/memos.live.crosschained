@@ -137,11 +137,8 @@ export function fromWei(string) {
   return web3.utils.fromWei(string, 'ether');
 }
 
-// export function balanceHumanReadable(stringValue) {
-//   const zeros = 1000000000000000000n;
-//   return Number(window.BigInt(stringValue) * 100n / zeros) / 100;
-// }
-//
-// export function numberToBigInt(numberValue) {
-//   return window.BigInt(numberValue) * 1000000000000000000n;
-// }
+export function uniq(a, param){
+  return a.filter(function(item, pos, array){
+    return array.map(function(mapItem){ return mapItem[param]; }).indexOf(item[param]) === pos;
+  })
+}

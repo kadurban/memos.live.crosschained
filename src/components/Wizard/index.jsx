@@ -547,13 +547,15 @@ function Wizard() {
 
                 <br/>
 
-                <button
-                  className="btn-big"
+                <a
+                  style={{ textAlign: 'center', display: 'block', textDecoration: 'none' }}
+                  href={`https://quickswap.exchange/#/swap?outputCurrency=${settingsState.appConfiguration.UTILITY_CONTRACT_ADDRESS}`}
+                  target="_blank"
                   type="button"
-                  onClick={() => alert('Join discord to get MLU tokens.')}
                 >
-                  Buy MLU tokens <br/>(own it to be able to mint)
-                </button>
+                  Buy MLU tokens at <br/>
+                  <b>quickswap.exchange</b>
+                </a>
               </>
 
               <Portal>
