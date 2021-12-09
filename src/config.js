@@ -29,8 +29,8 @@ function getConfig(chainId) {
   const polygonNftContractAddress = '0x820Eb6837B36d82B4B6d912a7702C5dA31259Df9';
 
   const avalancheSystemName = 'avalanche';
-  const avalancheUtilityContractAddress = '0xb94003CDFe2ec1235f8AAd2b905D83181B3EC276';
-  const avalancheNftContractAddress = '0x244566294bb00417f345E68ae5C1d3107a02b01f';
+  const avalancheUtilityContractAddress = '0x7966979596ca5cD6176d973275Ec23805BD054aF';
+  const avalancheNftContractAddress = '0x5a881Cfe11C7F54B506b2A75DbdDBcF57f3CDDBF';
 
   let CONFIG = {
     MAX_FILE_SIZE: 50000000,
@@ -44,7 +44,7 @@ function getConfig(chainId) {
       UTILITY_CONTRACT_ADDRESS: polygonUtilityContractAddress,
       MINT_CONTRACT_ADDRESS: polygonNftContractAddress
     }],
-    FUTURE_NETWORKS: ['avalanche', 'bsc', 'solana']
+    FUTURE_NETWORKS: ['bsc', 'solana']
   };
 
   if (/192.168.1.5/.test(window.location.href) || /http:\/\/localhost:3000/.test(window.location.href) || /test.memos.live/.test(window.location.href)) {
@@ -81,8 +81,8 @@ function getConfig(chainId) {
       ...CONFIG,
       IS_MAINNET: true,
       NETWORK_NAME: avalancheSystemName,
-      UTILITY_CONTRACT_ADDRESS: '',
-      MINT_CONTRACT_ADDRESS: ''
+      UTILITY_CONTRACT_ADDRESS: avalancheUtilityContractAddress,
+      MINT_CONTRACT_ADDRESS: avalancheNftContractAddress
     }
   }
 

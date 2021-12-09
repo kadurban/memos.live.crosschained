@@ -547,15 +547,25 @@ function Wizard() {
 
                 <br/>
 
-                <a
-                  style={{ textAlign: 'center', display: 'block', textDecoration: 'none' }}
-                  href={`https://quickswap.exchange/#/swap?outputCurrency=${settingsState.appConfiguration.UTILITY_CONTRACT_ADDRESS}`}
-                  target="_blank"
-                  type="button"
-                >
-                  Buy MLU tokens at <br/>
-                  <b>quickswap.exchange</b>
-                </a>
+                {settingsState.appConfiguration.NETWORK_NAME === 'polygon' && (
+                  <a
+                    style={{ textAlign: 'center', display: 'block', textDecoration: 'none' }}
+                    href={`https://quickswap.exchange/#/swap?outputCurrency=${settingsState.appConfiguration.UTILITY_CONTRACT_ADDRESS}`}
+                    target="_blank"
+                  >
+                    Get MLU tokens at <br/>
+                    <b>quickswap.exchange</b>
+                  </a>
+                )}
+
+                {settingsState.appConfiguration.NETWORK_NAME === 'avalanche' && (
+                  <button
+                    type="button"
+                    onClick={() => alert('You can get free MLU tokens in Discord')}
+                  >
+                    Get MLU tokens
+                  </button>
+                )}
               </>
 
               <Portal>

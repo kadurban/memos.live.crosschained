@@ -1,4 +1,5 @@
 .idea
+.tmp
 src_old
 /node_modules
 /_extra
