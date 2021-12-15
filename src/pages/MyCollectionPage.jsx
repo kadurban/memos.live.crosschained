@@ -3,7 +3,7 @@ import MyNFTs from '../components/MyNFTs'
 
 function MyCollectionPage(props) {
   return (
-    <div className="Page-wrapper main">
+    <div className="Page-wrapper">
       {/*<h1>My Collection</h1>*/}
       <MyNFTs/>
     </div>

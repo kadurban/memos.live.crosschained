@@ -5,6 +5,7 @@ import SettingsContext from "../SettingsContext";
 // import ScrollContainer from 'react-indiana-drag-scroll';
 import UnsupportedChainInfo from "../components/UnsupportedChainInfo";
 import Loader from "../components/Loader";
+import GridLayout from "../components/GridLayout";
 import { uniq } from "../lib/utils";
 import SVG from "../components/SVG";
 
@@ -16,7 +17,7 @@ function MainPage(props) {
   const { settingsState, setSettingsState } = useContext(SettingsContext);
   const [ nftListLoaded, setNftListLoadedStatus ] = useState(false);
   const [ nftList, setNftList ] = useState([]);
-  const scrollableElementRef = useRef(null);
+  // const scrollableElementRef = useRef(null);
 
   async function getCollectionsCrosschain() {
     const { AVAILABLE_NETWORKS } = settingsState.appConfiguration;
@@ -49,7 +50,7 @@ function MainPage(props) {
   }, []);
 
   return (
-    <div className="Page-wrapper main">
+    <div className="Page-wrapper">
       <h1>
         Recent
         <SearchForm/>
@@ -57,15 +58,17 @@ function MainPage(props) {
 
       {!nftListLoaded && <Loader/>}
 
-      {nftListLoaded && nftList.length > 0 && (
-        <div className="NftList-cards-holder" /*ref={scrollableElementRef}*/>
-          {nftList.map((nft, i) => {
-            if (nft.token_uri) {
-              return <Card onChain={nft.onChain} tokenUri={nft.token_uri} key={i}/>;
-            }
-          })}
-        </div>
-      )}
+      {nftListLoaded && nftList.length > 0 && <GridLayout nftList={nftList}/>}
+
+      {/*{nftListLoaded && nftList.length > 0 && (*/}
+      {/*  <div className="NftList-cards-holder">*/}
+      {/*    {nftList.map((nft, i) => {*/}
+      {/*      if (nft.token_uri) {*/}
+      {/*        return <Card onChain={nft.onChain} tokenUri={nft.token_uri} key={i}/>;*/}
+      {/*      }*/}
+      {/*    })}*/}
+      {/*  </div>*/}
+      {/*)}*/}
     </div>
   );
 }

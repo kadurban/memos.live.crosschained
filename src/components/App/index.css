@@ -3,7 +3,7 @@
   flex-flow: column;
   align-items: flex-start;
   height: 100vh;
-  min-width: 1200px;
+  min-width: 1250px;
 }
 
 .App-primary-content-inner {
@@ -41,7 +41,7 @@
 
 .App-primary-content-right h1:first-of-type {
   /*padding-top: .5rem;*/
-  margin-top: -70px;
+  /*margin-top: -70px;*/
   z-index: 5;
   position: relative;
   height: 70px;

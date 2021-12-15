@@ -8,6 +8,7 @@ import './index.css';
 import SVG from "../SVG";
 import {NavLink} from "react-router-dom";
 import ScrollContainer from "react-indiana-drag-scroll";
+import GridLayout from "../GridLayout";
 
 async function getUserNFTs(settingsState) {
   const { AVAILABLE_NETWORKS } = settingsState.appConfiguration;
@@ -84,11 +85,13 @@ function MyNFTs(props) {
             </AlertMessage>
           )}
 
-          {nftListLoaded && nftList.length > 0 && (
-            <div className="NftList-cards-holder" /*ref={scrollableElementRef}*/>
-              {nftList.map((nft, i) => <Card tokenUri={nft.token_uri} key={nft.token_uri + i} onChain={nft.onChain}/>)}
-            </div>
-          )}
+          {/*{nftListLoaded && nftList.length > 0 && (*/}
+          {/*  <div className="NftList-cards-holder">*/}
+          {/*    {nftList.map((nft, i) => <Card tokenUri={nft.token_uri} key={nft.token_uri + i} onChain={nft.onChain}/>)}*/}
+          {/*  </div>*/}
+          {/*)}*/}
+          
+          {nftListLoaded && nftList.length > 0 && <GridLayout nftList={nftList}/>}
         </>
       )}
     </section>

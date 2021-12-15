@@ -1,0 +1,35 @@
+.GridLayout {
+    /*display: grid;*/
+    /*margin-right: calc(var(--std-padding) * -1);*/
+    /*margin-left: calc(var(--std-padding) * -1);*/
+    /*padding-left: var(--std-padding);*/
+    /*padding-bottom: calc(var(--std-padding) * 3);*/
+    /*padding-top: 70px;*/
+    /*margin-top: -70px;*/
+    --auto-grid-min-size: 16rem;
+    display: grid;
+    /*grid-gap: 2rem;*/
+    grid-column-gap: 2rem;
+    grid-template-columns: repeat(auto-fill, minmax(var(--auto-grid-min-size), 1fr));
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    /*padding-right: 2rem;*/
+}
+
+.GridLayout .Card-holder {
+    height: auto;
+    transform: scale(.8) translateX(-2.5rem) translateY(-2rem);
+    /*background-color: #ef4444;*/
+    /*color: #ffffff;*/
+    /*font-size: 24px;*/
+    /*list-style-type: none;*/
+    /*padding: 5rem 1rem;*/
+    /*text-align: center;*/
+    /*text-transform: capitalize;*/
+    /*font-weight: 600;*/
+}
+
+.GridLayout .Card {
+    margin-right: 0;
+}

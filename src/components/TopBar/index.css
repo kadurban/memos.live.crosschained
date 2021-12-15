@@ -8,7 +8,9 @@
   /*background: #ffffffb5;*/
   /*box-shadow: #bababa4f 0.4375rem 0.125rem 1.625rem 0px;*/
   /*background: linear-gradient(3deg, rgb(255,255,255) 0%, rgb(255,251,229) 100%);*/
-  z-index: 2;
+  background-color: #ffffffb5;
+  backdrop-filter: blur(10px);
+  z-index: 10;
 }
 
 .App-primary-content {
