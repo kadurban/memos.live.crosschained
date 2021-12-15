@@ -221,7 +221,7 @@
   object-fit: cover;
   width: calc(300px - var(--std-padding) - var(--std-padding));
   height: calc(300px - var(--std-padding) - var(--std-padding));
-  transform: scale(1.18);
+  /*transform: scale(1.18);*/
 }
 
 .Card-timer {
