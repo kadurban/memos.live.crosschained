@@ -58,8 +58,6 @@ function MainPage(props) {
 
       {!nftListLoaded && <Loader/>}
 
-      {nftListLoaded && nftList.length > 0 && <GridLayout nftList={nftList}/>}
-
       {/*{nftListLoaded && nftList.length > 0 && (*/}
       {/*  <div className="NftList-cards-holder">*/}
       {/*    {nftList.map((nft, i) => {*/}
@@ -69,6 +67,11 @@ function MainPage(props) {
       {/*    })}*/}
       {/*  </div>*/}
       {/*)}*/}
+
+      {/*<br/>*/}
+      {/*<br/>*/}
+      {/*<br/>*/}
+      {nftListLoaded && nftList.length > 0 && <GridLayout nftList={nftList}/>}
     </div>
   );
 }

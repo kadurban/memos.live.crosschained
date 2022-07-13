@@ -13,52 +13,46 @@ contract MemosLiveNFT is ERC721URIStorage {
     event NFTMinted(uint256 tokenId);
 
     address private contractCreator;
-    address public communityPoolAddress;
-
-    ERC20 private utilityTokenContract;
+    address public poolAddress;
     uint256 private initialCost;
     uint256 private costStep;
 
     constructor(
         string memory nft_name,
         string memory nft_ticker,
-        ERC20 utility_token_address,
         uint256 initial_cost,
         uint256 cost_step,
-        address community_pool_address
+        address pool_address
     ) ERC721(nft_name, nft_ticker) {
         contractCreator = msg.sender;
-        utilityTokenContract = ERC20(utility_token_address);
         initialCost = initial_cost;
         costStep = cost_step;
-        setCommunityPoolAddress(community_pool_address);
+        setPoolAddress(pool_address);
     }
 
-    function setCommunityPoolAddress(address new_community_pool_address) public returns (address) {
+    function setPoolAddress(address new_pool_address) public returns (address) {
         require(contractCreator == msg.sender, 'No no...');
-        communityPoolAddress = new_community_pool_address;
-        return communityPoolAddress;
+        poolAddress = new_pool_address;
+        return poolAddress;
     }
 
-    function getCommunityPoolAddress() public view returns (address) {
-        return communityPoolAddress;
+    function getPoolAddress() public view returns (address) {
+        return poolAddress;
     }
 
     function getCurrentCost() public view returns (uint) {
         uint256 currentTokenId = _tokenIds.current();
-        uint256 currentCost = initialCost + (currentTokenId * costStep); // TODO: safemath?
+        uint256 currentCost = initialCost + (currentTokenId * costStep);
         return currentCost;
     }
 
-    function createToken(string memory tokenURI) public returns (uint) {
-        uint256 currentNFTCost = getCurrentCost();
+    function createToken(string memory tokenURI) public payable returns (uint) {
+        uint256 currentNFTCost = initialCost;
 
         require(
-            utilityTokenContract.balanceOf(msg.sender) > currentNFTCost,
-            "You need to have enough utility tokens on your balance for minting,"
+            msg.value >= currentNFTCost,
+            "Current cost is bigger than amount you sent"
         );
-
-        utilityTokenContract.transferFrom(msg.sender, communityPoolAddress, currentNFTCost);
 
         _tokenIds.increment();
         uint256 newTokenId = _tokenIds.current();
@@ -66,7 +60,7 @@ contract MemosLiveNFT is ERC721URIStorage {
         _mint(msg.sender, newTokenId);
         _setTokenURI(newTokenId, tokenURI);
 
-         emit NFTMinted(newTokenId);
+        emit NFTMinted(newTokenId);
 
         return newTokenId;
     }

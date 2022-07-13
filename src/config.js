@@ -89,14 +89,14 @@ function getConfig(chainId) {
   if (CONFIG.IS_MAINNET) {
     return {
       ...CONFIG,
-      MORALIS_SERVER_URL: 'https://s1y78pftafiy.usemoralis.com:2053/server',
-      MORALIS_APP_ID: 'B5YAeM54YwgVfhCEb7u1Zd4wye3U1vRLrUMJgPIR'
+      MORALIS_SERVER_URL: 'https://bfszt5uitm7b.usemoralis.com:2053/server',
+      MORALIS_APP_ID: 'aigriBGwT1YYrM9KamT7niT6VnYjm8nyGSH1nQgk'
     }
   } else {
     return {
       ...CONFIG,
-      MORALIS_SERVER_URL: 'https://9yqxytt7d1ew.usemoralis.com:2053/server',
-      MORALIS_APP_ID: '9w2T8sfZ5APXJQVVUwVzYep6IiSWCJ63om5Sx1WP'
+      MORALIS_SERVER_URL: 'https://bfszt5uitm7b.usemoralis.com:2053/server',
+      MORALIS_APP_ID: 'aigriBGwT1YYrM9KamT7niT6VnYjm8nyGSH1nQgk'
     }
   }
 }

@@ -219,7 +219,7 @@ function Wizard() {
     if (moment(data.eventDate, 'YYYY-MM-DD HH:mm:ss').isValid()) {
       metaData.attributes.push({
         key: 'Date',
-        trait_type: 'Picture',
+        trait_type: 'Date',
         value: data.exactTime ? `${data.eventDate} ${data.exactTime}` : data.eventDate
       });
     }
